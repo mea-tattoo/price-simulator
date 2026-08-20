@@ -54,6 +54,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .validation{margin-top:9px;padding:9px 10px;border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:10px;font-size:12px;line-height:1.5}
 .final,.result{margin-top:12px;border:2px solid var(--dark);border-radius:16px;background:white;padding:16px}
 .final .amount{font-size:34px;font-weight:800;letter-spacing:-.03em;margin-top:3px}
+.final.is-placeholder .kicker,.final.is-placeholder .amount,.result.is-placeholder .main-label,.result.is-placeholder .dimension-name,.result.is-placeholder .dimension-value{color:#b6bbc4}
 .estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:11px 12px;color:var(--warn-text);font-size:13px;line-height:1.6}
 .actions{display:flex;gap:8px;margin-top:12px}
 .actions button{border:0;border-radius:12px;padding:11px 14px;font:inherit;font-weight:700;background:#e5e7eb;color:#111;cursor:pointer}
@@ -62,6 +63,11 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
 .budget-title h2{margin:0}
 .budget-value{font-size:29px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+.size-input-card{display:grid;grid-template-columns:1fr auto;grid-template-areas:"title value" "range range" "validation validation";align-items:end;column-gap:14px;padding:13px 16px}
+.size-input-card>h2{grid-area:title;margin:0 0 10px}
+.size-input-card>.slider-head{grid-area:value;margin:0 0 10px}
+.size-input-card>.range-wrap{grid-area:range}
+.size-input-card>.validation{grid-area:validation}
 .result .main-label{font-size:14px;color:var(--text);font-weight:700}
 .result .size{margin-top:8px}
 .dimension-line{display:flex;align-items:baseline;gap:8px;line-height:1.25;white-space:nowrap}
@@ -105,7 +111,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 </div>
 
 <section id="sizePane" class="pane">
-  <section class="step">
+  <section class="step size-input-card">
     <h2 data-i18n="longSide">Long Side</h2>
     <div class="slider-head"><div class="slider-value" id="sizeLengthDisplay"><strong>80</strong><span>mm</span></div></div>
     <div class="range-wrap">
@@ -114,7 +120,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
     </div>
   </section>
 
-  <section class="step">
+  <section class="step size-input-card">
     <h2 data-i18n="shortSide">Short Side</h2>
     <div class="slider-head"><div class="slider-value" id="sizeShortDisplay"><strong>50</strong><span>mm</span></div></div>
     <div class="range-wrap">
@@ -154,9 +160,9 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
     </select>
   </section>
 
-  <div id="sizeFinal" class="final hidden">
+  <div id="sizeFinal" class="final is-placeholder">
     <div class="kicker" id="sizeResultKicker" data-i18n="estimatedPrice">Estimated Price</div>
-    <div id="sizeFinalAmount" class="amount">—</div>
+    <div id="sizeFinalAmount" class="amount">Approx. ¥--,---</div>
     <div id="sizeEstimateNote" class="estimate-note" data-i18n="priceNote">The displayed price is an estimate.</div>
     <div id="sizeInquiryMessage" class="hidden">
       <div class="estimate-note" data-i18n="sizeCannotPrice">This size cannot be priced automatically.</div>
@@ -221,11 +227,11 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
     </select>
   </section>
 
-  <div id="budgetResult" class="result hidden">
+  <div id="budgetResult" class="result is-placeholder">
     <div class="main-label" data-i18n="withBudget">With this budget</div>
     <div class="size">
-      <div class="dimension-line"><span class="dimension-name" data-i18n="longSide">Long Side</span><strong id="budgetLongResult" class="dimension-value">—</strong></div>
-      <div class="dimension-line"><span class="dimension-name" data-i18n="shortSide">Short Side</span><strong id="budgetShortResult" class="dimension-value">—</strong></div>
+      <div class="dimension-line"><span class="dimension-name" data-i18n="longSide">Long Side</span><strong id="budgetLongResult" class="dimension-value">Approx. -- mm</strong></div>
+      <div class="dimension-line"><span class="dimension-name" data-i18n="shortSide">Short Side</span><strong id="budgetShortResult" class="dimension-value">Approx. -- mm</strong></div>
     </div>
     <div id="budgetLargeNotice" class="estimate-note hidden" data-i18n="largeNotice">Sizes over 230 mm cannot be calculated.</div>
     <div class="estimate-note" data-i18n="sizeNote">The displayed size is an estimate.</div>
@@ -415,11 +421,22 @@ function setSizeDimensionDisplay(id,value){
   }
 }
 
+function showSizePlaceholder(){
+  $('sizeResultKicker').textContent=t('estimatedPrice');
+  $('sizeFinalAmount').textContent=currentLang==='en'?'Approx. ¥--,---':'約 ¥--,---';
+  $('sizeFinalAmount').classList.remove('hidden');
+  $('sizeEstimateNote').classList.remove('hidden');
+  $('sizeInquiryMessage').classList.add('hidden');
+  $('sizeFinal').classList.add('is-placeholder');
+  $('sizeFinal').classList.remove('hidden');
+}
+
 function showSizeInquiry(){
   $('sizeResultKicker').textContent=t('pricing');
   $('sizeFinalAmount').classList.add('hidden');
   $('sizeEstimateNote').classList.add('hidden');
   $('sizeInquiryMessage').classList.remove('hidden');
+  $('sizeFinal').classList.remove('is-placeholder');
   $('sizeFinal').classList.remove('hidden');
 }
 
@@ -429,6 +446,7 @@ function showSizeEstimate(amount){
   $('sizeFinalAmount').classList.remove('hidden');
   $('sizeEstimateNote').classList.remove('hidden');
   $('sizeInquiryMessage').classList.add('hidden');
+  $('sizeFinal').classList.remove('is-placeholder');
   $('sizeFinal').classList.remove('hidden');
 }
 
@@ -438,7 +456,7 @@ function recalcSize(){
   setSizeDimensionDisplay('sizeLength',longMm);
   setSizeDimensionDisplay('sizeShort',shortMm);
   $('sizeDimensionError').classList.toggle('hidden',shortMm<=longMm);
-  $('sizeFinal').classList.add('hidden');
+  showSizePlaceholder();
   if(shortMm>longMm)return;
   const base=baseFromLength(longMm);
   if(base.special){showSizeInquiry();return;}
@@ -480,12 +498,25 @@ function maxAffordableLength(budgetValue){
   return max;
 }
 
+function showBudgetPlaceholder(){
+  if(currentLang==='en'){
+    $('budgetLongResult').textContent='Approx. -- mm';
+    $('budgetShortResult').textContent='Approx. -- mm';
+  }else{
+    $('budgetLongResult').textContent='約 -- mm';
+    $('budgetShortResult').textContent='約 -- mm';
+  }
+  $('budgetLargeNotice').classList.add('hidden');
+  budgetResult.classList.add('is-placeholder');
+  budgetResult.classList.remove('hidden');
+}
+
 function recalcBudget(){
   const budgetValue=Number(budget.value);
   $('budgetDisplay').textContent=budgetValue===17000?t('budgetMin'):budgetValue===120000?t('budgetMax'):money(budgetValue);
-  if(!budgetShape.value||!budgetComplexity.value||!budgetColor.value){budgetResult.classList.add('hidden');return;}
+  if(!budgetShape.value||!budgetComplexity.value||!budgetColor.value){showBudgetPlaceholder();return;}
   const longMm=maxAffordableLength(budgetValue);
-  if(!longMm){budgetResult.classList.add('hidden');return;}
+  if(!longMm){showBudgetPlaceholder();return;}
   const shortMm=Math.max(1,Math.round(longMm*SHAPE_RATIO[budgetShape.value]));
   if(currentLang==='en'){
     $('budgetLongResult').textContent=`Up to ${longMm} mm`;
@@ -495,6 +526,7 @@ function recalcBudget(){
     $('budgetShortResult').textContent=`約${shortMm}mmまで`;
   }
   $('budgetLargeNotice').classList.toggle('hidden',longMm<230);
+  budgetResult.classList.remove('is-placeholder');
   budgetResult.classList.remove('hidden');
 }
 
