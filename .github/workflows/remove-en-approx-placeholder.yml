@@ -1,0 +1,48 @@
+name: Remove English Approx placeholder
+
+on:
+  push:
+    paths:
+      - '.github/workflows/remove-en-approx-placeholder.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update-copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove Approx from English placeholders only
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = [
+            ('<div id="sizeFinalAmount" class="amount">Approx. ¥--,---</div>', '<div id="sizeFinalAmount" class="amount">¥--,---</div>'),
+            ('<strong id="budgetLongResult" class="dimension-value">Approx. -- mm</strong>', '<strong id="budgetLongResult" class="dimension-value">-- mm</strong>'),
+            ('<strong id="budgetShortResult" class="dimension-value">Approx. -- mm</strong>', '<strong id="budgetShortResult" class="dimension-value">-- mm</strong>'),
+            ("$('sizeFinalAmount').textContent=currentLang==='en'?'Approx. ¥--,---':'約 ¥--,---';", "$('sizeFinalAmount').textContent=currentLang==='en'?'¥--,---':'約 ¥--,---';"),
+            ("$('budgetLongResult').textContent='Approx. -- mm';", "$('budgetLongResult').textContent='-- mm';"),
+            ("$('budgetShortResult').textContent='Approx. -- mm';", "$('budgetShortResult').textContent='-- mm';"),
+          ]
+
+          for old, new in replacements:
+            if old not in s:
+              raise SystemExit(f'Target not found: {old}')
+            s = s.replace(old, new, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Remove Approx from English placeholders"
+          git push
