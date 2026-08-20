@@ -162,7 +162,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 
   <div id="sizeFinal" class="final is-placeholder">
     <div class="kicker" id="sizeResultKicker" data-i18n="estimatedPrice">Estimated Price</div>
-    <div id="sizeFinalAmount" class="amount">Approx. ¥--,---</div>
+    <div id="sizeFinalAmount" class="amount">¥--,---</div>
     <div id="sizeEstimateNote" class="estimate-note" data-i18n="priceNote">The displayed price is an estimate.</div>
     <div id="sizeInquiryMessage" class="hidden">
       <div class="estimate-note" data-i18n="sizeCannotPrice">This size cannot be priced automatically.</div>
@@ -230,8 +230,8 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
   <div id="budgetResult" class="result is-placeholder">
     <div class="main-label" data-i18n="withBudget">With this budget</div>
     <div class="size">
-      <div class="dimension-line"><span class="dimension-name" data-i18n="longSide">Long Side</span><strong id="budgetLongResult" class="dimension-value">Approx. -- mm</strong></div>
-      <div class="dimension-line"><span class="dimension-name" data-i18n="shortSide">Short Side</span><strong id="budgetShortResult" class="dimension-value">Approx. -- mm</strong></div>
+      <div class="dimension-line"><span class="dimension-name" data-i18n="longSide">Long Side</span><strong id="budgetLongResult" class="dimension-value">-- mm</strong></div>
+      <div class="dimension-line"><span class="dimension-name" data-i18n="shortSide">Short Side</span><strong id="budgetShortResult" class="dimension-value">-- mm</strong></div>
     </div>
     <div id="budgetLargeNotice" class="estimate-note hidden" data-i18n="largeNotice">Sizes over 230 mm cannot be calculated.</div>
     <div class="estimate-note" data-i18n="sizeNote">The displayed size is an estimate.</div>
@@ -423,7 +423,7 @@ function setSizeDimensionDisplay(id,value){
 
 function showSizePlaceholder(){
   $('sizeResultKicker').textContent=t('estimatedPrice');
-  $('sizeFinalAmount').textContent=currentLang==='en'?'Approx. ¥--,---':'約 ¥--,---';
+  $('sizeFinalAmount').textContent=currentLang==='en'?'¥--,---':'約 ¥--,---';
   $('sizeFinalAmount').classList.remove('hidden');
   $('sizeEstimateNote').classList.remove('hidden');
   $('sizeInquiryMessage').classList.add('hidden');
@@ -500,8 +500,8 @@ function maxAffordableLength(budgetValue){
 
 function showBudgetPlaceholder(){
   if(currentLang==='en'){
-    $('budgetLongResult').textContent='Approx. -- mm';
-    $('budgetShortResult').textContent='Approx. -- mm';
+    $('budgetLongResult').textContent='-- mm';
+    $('budgetShortResult').textContent='-- mm';
   }else{
     $('budgetLongResult').textContent='約 -- mm';
     $('budgetShortResult').textContent='約 -- mm';
