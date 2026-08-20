@@ -25,6 +25,7 @@ h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .quick-price-value{font-weight:750;white-space:nowrap;text-align:right;color:#fff}
 .quick-price-note{margin-top:8px;color:#b8b8b8;font-size:11px;line-height:1.5}
 .simulator-title{font-size:22px;line-height:1.25;font-weight:800;margin:52px 2px 0}
+.simulator-description{margin:6px 2px 0;color:var(--muted);font-size:13px;line-height:1.5}
 .top-segment-wrap{margin-top:12px}
 .top-segment-wrap .segment{max-width:none}
 .top-segment-wrap .segment button{padding:11px 8px}
@@ -79,14 +80,15 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 </div>
 
 <section class="quick-price-guide" aria-labelledby="quickPriceHeading">
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickXSSize">XS — about 3 cm (1.2 in)</div><div class="quick-price-value" data-i18n="quickXSPrice">about ¥17,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickSSize">S — about 6 cm (2.5 in)</div><div class="quick-price-value" data-i18n="quickSPrice">¥25,000–¥35,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickMSize">M — about 12 cm (5 in)</div><div class="quick-price-value" data-i18n="quickMPrice">¥52,000–¥70,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickLSize">L — about 20 cm (8 in)</div><div class="quick-price-value" data-i18n="quickLPrice">¥80,000–¥150,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickXSSize">XS size — about 3 cm (1.2 in)</div><div class="quick-price-value" data-i18n="quickXSPrice">about ¥17,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickSSize">S size — about 6 cm (2.5 in)</div><div class="quick-price-value" data-i18n="quickSPrice">¥25,000–¥35,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickMSize">M size — about 12 cm (5 in)</div><div class="quick-price-value" data-i18n="quickMPrice">¥52,000–¥70,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickLSize">L size — about 20 cm (8 in)</div><div class="quick-price-value" data-i18n="quickLPrice">¥80,000–¥150,000</div></div>
   <div class="quick-price-note" data-i18n="quickPriceNote">Prices are estimates and may vary depending on the design.</div>
 </section>
 
 <h2 id="appTitle" class="simulator-title" data-i18n="title">Price Simulator</h2>
+<p class="simulator-description" data-i18n="simulatorDescription">Get a more detailed price estimate.</p>
 
 <div class="top-segment-wrap">
   <div id="estimateMethodTabsTop" class="segment" role="tablist" data-i18n-aria="estimateMethod">
@@ -243,11 +245,12 @@ const TEXT={
   ja:{
     title:'料金シミュレーター',
     quickPriceGuide:'料金の目安',
-    quickXSSize:'XS — 約3cm',quickXSPrice:'約¥17,000',
-    quickSSize:'S — 約6cm',quickSPrice:'¥25,000〜¥35,000',
-    quickMSize:'M — 約12cm',quickMPrice:'¥52,000〜¥70,000',
-    quickLSize:'L — 約20cm',quickLPrice:'¥80,000〜¥150,000',
+    quickXSSize:'XSサイズ — 約3cm',quickXSPrice:'約¥17,000',
+    quickSSize:'Sサイズ — 約6cm',quickSPrice:'¥25,000〜¥35,000',
+    quickMSize:'Mサイズ — 約12cm',quickMPrice:'¥52,000〜¥70,000',
+    quickLSize:'Lサイズ — 約20cm',quickLPrice:'¥80,000〜¥150,000',
     quickPriceNote:'料金はあくまで目安です。デザインによって異なります。',
+    simulatorDescription:'より詳細な料金をもとめられます。',
     estimateMethod:'見積もり方法',
     tabSize:'サイズから見積もる',tabBudget:'予算から見積もる',
     longSide:'長辺',shortSide:'短辺',max300:'300mm以上',
@@ -271,11 +274,12 @@ const TEXT={
   en:{
     title:'Price Simulator',
     quickPriceGuide:'Quick Price Guide',
-    quickXSSize:'XS — about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',
-    quickSSize:'S — about 6 cm (2.5 in)',quickSPrice:'¥25,000–¥35,000',
-    quickMSize:'M — about 12 cm (5 in)',quickMPrice:'¥52,000–¥70,000',
-    quickLSize:'L — about 20 cm (8 in)',quickLPrice:'¥80,000–¥150,000',
+    quickXSSize:'XS size — about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',
+    quickSSize:'S size — about 6 cm (2.5 in)',quickSPrice:'¥25,000–¥35,000',
+    quickMSize:'M size — about 12 cm (5 in)',quickMPrice:'¥52,000–¥70,000',
+    quickLSize:'L size — about 20 cm (8 in)',quickLPrice:'¥80,000–¥150,000',
     quickPriceNote:'Prices are estimates and may vary depending on the design.',
+    simulatorDescription:'Get a more detailed price estimate.',
     estimateMethod:'Estimate method',
     tabSize:'Estimate by Size',tabBudget:'Estimate by Budget',
     longSide:'Long Side',shortSide:'Short Side',max300:'300+ mm',
