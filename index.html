@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Tattoo Price Simulator</title>
+<meta name="apple-mobile-web-app-title" content="Tattoo Price Simulator">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+:root{
+  --bg:#f7f7f8;--card:#fff;--text:#111;--muted:#6b7280;--line:#e5e7eb;
+  --dark:#111827;--soft:#eceef1;--warn-bg:#fff8e7;--warn-line:#ead9a8;--warn-text:#5f4a15;
+}
+*{box-sizing:border-box}
+html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text)}
+body{margin:0}
+main{max-width:760px;margin:auto;padding:18px 14px calc(110px + env(safe-area-inset-bottom))}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
+h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
+.language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
+.top-segment-wrap{margin-top:14px}
+.top-segment-wrap .segment{max-width:none}
+.top-segment-wrap .segment button{padding:11px 8px}
+.bottom-segment-wrap{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(247,247,248,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.segment{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:732px;margin:auto;padding:3px;background:#e8e9ec;border-radius:12px;box-shadow:0 0 0 1px rgba(0,0,0,.04)}
+.segment button{border:0;border-radius:9px;background:transparent;color:#3f4650;font:inherit;font-size:14px;font-weight:700;padding:10px 8px;cursor:pointer}
+.segment button.active{background:white;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.pane.hidden{display:none!important}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:12px;padding:16px}
+.kicker{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em}
+h2{font-size:17px;margin:0 0 12px}
+.helper{font-size:12px;color:var(--muted);line-height:1.65;margin:10px 0 0}
+.helper-title{font-size:10px;font-weight:800;color:#6b7280;letter-spacing:.08em;margin-bottom:4px}
+.helper-row{display:flex;align-items:baseline;gap:6px}
+.helper-row+.helper-row{margin-top:3px}
+.helper-label{font-weight:700;color:#4b5563;white-space:nowrap}
+.helper-sep{color:#9ca3af;white-space:nowrap}
+.helper-example{min-width:0}
+select{width:100%;font-size:16px;border:1px solid #d1d5db;border-radius:12px;background:white;padding:12px 11px;color:var(--text)}
+.slider-head{display:flex;justify-content:flex-end;margin-bottom:9px}
+.slider-value{font-size:26px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
+.slider-value span{font-size:14px;font-weight:600;color:var(--muted);margin-left:3px}
+.range-wrap{padding:4px 1px 0}
+input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
+.range-scale{display:flex;justify-content:space-between;margin-top:4px;color:var(--muted);font-size:11px}
+.validation{margin-top:9px;padding:9px 10px;border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:10px;font-size:12px;line-height:1.5}
+.final,.result{margin-top:12px;border:2px solid var(--dark);border-radius:16px;background:white;padding:16px}
+.final .amount{font-size:34px;font-weight:800;letter-spacing:-.03em;margin-top:3px}
+.estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;padding:11px 12px;color:var(--warn-text);font-size:13px;line-height:1.6}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions button{border:0;border-radius:12px;padding:11px 14px;font:inherit;font-weight:700;background:#e5e7eb;color:#111;cursor:pointer}
+.budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(247,247,248,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.budget-card{margin-top:0;padding:13px 16px}
+.budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
+.budget-title h2{margin:0}
+.budget-value{font-size:29px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+.result .main-label{font-size:14px;color:var(--text);font-weight:700}
+.result .size{margin-top:8px}
+.dimension-line{display:flex;align-items:baseline;gap:8px;line-height:1.25;white-space:nowrap}
+.dimension-line+.dimension-line{margin-top:5px}
+.dimension-name{font-size:19px;font-weight:700;color:var(--text)}
+.dimension-value{font-size:31px;font-weight:800;letter-spacing:-.035em}
+.hidden{display:none!important}
+@media(max-width:390px){h1{font-size:22px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
+</style>
+</head>
+<body>
+<main>
+<div class="topbar">
+  <h1 id="appTitle" data-i18n="title">Price Simulator</h1>
+  <button id="langToggle" class="language-toggle" type="button">日本語</button>
+</div>
+
+<div class="top-segment-wrap">
+  <div id="estimateMethodTabsTop" class="segment" role="tablist" data-i18n-aria="estimateMethod">
+    <button id="tabSizeTop" class="active" type="button" role="tab" aria-selected="true" data-i18n="tabSize">Estimate by Size</button>
+    <button id="tabBudgetTop" type="button" role="tab" aria-selected="false" data-i18n="tabBudget">Estimate by Budget</button>
+  </div>
+</div>
+
+<div class="bottom-segment-wrap">
+  <div id="estimateMethodTabsBottom" class="segment" role="tablist" data-i18n-aria="estimateMethod">
+    <button id="tabSizeBottom" class="active" type="button" role="tab" aria-selected="true" data-i18n="tabSize">Estimate by Size</button>
+    <button id="tabBudgetBottom" type="button" role="tab" aria-selected="false" data-i18n="tabBudget">Estimate by Budget</button>
+  </div>
+</div>
+
+<section id="sizePane" class="pane">
+  <section class="step">
+    <h2 data-i18n="longSide">Long Side</h2>
+    <div class="slider-head"><div class="slider-value" id="sizeLengthDisplay"><strong>80</strong><span>mm</span></div></div>
+    <div class="range-wrap">
+      <input id="sizeLength" type="range" min="1" max="300" step="1" value="80" data-i18n-aria="longSide" />
+      <div class="range-scale"><span>1mm</span><span data-i18n="max300">300+ mm</span></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2 data-i18n="shortSide">Short Side</h2>
+    <div class="slider-head"><div class="slider-value" id="sizeShortDisplay"><strong>50</strong><span>mm</span></div></div>
+    <div class="range-wrap">
+      <input id="sizeShort" type="range" min="1" max="300" step="1" value="50" data-i18n-aria="shortSide" />
+      <div class="range-scale"><span>1mm</span><span data-i18n="max300">300+ mm</span></div>
+    </div>
+    <div id="sizeDimensionError" class="validation hidden" data-i18n="dimensionError">The short side must not exceed the long side.</div>
+  </section>
+
+  <section class="step">
+    <h2 data-i18n="designComplexity">Design Complexity</h2>
+    <select id="sizeComplexity" data-i18n-aria="designComplexity">
+      <option value="" data-i18n="select">Select</option>
+      <option value="verySimple" data-i18n="verySimple">Very Simple</option>
+      <option value="simple" data-i18n="simple">Simple</option>
+      <option value="standard" data-i18n="standard">Standard</option>
+      <option value="complex" data-i18n="complex">Complex</option>
+      <option value="veryComplex" data-i18n="veryComplex">Very Complex</option>
+    </select>
+    <div class="helper">
+      <div class="helper-title" data-i18n="examples">EXAMPLES</div>
+      <div class="helper-row"><b class="helper-label" data-i18n="verySimple">Very Simple</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exVerySimple">A few lines / heart only</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="simple">Simple</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exSimple">Simple linework / lettering</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="standard">Standard</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exStandard">Standard linework / solid fill / partial shading</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="complex">Complex</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exComplex">Detailed work / standard shading</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="veryComplex">Very Complex</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exVeryComplex">Realism / highly detailed work / full color / full shading</span></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2 data-i18n="color">Color</h2>
+    <select id="sizeColor" data-i18n-aria="color">
+      <option value="" data-i18n="select">Select</option>
+      <option value="oneToThree" data-i18n="oneToThree">1–3 colors / Black & Grey</option>
+      <option value="fourToSix" data-i18n="fourToSix">4–6 colors</option>
+      <option value="sevenPlus" data-i18n="sevenPlus">7+ colors</option>
+    </select>
+  </section>
+
+  <div id="sizeFinal" class="final hidden">
+    <div class="kicker" id="sizeResultKicker" data-i18n="estimatedPrice">Estimated Price</div>
+    <div id="sizeFinalAmount" class="amount">—</div>
+    <div id="sizeEstimateNote" class="estimate-note" data-i18n="priceNote">The displayed price is an estimate.</div>
+    <div id="sizeInquiryMessage" class="hidden">
+      <div class="estimate-note" data-i18n="sizeCannotPrice">This size cannot be priced automatically.</div>
+    </div>
+  </div>
+
+  <div class="actions"><button id="sizeReset" type="button" data-i18n="reset">Reset</button></div>
+</section>
+
+<section id="budgetPane" class="pane hidden">
+  <div class="budget-sticky">
+    <section class="step budget-card">
+      <div class="budget-head">
+        <div class="budget-title"><h2 data-i18n="budget">Budget</h2></div>
+        <div id="budgetDisplay" class="budget-value">¥30,000</div>
+      </div>
+      <div class="range-wrap">
+        <input id="budget" type="range" min="17000" max="120000" step="1000" value="30000" data-i18n-aria="budget" />
+        <div class="range-scale"><span data-i18n="budgetMin">≤ ¥17,000</span><span data-i18n="budgetMax">≥ ¥120,000</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="step">
+    <h2 data-i18n="shape">Proportions</h2>
+    <select id="budgetShape" data-i18n-aria="shape">
+      <option value="" data-i18n="select">Select</option>
+      <option value="square" data-i18n="shapeSquare">Nearly Equal</option>
+      <option value="somewhat" data-i18n="shapeSomewhat">Moderately Elongated</option>
+      <option value="narrow" data-i18n="shapeNarrow">Elongated</option>
+      <option value="veryNarrow" data-i18n="shapeVeryNarrow">Very Elongated</option>
+    </select>
+  </section>
+
+  <section class="step">
+    <h2 data-i18n="designComplexity">Design Complexity</h2>
+    <select id="budgetComplexity" data-i18n-aria="designComplexity">
+      <option value="" data-i18n="select">Select</option>
+      <option value="verySimple" data-i18n="verySimple">Very Simple</option>
+      <option value="simple" data-i18n="simple">Simple</option>
+      <option value="standard" data-i18n="standard">Standard</option>
+      <option value="complex" data-i18n="complex">Complex</option>
+      <option value="veryComplex" data-i18n="veryComplex">Very Complex</option>
+    </select>
+    <div class="helper">
+      <div class="helper-title" data-i18n="examples">EXAMPLES</div>
+      <div class="helper-row"><b class="helper-label" data-i18n="verySimple">Very Simple</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exVerySimple">A few lines / heart only</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="simple">Simple</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exSimple">Simple linework / lettering</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="standard">Standard</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exStandard">Standard linework / solid fill / partial shading</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="complex">Complex</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exComplex">Detailed work / standard shading</span></div>
+      <div class="helper-row"><b class="helper-label" data-i18n="veryComplex">Very Complex</b><span class="helper-sep">･･･</span><span class="helper-example" data-i18n="exVeryComplex">Realism / highly detailed work / full color / full shading</span></div>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2 data-i18n="color">Color</h2>
+    <select id="budgetColor" data-i18n-aria="color">
+      <option value="" data-i18n="select">Select</option>
+      <option value="oneToThree" data-i18n="oneToThree">1–3 colors / Black & Grey</option>
+      <option value="fourToSix" data-i18n="fourToSix">4–6 colors</option>
+      <option value="sevenPlus" data-i18n="sevenPlus">7+ colors</option>
+    </select>
+  </section>
+
+  <div id="budgetResult" class="result hidden">
+    <div class="main-label" data-i18n="withBudget">With this budget</div>
+    <div class="size">
+      <div class="dimension-line"><span class="dimension-name" data-i18n="longSide">Long Side</span><strong id="budgetLongResult" class="dimension-value">—</strong></div>
+      <div class="dimension-line"><span class="dimension-name" data-i18n="shortSide">Short Side</span><strong id="budgetShortResult" class="dimension-value">—</strong></div>
+    </div>
+    <div id="budgetLargeNotice" class="estimate-note hidden" data-i18n="largeNotice">Sizes over 230 mm cannot be calculated.</div>
+    <div class="estimate-note" data-i18n="sizeNote">The displayed size is an estimate.</div>
+  </div>
+
+  <div class="actions"><button id="budgetReset" type="button" data-i18n="reset">Reset</button></div>
+</section>
+</main>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(n);
+
+const TEXT={
+  ja:{
+    title:'料金シミュレーター',
+    estimateMethod:'見積もり方法',
+    tabSize:'サイズから見積もる',tabBudget:'予算から見積もる',
+    longSide:'長辺',shortSide:'短辺',max300:'300mm以上',
+    dimensionError:'短辺は長辺以下になるように設定してください。',
+    designComplexity:'デザインの複雑さ',select:'選択してください',
+    verySimple:'非常にシンプル',simple:'シンプル',standard:'標準',complex:'複雑',veryComplex:'非常に複雑',
+    examples:'【例】',
+    exVerySimple:'ライン数本、ハートのみ',
+    exSimple:'シンプルなラインワーク、レタリング',
+    exStandard:'一般的なラインワーク、パッキング、一部分シェーディング',
+    exComplex:'多い描き込み、一般的なシェーディング',
+    exVeryComplex:'リアリスティック、非常に多い描き込み、フルカラー、全面的なシェーディング',
+    color:'カラー',oneToThree:'1〜3色 または ブラック&グレー',fourToSix:'4〜6色',sevenPlus:'7色〜',
+    estimatedPrice:'予想金額',priceNote:'表示金額は目安です。実際の金額とは異なる場合があります。',
+    pricing:'料金について',sizeCannotPrice:'このサイズは自動で料金を算出できません。',reset:'リセット',
+    budget:'予算',budgetMin:'¥17,000以下',budgetMax:'¥120,000以上',
+    shape:'形状',shapeSquare:'正方形に近い',shapeSomewhat:'一般的な長方形',shapeNarrow:'細長い',shapeVeryNarrow:'とても細長い',
+    withBudget:'この予算なら',largeNotice:'230mmを超えるサイズは、このシミュレーターでは算出できません。',
+    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。'
+  },
+  en:{
+    title:'Price Simulator',
+    estimateMethod:'Estimate method',
+    tabSize:'Estimate by Size',tabBudget:'Estimate by Budget',
+    longSide:'Long Side',shortSide:'Short Side',max300:'300+ mm',
+    dimensionError:'The short side must not exceed the long side.',
+    designComplexity:'Design Complexity',select:'Select',
+    verySimple:'Very Simple',simple:'Simple',standard:'Standard',complex:'Complex',veryComplex:'Very Complex',
+    examples:'EXAMPLES',
+    exVerySimple:'A few lines / heart only',
+    exSimple:'Simple linework / lettering',
+    exStandard:'Standard linework / solid fill / partial shading',
+    exComplex:'Detailed work / standard shading',
+    exVeryComplex:'Realism / highly detailed work / full color / full shading',
+    color:'Color',oneToThree:'1–3 colors / Black & Grey',fourToSix:'4–6 colors',sevenPlus:'7+ colors',
+    estimatedPrice:'Estimated Price',priceNote:'The displayed price is an estimate.',
+    pricing:'Pricing',sizeCannotPrice:'This size cannot be priced automatically.',reset:'Reset',
+    budget:'Budget',budgetMin:'≤ ¥17,000',budgetMax:'≥ ¥120,000',
+    shape:'Proportions',shapeSquare:'Nearly Equal',shapeSomewhat:'Moderately Elongated',shapeNarrow:'Elongated',shapeVeryNarrow:'Very Elongated',
+    withBudget:'With this budget',largeNotice:'Sizes over 230 mm cannot be calculated.',
+    sizeNote:'The displayed size is an estimate.'
+  }
+};
+
+const requestedLang=new URLSearchParams(location.search).get('lang');
+let currentLang=requestedLang==='ja'?'ja':'en';
+const t=key=>TEXT[currentLang][key]??key;
+
+function applyLanguage(){
+  document.documentElement.lang=currentLang;
+  document.title=currentLang==='en'?'Tattoo Price Simulator':'簡易版タトゥー料金シミュレーター';
+  const meta=document.querySelector('meta[name="apple-mobile-web-app-title"]');
+  if(meta)meta.content=document.title;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.i18nAria));});
+  $('langToggle').textContent=currentLang==='en'?'日本語':'English';
+  $('langToggle').setAttribute('aria-label',currentLang==='en'?'日本語に切り替える':'Switch to English');
+}
+
+function setLanguage(lang,updateUrl=true){
+  currentLang=lang==='en'?'en':'ja';
+  if(updateUrl){
+    const url=new URL(location.href);
+    url.searchParams.set('lang',currentLang);
+    history.replaceState(null,'',url);
+  }
+  applyLanguage();
+  recalcSize();
+  recalcBudget();
+}
+
+$('langToggle').addEventListener('click',()=>setLanguage(currentLang==='en'?'ja':'en'));
+
+const RATE={
+  shape:{
+    veryNarrow:{XS:-20,S:-20,M:-30,L:-30},
+    narrow:{XS:0,S:-10,M:-15,L:-15},
+    somewhat:{XS:0,S:0,M:-8,L:-8},
+    square:{XS:0,S:0,M:0,L:0}
+  },
+  complexity:{
+    verySimple:{XS:0,S:-15,M:-15,L:-20},
+    simple:{XS:0,S:0,M:-10,L:-15},
+    standard:{XS:0,S:0,M:0,L:0},
+    complex:{XS:0,S:10,M:5,L:5},
+    veryComplex:{XS:10,S:15,M:10,L:25}
+  },
+  color:{
+    oneToThree:{XS:0,S:0,M:0,L:0},
+    fourToSix:{XS:0,S:5,M:5,L:10},
+    sevenPlus:{XS:10,S:10,M:10,L:20}
+  }
+};
+
+const SHAPE_RATIO={square:1,somewhat:.75,narrow:.5,veryNarrow:1/3};
+
+function baseFromLength(mm){
+  if(mm<=9)return {size:'XXS',price:13000};
+  if(mm<=44)return {size:'XS',price:17000};
+  if(mm<=49)return {size:'XS',price:22000};
+  if(mm<=75)return {size:'S',price:25000};
+  if(mm<=90)return {size:'S',price:33000};
+  if(mm<=109)return {size:'M',price:42000};
+  if(mm<=150)return {size:'M',price:52000};
+  if(mm<=180)return {size:'M',price:62000};
+  if(mm<=230)return {size:'L',price:80000};
+  return {special:true};
+}
+
+function rate(type,value,size){
+  if(size==='XXS')return 0;
+  return RATE[type]?.[value]?.[size]??0;
+}
+
+const modeButtons={
+  size:[$('tabSizeTop'),$('tabSizeBottom')],
+  budget:[$('tabBudgetTop'),$('tabBudgetBottom')]
+};
+
+function setMode(mode){
+  const sizeMode=mode==='size';
+  $('sizePane').classList.toggle('hidden',!sizeMode);
+  $('budgetPane').classList.toggle('hidden',sizeMode);
+  modeButtons.size.forEach(btn=>{
+    btn.classList.toggle('active',sizeMode);
+    btn.setAttribute('aria-selected',String(sizeMode));
+  });
+  modeButtons.budget.forEach(btn=>{
+    btn.classList.toggle('active',!sizeMode);
+    btn.setAttribute('aria-selected',String(!sizeMode));
+  });
+}
+modeButtons.size.forEach(btn=>btn.addEventListener('click',()=>setMode('size')));
+modeButtons.budget.forEach(btn=>btn.addEventListener('click',()=>setMode('budget')));
+
+const sizeLength=$('sizeLength');
+const sizeShort=$('sizeShort');
+const sizeComplexity=$('sizeComplexity');
+const sizeColor=$('sizeColor');
+
+function shapeFromDimensions(longMm,shortMm){
+  const ratio=shortMm/longMm;
+  if(ratio<=1/3)return 'veryNarrow';
+  if(ratio<=0.625)return 'narrow';
+  if(ratio<0.875)return 'somewhat';
+  return 'square';
+}
+
+function setSizeDimensionDisplay(id,value){
+  const display=$(id+'Display');
+  if(value===300){
+    display.innerHTML=currentLang==='en'?'<strong>300</strong><span>+ mm</span>':'<strong>300</strong><span>mm以上</span>';
+  }else{
+    display.innerHTML=`<strong>${value}</strong><span>mm</span>`;
+  }
+}
+
+function showSizeInquiry(){
+  $('sizeResultKicker').textContent=t('pricing');
+  $('sizeFinalAmount').classList.add('hidden');
+  $('sizeEstimateNote').classList.add('hidden');
+  $('sizeInquiryMessage').classList.remove('hidden');
+  $('sizeFinal').classList.remove('hidden');
+}
+
+function showSizeEstimate(amount){
+  $('sizeResultKicker').textContent=t('estimatedPrice');
+  $('sizeFinalAmount').textContent=currentLang==='en'?money(amount):`約${money(amount)}`;
+  $('sizeFinalAmount').classList.remove('hidden');
+  $('sizeEstimateNote').classList.remove('hidden');
+  $('sizeInquiryMessage').classList.add('hidden');
+  $('sizeFinal').classList.remove('hidden');
+}
+
+function recalcSize(){
+  const longMm=Number(sizeLength.value);
+  const shortMm=Number(sizeShort.value);
+  setSizeDimensionDisplay('sizeLength',longMm);
+  setSizeDimensionDisplay('sizeShort',shortMm);
+  $('sizeDimensionError').classList.toggle('hidden',shortMm<=longMm);
+  $('sizeFinal').classList.add('hidden');
+  if(shortMm>longMm)return;
+  const base=baseFromLength(longMm);
+  if(base.special){showSizeInquiry();return;}
+  if(!sizeComplexity.value||!sizeColor.value)return;
+  const shape=shapeFromDimensions(longMm,shortMm);
+  let amount=base.price;
+  amount*=1+rate('shape',shape,base.size)/100;
+  amount*=1+rate('complexity',sizeComplexity.value,base.size)/100;
+  amount*=1+rate('color',sizeColor.value,base.size)/100;
+  showSizeEstimate(Math.round(amount/1000)*1000);
+}
+
+[sizeLength,sizeShort].forEach(el=>el.addEventListener('input',recalcSize));
+sizeComplexity.addEventListener('change',recalcSize);
+sizeColor.addEventListener('change',recalcSize);
+$('sizeReset').addEventListener('click',()=>{
+  sizeLength.value='80';sizeShort.value='50';sizeComplexity.value='';sizeColor.value='';recalcSize();
+});
+
+const budget=$('budget');
+const budgetShape=$('budgetShape');
+const budgetComplexity=$('budgetComplexity');
+const budgetColor=$('budgetColor');
+const budgetResult=$('budgetResult');
+
+function calculatedBudgetPrice(longMm){
+  const base=baseFromLength(longMm);
+  if(base.special)return Infinity;
+  let amount=base.price;
+  amount*=1+rate('shape',budgetShape.value,base.size)/100;
+  amount*=1+rate('complexity',budgetComplexity.value,base.size)/100;
+  amount*=1+rate('color',budgetColor.value,base.size)/100;
+  return Math.round(amount/1000)*1000;
+}
+
+function maxAffordableLength(budgetValue){
+  let max=0;
+  for(let mm=1;mm<=230;mm++)if(calculatedBudgetPrice(mm)<=budgetValue)max=mm;
+  return max;
+}
+
+function recalcBudget(){
+  const budgetValue=Number(budget.value);
+  $('budgetDisplay').textContent=budgetValue===17000?t('budgetMin'):budgetValue===120000?t('budgetMax'):money(budgetValue);
+  if(!budgetShape.value||!budgetComplexity.value||!budgetColor.value){budgetResult.classList.add('hidden');return;}
+  const longMm=maxAffordableLength(budgetValue);
+  if(!longMm){budgetResult.classList.add('hidden');return;}
+  const shortMm=Math.max(1,Math.round(longMm*SHAPE_RATIO[budgetShape.value]));
+  if(currentLang==='en'){
+    $('budgetLongResult').textContent=`Up to ${longMm} mm`;
+    $('budgetShortResult').textContent=`Up to ${shortMm} mm`;
+  }else{
+    $('budgetLongResult').textContent=`約${longMm}mmまで`;
+    $('budgetShortResult').textContent=`約${shortMm}mmまで`;
+  }
+  $('budgetLargeNotice').classList.toggle('hidden',longMm<230);
+  budgetResult.classList.remove('hidden');
+}
+
+[budgetShape,budgetComplexity,budgetColor].forEach(el=>el.addEventListener('change',recalcBudget));
+budget.addEventListener('input',recalcBudget);
+$('budgetReset').addEventListener('click',()=>{
+  budgetShape.value='';budgetComplexity.value='';budgetColor.value='';budget.value='30000';recalcBudget();
+});
+
+setLanguage(currentLang,false);
+})();
+</script>
+</body>
+</html>
