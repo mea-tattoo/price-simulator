@@ -18,7 +18,14 @@ main{max-width:760px;margin:auto;padding:18px 14px calc(110px + env(safe-area-in
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
 h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
-.top-segment-wrap{margin-top:14px}
+.quick-price-guide{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:14px;padding:14px 16px}
+.quick-price-title{font-size:14px;font-weight:800;margin-bottom:7px}
+.quick-price-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:6px 0;font-size:13px;line-height:1.4}
+.quick-price-row+.quick-price-row{border-top:1px solid #f0f1f2}
+.quick-price-size{font-weight:700;min-width:0}
+.quick-price-value{font-weight:700;white-space:nowrap;text-align:right}
+.quick-price-note{margin-top:7px;color:var(--muted);font-size:11px;line-height:1.5}
+.top-segment-wrap{margin-top:12px}
 .top-segment-wrap .segment{max-width:none}
 .top-segment-wrap .segment button{padding:11px 8px}
 .bottom-segment-wrap{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(247,247,248,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -61,7 +68,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .dimension-name{font-size:19px;font-weight:700;color:var(--text)}
 .dimension-value{font-size:31px;font-weight:800;letter-spacing:-.035em}
 .hidden{display:none!important}
-@media(max-width:390px){h1{font-size:22px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
+@media(max-width:390px){h1{font-size:22px}.quick-price-guide{padding:13px 14px}.quick-price-row{font-size:12px;gap:8px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
 </style>
 </head>
 <body>
@@ -70,6 +77,15 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
   <h1 id="appTitle" data-i18n="title">Price Simulator</h1>
   <button id="langToggle" class="language-toggle" type="button">日本語</button>
 </div>
+
+<section class="quick-price-guide" aria-labelledby="quickPriceTitle">
+  <div id="quickPriceTitle" class="quick-price-title" data-i18n="quickPriceGuide">Quick Price Guide</div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickXSSize">XS — about 3 cm (1.2 in)</div><div class="quick-price-value" data-i18n="quickXSPrice">about ¥17,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickSSize">S — about 6 cm (2.5 in)</div><div class="quick-price-value" data-i18n="quickSPrice">¥25,000–¥35,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickMSize">M — about 12 cm (5 in)</div><div class="quick-price-value" data-i18n="quickMPrice">¥52,000–¥70,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickLSize">L — about 20 cm (8 in)</div><div class="quick-price-value" data-i18n="quickLPrice">¥80,000–¥150,000</div></div>
+  <div class="quick-price-note" data-i18n="quickPriceNote">Prices are estimates and may vary depending on the design.</div>
+</section>
 
 <div class="top-segment-wrap">
   <div id="estimateMethodTabsTop" class="segment" role="tablist" data-i18n-aria="estimateMethod">
@@ -225,6 +241,12 @@ const money=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',ma
 const TEXT={
   ja:{
     title:'料金シミュレーター',
+    quickPriceGuide:'料金の目安',
+    quickXSSize:'XS — 約3cm',quickXSPrice:'約¥17,000',
+    quickSSize:'S — 約6cm',quickSPrice:'¥25,000〜¥35,000',
+    quickMSize:'M — 約12cm',quickMPrice:'¥52,000〜¥70,000',
+    quickLSize:'L — 約20cm',quickLPrice:'¥80,000〜¥150,000',
+    quickPriceNote:'料金はあくまで目安です。デザインによって異なります。',
     estimateMethod:'見積もり方法',
     tabSize:'サイズから見積もる',tabBudget:'予算から見積もる',
     longSide:'長辺',shortSide:'短辺',max300:'300mm以上',
@@ -247,6 +269,12 @@ const TEXT={
   },
   en:{
     title:'Price Simulator',
+    quickPriceGuide:'Quick Price Guide',
+    quickXSSize:'XS — about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',
+    quickSSize:'S — about 6 cm (2.5 in)',quickSPrice:'¥25,000–¥35,000',
+    quickMSize:'M — about 12 cm (5 in)',quickMPrice:'¥52,000–¥70,000',
+    quickLSize:'L — about 20 cm (8 in)',quickLPrice:'¥80,000–¥150,000',
+    quickPriceNote:'Prices are estimates and may vary depending on the design.',
     estimateMethod:'Estimate method',
     tabSize:'Estimate by Size',tabBudget:'Estimate by Budget',
     longSide:'Long Side',shortSide:'Short Side',max300:'300+ mm',
