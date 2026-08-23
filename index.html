@@ -51,8 +51,9 @@ h2{font-size:17px;margin:0 0 12px}
 .helper-example{min-width:0}
 select{width:100%;font-size:16px;border:1px solid #d1d5db;border-radius:12px;background:white;padding:12px 11px;color:var(--text)}
 .slider-head{display:flex;justify-content:flex-end;margin-bottom:9px}
-.slider-value{font-size:26px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
-.slider-value span{font-size:14px;font-weight:600;color:var(--muted);margin-left:3px}
+.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:24px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
+.slider-value span{font-size:13px;font-weight:600;color:var(--muted);margin-left:0}
+.slider-value .inch-value{font-size:11.5px;font-weight:600;color:#9ca3af;margin-left:3px;letter-spacing:0}
 .range-wrap{padding:4px 1px 0}
 input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .range-scale{display:flex;justify-content:space-between;margin-top:4px;color:var(--muted);font-size:11px}
@@ -78,9 +79,10 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .dimension-line{display:flex;align-items:baseline;gap:8px;line-height:1.25;white-space:nowrap}
 .dimension-line+.dimension-line{margin-top:5px}
 .dimension-name{font-size:19px;font-weight:700;color:var(--text)}
-.dimension-value{font-size:31px;font-weight:800;letter-spacing:-.035em}
+.dimension-value{font-size:27px;font-weight:800;letter-spacing:-.035em}
+.dimension-value .inch-value{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:5px;letter-spacing:0}
 .hidden{display:none!important}
-@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
+@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:23px}.slider-value .inch-value{font-size:11px}.dimension-value{font-size:25px}.dimension-value .inch-value{font-size:11.5px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
 </style>
 </head>
 <body>
@@ -439,10 +441,14 @@ function shapeFromDimensions(longMm,shortMm){
   return 'square';
 }
 
+function inchesFromMm(mm){return (mm/25.4).toFixed(1);}
+
 function setSizeDimensionDisplay(id,value){
   const display=$(id+'Display');
   if(value===300){
-    display.innerHTML=currentLang==='en'?'<strong>300</strong><span>+ mm</span>':'<strong>300</strong><span>mm以上</span>';
+    display.innerHTML=currentLang==='en'?`<strong>300</strong><span>+ mm</span><span class="inch-value">${inchesFromMm(value)}+in</span>`:'<strong>300</strong><span>mm以上</span>';
+  }else if(currentLang==='en'){
+    display.innerHTML=`<strong>${value}</strong><span>mm</span><span class="inch-value">${inchesFromMm(value)}in</span>`;
   }else{
     display.innerHTML=`<strong>${value}</strong><span>mm</span>`;
   }
@@ -546,8 +552,8 @@ function recalcBudget(){
   if(!longMm){showBudgetPlaceholder();return;}
   const shortMm=Math.max(1,Math.round(longMm*SHAPE_RATIO[budgetShape.value]));
   if(currentLang==='en'){
-    $('budgetLongResult').textContent=`Up to ${longMm} mm`;
-    $('budgetShortResult').textContent=`Up to ${shortMm} mm`;
+    $('budgetLongResult').innerHTML=`Up to ${longMm} mm<span class="inch-value">${inchesFromMm(longMm)}in</span>`;
+    $('budgetShortResult').innerHTML=`Up to ${shortMm} mm<span class="inch-value">${inchesFromMm(shortMm)}in</span>`;
   }else{
     $('budgetLongResult').textContent=`約${longMm}mmまで`;
     $('budgetShortResult').textContent=`約${shortMm}mmまで`;
