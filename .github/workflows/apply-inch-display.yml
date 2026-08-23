@@ -1,0 +1,88 @@
+name: Apply English inch display
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/apply-inch-display.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: price-time-display
+          fetch-depth: 0
+
+      - name: Add inch equivalents to English size displays
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old='.slider-value{font-size:26px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}\n.slider-value span{font-size:14px;font-weight:600;color:var(--muted);margin-left:3px}'
+          new='.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:24px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}\n.slider-value span{font-size:13px;font-weight:600;color:var(--muted);margin-left:0}\n.slider-value .inch-value{font-size:11.5px;font-weight:600;color:#9ca3af;margin-left:3px;letter-spacing:0}'
+          if old not in s: raise SystemExit('slider CSS target not found')
+          s=s.replace(old,new,1)
+
+          old='.dimension-value{font-size:31px;font-weight:800;letter-spacing:-.035em}'
+          new='.dimension-value{font-size:27px;font-weight:800;letter-spacing:-.035em}\n.dimension-value .inch-value{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:5px;letter-spacing:0}'
+          if old not in s: raise SystemExit('dimension CSS target not found')
+          s=s.replace(old,new,1)
+
+          old='@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}'
+          new='@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:23px}.slider-value .inch-value{font-size:11px}.dimension-value{font-size:25px}.dimension-value .inch-value{font-size:11.5px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}'
+          if old not in s: raise SystemExit('mobile CSS target not found')
+          s=s.replace(old,new,1)
+
+          old="""function setSizeDimensionDisplay(id,value){
+  const display=$(id+'Display');
+  if(value===300){
+    display.innerHTML=currentLang==='en'?'<strong>300</strong><span>+ mm</span>':'<strong>300</strong><span>mm以上</span>';
+  }else{
+    display.innerHTML=`<strong>${value}</strong><span>mm</span>`;
+  }
+}"""
+          new="""function inchesFromMm(mm){return (mm/25.4).toFixed(1);}
+
+function setSizeDimensionDisplay(id,value){
+  const display=$(id+'Display');
+  if(value===300){
+    display.innerHTML=currentLang==='en'?`<strong>300</strong><span>+ mm</span><span class="inch-value">${inchesFromMm(value)}+in</span>`:'<strong>300</strong><span>mm以上</span>';
+  }else if(currentLang==='en'){
+    display.innerHTML=`<strong>${value}</strong><span>mm</span><span class="inch-value">${inchesFromMm(value)}in</span>`;
+  }else{
+    display.innerHTML=`<strong>${value}</strong><span>mm</span>`;
+  }
+}"""
+          if old not in s: raise SystemExit('size display JS target not found')
+          s=s.replace(old,new,1)
+
+          old="""  if(currentLang==='en'){
+    $('budgetLongResult').textContent=`Up to ${longMm} mm`;
+    $('budgetShortResult').textContent=`Up to ${shortMm} mm`;
+  }else{"""
+          new="""  if(currentLang==='en'){
+    $('budgetLongResult').innerHTML=`Up to ${longMm} mm<span class="inch-value">${inchesFromMm(longMm)}in</span>`;
+    $('budgetShortResult').innerHTML=`Up to ${shortMm} mm<span class="inch-value">${inchesFromMm(shortMm)}in</span>`;
+  }else{"""
+          if old not in s: raise SystemExit('budget result JS target not found')
+          s=s.replace(old,new,1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+
+      - name: Commit branch update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add English inch equivalents to size displays"
+          git push origin price-time-display
