@@ -19,10 +19,11 @@ main{max-width:760px;margin:auto;padding:18px 14px calc(110px + env(safe-area-in
 h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
 .quick-price-guide{background:#171717;border:1px solid #262626;border-radius:16px;margin-top:14px;padding:22px 16px;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.quick-price-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:11px 0;font-size:13px;line-height:1.4}
+.quick-price-row{display:block;padding:15px 0;line-height:1.45}
 .quick-price-row+.quick-price-row{border-top:1px solid rgba(255,255,255,.12)}
-.quick-price-size{font-weight:700;min-width:0;color:#f5f5f5}
-.quick-price-value{font-weight:750;white-space:nowrap;text-align:right;color:#fff}
+.quick-price-size{font-weight:800;color:#fff;font-size:14px;margin-bottom:7px}
+.quick-price-detail{color:#d2d2d2;font-size:12.5px;line-height:1.55}
+.quick-price-detail+.quick-price-detail{margin-top:2px}
 .quick-price-note{margin-top:12px;color:#b8b8b8;font-size:11px;line-height:1.5}
 .section-divider{height:1px;background:var(--line);margin:52px 2px}
 .simulator-title{font-size:22px;line-height:1.25;font-weight:800;margin:0 2px}
@@ -76,7 +77,7 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 .dimension-name{font-size:19px;font-weight:700;color:var(--text)}
 .dimension-value{font-size:31px;font-weight:800;letter-spacing:-.035em}
 .hidden{display:none!important}
-@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:21px 14px}.quick-price-row{font-size:12px;gap:8px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
+@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:21px 14px}.quick-price-size{font-size:13px}.quick-price-detail{font-size:12px}.dimension-value{font-size:28px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
 </style>
 </head>
 <body>
@@ -87,11 +88,31 @@ input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}
 </div>
 
 <section class="quick-price-guide" aria-labelledby="quickPriceHeading">
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickXSSize">XS size — about 3 cm (1.2 in)</div><div class="quick-price-value" data-i18n="quickXSPrice">about ¥17,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickSSize">S size — about 6 cm (2.5 in)</div><div class="quick-price-value" data-i18n="quickSPrice">¥25,000–¥35,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickMSize">M size — about 12 cm (5 in)</div><div class="quick-price-value" data-i18n="quickMPrice">¥52,000–¥70,000</div></div>
-  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickLSize">L size — about 20 cm (8 in)</div><div class="quick-price-value" data-i18n="quickLPrice">¥80,000–¥150,000</div></div>
-  <div class="quick-price-note" data-i18n="quickPriceNote">Prices are estimates and may vary depending on the design.</div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickXSName">XS size</div>
+    <div class="quick-price-detail" data-i18n="quickXSSize">Size: about 3 cm (1.2 in)</div>
+    <div class="quick-price-detail" data-i18n="quickXSPrice">Price: about ¥17,000</div>
+    <div class="quick-price-detail" data-i18n="quickXSTime">Time: about 1 hour</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickSName">S size</div>
+    <div class="quick-price-detail" data-i18n="quickSSize">Size: about 6 cm (2.5 in)</div>
+    <div class="quick-price-detail" data-i18n="quickSPrice">Price: ¥25,000–¥35,000</div>
+    <div class="quick-price-detail" data-i18n="quickSTime">Time: about 1–2 hours</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickMName">M size</div>
+    <div class="quick-price-detail" data-i18n="quickMSize">Size: about 12 cm (5 in)</div>
+    <div class="quick-price-detail" data-i18n="quickMPrice">Price: ¥52,000–¥70,000</div>
+    <div class="quick-price-detail" data-i18n="quickMTime">Time: about 3–5 hours</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickLName">L size</div>
+    <div class="quick-price-detail" data-i18n="quickLSize">Size: about 20 cm (8 in)</div>
+    <div class="quick-price-detail" data-i18n="quickLPrice">Price: ¥80,000–¥150,000</div>
+    <div class="quick-price-detail" data-i18n="quickLTime">Time: about 5–8 hours</div>
+  </div>
+  <div class="quick-price-note" data-i18n="quickPriceNote">Prices and times are estimates and may vary depending on the design.</div>
 </section>
 
 <div class="section-divider" aria-hidden="true"></div>
@@ -254,11 +275,11 @@ const TEXT={
   ja:{
     title:'料金シミュレーター',
     quickPriceGuide:'料金',
-    quickXSSize:'XSサイズ — 約3cm',quickXSPrice:'約¥17,000',
-    quickSSize:'Sサイズ — 約6cm',quickSPrice:'¥25,000〜¥35,000',
-    quickMSize:'Mサイズ — 約12cm',quickMPrice:'¥52,000〜¥70,000',
-    quickLSize:'Lサイズ — 約20cm',quickLPrice:'¥80,000〜¥150,000',
-    quickPriceNote:'料金はあくまで目安です。デザインによって異なります。',
+    quickXSName:'XSサイズ',quickXSSize:'サイズ：約3cm',quickXSPrice:'料金：約¥17,000',quickXSTime:'時間：約1時間',
+    quickSName:'Sサイズ',quickSSize:'サイズ：約6cm',quickSPrice:'料金：¥25,000〜¥35,000',quickSTime:'時間：約1〜2時間',
+    quickMName:'Mサイズ',quickMSize:'サイズ：約12cm',quickMPrice:'料金：¥52,000〜¥70,000',quickMTime:'時間：約3〜5時間',
+    quickLName:'Lサイズ',quickLSize:'サイズ：約20cm',quickLPrice:'料金：¥80,000〜¥150,000',quickLTime:'時間：約5〜8時間',
+    quickPriceNote:'料金・所要時間はあくまで目安です。デザインによって異なります。',
     simulatorDescription:'より詳細な料金をもとめられます。',
     estimateMethod:'見積もり方法',
     tabSize:'サイズから見積もる',tabBudget:'予算から見積もる',
@@ -283,11 +304,11 @@ const TEXT={
   en:{
     title:'Price Simulator',
     quickPriceGuide:'Price',
-    quickXSSize:'XS size — about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',
-    quickSSize:'S size — about 6 cm (2.5 in)',quickSPrice:'¥25,000–¥35,000',
-    quickMSize:'M size — about 12 cm (5 in)',quickMPrice:'¥52,000–¥70,000',
-    quickLSize:'L size — about 20 cm (8 in)',quickLPrice:'¥80,000–¥150,000',
-    quickPriceNote:'Prices are estimates and may vary depending on the design.',
+    quickXSName:'XS size',quickXSSize:'Size: about 3 cm (1.2 in)',quickXSPrice:'Price: about ¥17,000',quickXSTime:'Time: about 1 hour',
+    quickSName:'S size',quickSSize:'Size: about 6 cm (2.5 in)',quickSPrice:'Price: ¥25,000–¥35,000',quickSTime:'Time: about 1–2 hours',
+    quickMName:'M size',quickMSize:'Size: about 12 cm (5 in)',quickMPrice:'Price: ¥52,000–¥70,000',quickMTime:'Time: about 3–5 hours',
+    quickLName:'L size',quickLSize:'Size: about 20 cm (8 in)',quickLPrice:'Price: ¥80,000–¥150,000',quickLTime:'Time: about 5–8 hours',
+    quickPriceNote:'Prices and times are estimates and may vary depending on the design.',
     simulatorDescription:'Get a more detailed price estimate.',
     estimateMethod:'Estimate method',
     tabSize:'Estimate by Size',tabBudget:'Estimate by Budget',
