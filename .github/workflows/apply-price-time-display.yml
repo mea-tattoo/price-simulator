@@ -1,0 +1,91 @@
+name: Apply price time display branch
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/apply-price-time-display.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: price-time-display
+          fetch-depth: 0
+
+      - name: Update price guide with time
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          old_css = ".quick-price-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:11px 0;font-size:13px;line-height:1.4}\n.quick-price-row+.quick-price-row{border-top:1px solid rgba(255,255,255,.12)}\n.quick-price-size{font-weight:700;min-width:0;color:#f5f5f5}\n.quick-price-value{font-weight:750;white-space:nowrap;text-align:right;color:#fff}"
+          new_css = ".quick-price-row{display:block;padding:15px 0;line-height:1.45}\n.quick-price-row+.quick-price-row{border-top:1px solid rgba(255,255,255,.12)}\n.quick-price-size{font-weight:800;color:#fff;font-size:14px;margin-bottom:7px}\n.quick-price-detail{color:#d2d2d2;font-size:12.5px;line-height:1.55}\n.quick-price-detail+.quick-price-detail{margin-top:2px}"
+          if old_css not in s: raise SystemExit('CSS target not found')
+          s = s.replace(old_css, new_css, 1)
+
+          old_html = '''<section class="quick-price-guide" aria-labelledby="quickPriceHeading">
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickXSSize">XS size — about 3 cm (1.2 in)</div><div class="quick-price-value" data-i18n="quickXSPrice">about ¥17,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickSSize">S size — about 6 cm (2.5 in)</div><div class="quick-price-value" data-i18n="quickSPrice">¥25,000–¥35,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickMSize">M size — about 12 cm (5 in)</div><div class="quick-price-value" data-i18n="quickMPrice">¥52,000–¥70,000</div></div>
+  <div class="quick-price-row"><div class="quick-price-size" data-i18n="quickLSize">L size — about 20 cm (8 in)</div><div class="quick-price-value" data-i18n="quickLPrice">¥80,000–¥150,000</div></div>
+  <div class="quick-price-note" data-i18n="quickPriceNote">Prices are estimates and may vary depending on the design.</div>
+</section>'''
+          new_html = '''<section class="quick-price-guide" aria-labelledby="quickPriceHeading">
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickXSName">XS size</div>
+    <div class="quick-price-detail" data-i18n="quickXSSize">Size: about 3 cm (1.2 in)</div>
+    <div class="quick-price-detail" data-i18n="quickXSPrice">Price: about ¥17,000</div>
+    <div class="quick-price-detail" data-i18n="quickXSTime">Time: about 1 hour</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickSName">S size</div>
+    <div class="quick-price-detail" data-i18n="quickSSize">Size: about 6 cm (2.5 in)</div>
+    <div class="quick-price-detail" data-i18n="quickSPrice">Price: ¥25,000–¥35,000</div>
+    <div class="quick-price-detail" data-i18n="quickSTime">Time: about 1–2 hours</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickMName">M size</div>
+    <div class="quick-price-detail" data-i18n="quickMSize">Size: about 12 cm (5 in)</div>
+    <div class="quick-price-detail" data-i18n="quickMPrice">Price: ¥52,000–¥70,000</div>
+    <div class="quick-price-detail" data-i18n="quickMTime">Time: about 3–5 hours</div>
+  </div>
+  <div class="quick-price-row">
+    <div class="quick-price-size" data-i18n="quickLName">L size</div>
+    <div class="quick-price-detail" data-i18n="quickLSize">Size: about 20 cm (8 in)</div>
+    <div class="quick-price-detail" data-i18n="quickLPrice">Price: ¥80,000–¥150,000</div>
+    <div class="quick-price-detail" data-i18n="quickLTime">Time: about 5–8 hours</div>
+  </div>
+  <div class="quick-price-note" data-i18n="quickPriceNote">Prices and times are estimates and may vary depending on the design.</div>
+</section>'''
+          if old_html not in s: raise SystemExit('HTML target not found')
+          s = s.replace(old_html, new_html, 1)
+
+          old_ja = "quickXSSize:'XSサイズ — 約3cm',quickXSPrice:'約¥17,000',\n    quickSSize:'Sサイズ — 約6cm',quickSPrice:'¥25,000〜¥35,000',\n    quickMSize:'Mサイズ — 約12cm',quickMPrice:'¥52,000〜¥70,000',\n    quickLSize:'Lサイズ — 約20cm',quickLPrice:'¥80,000〜¥150,000',\n    quickPriceNote:'料金はあくまで目安です。デザインによって異なります。',"
+          new_ja = "quickXSName:'XSサイズ',quickXSSize:'サイズ：約3cm',quickXSPrice:'料金：約¥17,000',quickXSTime:'時間：約1時間',\n    quickSName:'Sサイズ',quickSSize:'サイズ：約6cm',quickSPrice:'料金：¥25,000〜¥35,000',quickSTime:'時間：約1〜2時間',\n    quickMName:'Mサイズ',quickMSize:'サイズ：約12cm',quickMPrice:'料金：¥52,000〜¥70,000',quickMTime:'時間：約3〜5時間',\n    quickLName:'Lサイズ',quickLSize:'サイズ：約20cm',quickLPrice:'料金：¥80,000〜¥150,000',quickLTime:'時間：約5〜8時間',\n    quickPriceNote:'料金・所要時間はあくまで目安です。デザインによって異なります。',"
+          if old_ja not in s: raise SystemExit('Japanese target not found')
+          s = s.replace(old_ja, new_ja, 1)
+
+          old_en = "quickXSSize:'XS size — about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',\n    quickSSize:'S size — about 6 cm (2.5 in)',quickSPrice:'¥25,000–¥35,000',\n    quickMSize:'M size — about 12 cm (5 in)',quickMPrice:'¥52,000–¥70,000',\n    quickLSize:'L size — about 20 cm (8 in)',quickLPrice:'¥80,000–¥150,000',\n    quickPriceNote:'Prices are estimates and may vary depending on the design.',"
+          new_en = "quickXSName:'XS size',quickXSSize:'Size: about 3 cm (1.2 in)',quickXSPrice:'Price: about ¥17,000',quickXSTime:'Time: about 1 hour',\n    quickSName:'S size',quickSSize:'Size: about 6 cm (2.5 in)',quickSPrice:'Price: ¥25,000–¥35,000',quickSTime:'Time: about 1–2 hours',\n    quickMName:'M size',quickMSize:'Size: about 12 cm (5 in)',quickMPrice:'Price: ¥52,000–¥70,000',quickMTime:'Time: about 3–5 hours',\n    quickLName:'L size',quickLSize:'Size: about 20 cm (8 in)',quickLPrice:'Price: ¥80,000–¥150,000',quickLTime:'Time: about 5–8 hours',\n    quickPriceNote:'Prices and times are estimates and may vary depending on the design.',"
+          if old_en not in s: raise SystemExit('English target not found')
+          s = s.replace(old_en, new_en, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit branch update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add estimated time to price guide"
+          git push origin price-time-display
