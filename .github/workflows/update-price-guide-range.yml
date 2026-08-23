@@ -1,0 +1,49 @@
+name: Update price guide range and shape
+
+on:
+  push:
+    branches:
+      - price-time-display
+    paths:
+      - '.github/workflows/update-price-guide-range.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: price-time-display
+      - name: Update price guide
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          replacements={
+            "border-radius:16px;margin-top:14px":"border-radius:0;margin-top:14px",
+            ".quick-price-note{margin-top:12px;color:#b8b8b8;font-size:11px;line-height:1.5}":".quick-price-note{margin-top:12px;color:#b8b8b8;font-size:11px;line-height:1.5;font-weight:700}",
+            "Price: ¥25,000–¥35,000":"Price: ¥22,000–¥35,000",
+            "Price: ¥52,000–¥70,000":"Price: ¥45,000–¥65,000",
+            "Price: ¥80,000–¥150,000":"Price: ¥70,000–¥100,000",
+            "料金：¥25,000〜¥35,000":"料金：¥22,000〜¥35,000",
+            "料金：¥52,000〜¥70,000":"料金：¥45,000〜¥65,000",
+            "料金：¥80,000〜¥150,000":"料金：¥70,000〜¥100,000",
+          }
+          for old,new in replacements.items():
+            if old not in s:
+              raise SystemExit(f'target not found: {old}')
+            s=s.replace(old,new)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Update price ranges and square price guide"
+          git push origin price-time-display
