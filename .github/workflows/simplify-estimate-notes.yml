@@ -1,0 +1,42 @@
+name: Simplify estimate notes
+
+on:
+  push:
+    branches:
+      - segment-border-refine
+    paths:
+      - '.github/workflows/simplify-estimate-notes.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: segment-border-refine
+      - name: Simplify estimate notes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old='.estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:4px;padding:11px 12px;color:var(--warn-text);font-size:13px;line-height:1.6}'
+          new='.estimate-note{margin-top:8px;padding:0;color:var(--muted);font-size:12px;line-height:1.5}\n.final.is-placeholder .estimate-note,.result.is-placeholder .estimate-note{display:none}'
+          if old not in s:
+              raise SystemExit('estimate note CSS target not found')
+          s=s.replace(old,new,1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Simplify estimate notes"
+          git push origin segment-border-refine
