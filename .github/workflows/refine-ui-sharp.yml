@@ -1,0 +1,72 @@
+name: Refine sharp UI
+
+on:
+  push:
+    branches:
+      - segment-border-refine
+    paths:
+      - '.github/workflows/refine-ui-sharp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: segment-border-refine
+      - name: Refine corners background and sliders
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          replacements={
+            '--bg:#f7f7f8;--card:#fff;':'--bg:#fff;--card:#fff;',
+            'background:rgba(247,247,248,.94);backdrop-filter:blur(14px);':'background:rgba(255,255,255,.96);backdrop-filter:blur(14px);',
+            '.step{background:var(--card);border:1px solid var(--line);border-radius:16px;':'.step{background:var(--card);border:1px solid var(--line);border-radius:4px;',
+            'select{width:100%;font-size:16px;border:1px solid #d1d5db;border-radius:12px;':'select{width:100%;font-size:16px;border:1px solid #d1d5db;border-radius:4px;',
+            '.validation{margin-top:9px;padding:9px 10px;border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:10px;':'.validation{margin-top:9px;padding:9px 10px;border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:4px;',
+            '.final,.result{margin-top:12px;border:2px solid var(--dark);border-radius:16px;':'.final,.result{margin-top:12px;border:2px solid var(--dark);border-radius:4px;',
+            '.estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:12px;':'.estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:4px;',
+            '.actions button{border:0;border-radius:12px;':'.actions button{border:0;border-radius:4px;',
+            '.budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(247,247,248,.94);':'.budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);',
+          }
+          for old,new in replacements.items():
+            if old not in s:
+              raise SystemExit(f'target not found: {old}')
+            s=s.replace(old,new,1)
+
+          old='input[type="range"]{width:100%;margin:0;accent-color:var(--dark)}'
+          new='''input[type="range"]{width:100%;height:18px;margin:0;-webkit-appearance:none;appearance:none;background:transparent;--range-progress:0%}\ninput[type="range"]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(to right,var(--dark) 0 var(--range-progress),#dfe2e6 var(--range-progress) 100%);border-radius:1px}\ninput[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-7px;border:1px solid #d1d5db;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}\ninput[type="range"]::-moz-range-track{height:2px;background:#dfe2e6;border:0;border-radius:1px}\ninput[type="range"]::-moz-range-progress{height:2px;background:var(--dark);border-radius:1px}\ninput[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d1d5db;border-radius:50%;background:#fff}'''
+          if old not in s: raise SystemExit('range css target not found')
+          s=s.replace(old,new,1)
+
+          marker="function inchesFromMm(mm){return (mm/25.4).toFixed(1);}\n"
+          addition="""function inchesFromMm(mm){return (mm/25.4).toFixed(1);}\n\nfunction updateRangeTrack(el){\n  const min=Number(el.min)||0;\n  const max=Number(el.max)||100;\n  const value=Number(el.value);\n  const progress=((value-min)/(max-min))*100;\n  el.style.setProperty('--range-progress',`${Math.max(0,Math.min(100,progress))}%`);\n}\n"""
+          if marker not in s: raise SystemExit('inches marker not found')
+          s=s.replace(marker,addition,1)
+
+          old_recalc="""function recalcSize(){\n  const longMm=Number(sizeLength.value);\n  const shortMm=Number(sizeShort.value);"""
+          new_recalc="""function recalcSize(){\n  updateRangeTrack(sizeLength);\n  updateRangeTrack(sizeShort);\n  const longMm=Number(sizeLength.value);\n  const shortMm=Number(sizeShort.value);"""
+          if old_recalc not in s: raise SystemExit('recalcSize target not found')
+          s=s.replace(old_recalc,new_recalc,1)
+
+          old_budget="""function recalcBudget(){\n  const budgetValue=Number(budget.value);"""
+          new_budget="""function recalcBudget(){\n  updateRangeTrack(budget);\n  const budgetValue=Number(budget.value);"""
+          if old_budget not in s: raise SystemExit('recalcBudget target not found')
+          s=s.replace(old_budget,new_budget,1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Sharpen corners sliders and background"
+          git push origin segment-border-refine
