@@ -1,0 +1,66 @@
+name: Add booking CTA
+
+on:
+  push:
+    branches:
+      - segment-border-refine
+    paths:
+      - '.github/workflows/add-booking-cta.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: segment-border-refine
+      - name: Add booking CTA
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          old='.actions button{border:0;border-radius:4px;padding:11px 14px;font:inherit;font-weight:700;background:#e5e7eb;color:#111;cursor:pointer}'
+          new=old+'\n.booking-cta{display:flex;align-items:center;justify-content:center;width:100%;margin-top:14px;padding:15px 16px;background:#171717;color:#fff;text-decoration:none;border:1.3px solid #171717;border-radius:4px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em}\n.booking-cta:active{background:#2a2a2a}'
+          if old not in s: raise SystemExit('actions CSS target not found')
+          s=s.replace(old,new,1)
+
+          old='''  </div>\n\n  <div class="actions"><button id="sizeReset" type="button" data-i18n="reset">Reset</button></div>'''
+          new='''  </div>\n\n  <a id="sizeBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Book an Appointment</a>\n  <div class="actions"><button id="sizeReset" type="button" data-i18n="reset">Reset</button></div>'''
+          if old not in s: raise SystemExit('size CTA target not found')
+          s=s.replace(old,new,1)
+
+          old='''  </div>\n\n  <div class="actions"><button id="budgetReset" type="button" data-i18n="reset">Reset</button></div>'''
+          new='''  </div>\n\n  <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Book an Appointment</a>\n  <div class="actions"><button id="budgetReset" type="button" data-i18n="reset">Reset</button></div>'''
+          if old not in s: raise SystemExit('budget CTA target not found')
+          s=s.replace(old,new,1)
+
+          old="sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。'"
+          new="sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームへ'"
+          if old not in s: raise SystemExit('ja text target not found')
+          s=s.replace(old,new,1)
+
+          old="sizeNote:'The displayed size is an estimate.'"
+          new="sizeNote:'The displayed size is an estimate.',bookingCta:'Book an Appointment'"
+          if old not in s: raise SystemExit('en text target not found')
+          s=s.replace(old,new,1)
+
+          old="""  $('langToggle').setAttribute('aria-label',currentLang==='en'?'日本語に切り替える':'Switch to English');\n}"""
+          new="""  $('langToggle').setAttribute('aria-label',currentLang==='en'?'日本語に切り替える':'Switch to English');\n  const bookingUrl=currentLang==='en'?'https://docs.google.com/forms/d/e/1FAIpQLSecK9YxkFyGUIKs14U2xnfTjO-N-H56az5IWWe9ntD9Cynsvw/viewform':'https://docs.google.com/forms/d/e/1FAIpQLScQl62hFykxi3l_dEHyUc7Ol1HoiIjjlMt_b2bd04L9F98S8Q/viewform';\n  $('sizeBookingLink').href=bookingUrl;\n  $('budgetBookingLink').href=bookingUrl;\n}"""
+          if old not in s: raise SystemExit('language link target not found')
+          s=s.replace(old,new,1)
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add booking form CTA"
+          git push origin segment-border-refine
