@@ -69,6 +69,8 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .estimate-note{margin-top:10px;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:4px;padding:11px 12px;color:var(--warn-text);font-size:13px;line-height:1.6}
 .actions{display:flex;gap:8px;margin-top:12px}
 .actions button{border:0;border-radius:4px;padding:11px 14px;font:inherit;font-weight:700;background:#e5e7eb;color:#111;cursor:pointer}
+.booking-cta{display:flex;align-items:center;justify-content:center;width:100%;margin-top:14px;padding:15px 16px;background:#171717;color:#fff;text-decoration:none;border:1.3px solid #171717;border-radius:4px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.booking-cta:active{background:#2a2a2a}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
@@ -203,6 +205,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
     </div>
   </div>
 
+  <a id="sizeBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Book an Appointment</a>
   <div class="actions"><button id="sizeReset" type="button" data-i18n="reset">Reset</button></div>
 </section>
 
@@ -271,6 +274,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
     <div class="estimate-note" data-i18n="sizeNote">The displayed size is an estimate.</div>
   </div>
 
+  <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Book an Appointment</a>
   <div class="actions"><button id="budgetReset" type="button" data-i18n="reset">Reset</button></div>
 </section>
 </main>
@@ -309,7 +313,7 @@ const TEXT={
     budget:'予算',budgetMin:'¥17,000以下',budgetMax:'¥120,000以上',
     shape:'形状',shapeSquare:'正方形に近い',shapeSomewhat:'一般的な長方形',shapeNarrow:'細長い',shapeVeryNarrow:'とても細長い',
     withBudget:'この予算なら',largeNotice:'230mmを超えるサイズは、このシミュレーターでは算出できません。',
-    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。'
+    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームへ'
   },
   en:{
     title:'Price Simulator',
@@ -338,7 +342,7 @@ const TEXT={
     budget:'Budget',budgetMin:'≤ ¥17,000',budgetMax:'≥ ¥120,000',
     shape:'Proportions',shapeSquare:'Nearly Equal',shapeSomewhat:'Moderately Elongated',shapeNarrow:'Elongated',shapeVeryNarrow:'Very Elongated',
     withBudget:'With this budget',largeNotice:'Sizes over 230 mm cannot be calculated.',
-    sizeNote:'The displayed size is an estimate.'
+    sizeNote:'The displayed size is an estimate.',bookingCta:'Book an Appointment'
   }
 };
 
@@ -355,6 +359,9 @@ function applyLanguage(){
   document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.dataset.i18nAria));});
   $('langToggle').textContent=currentLang==='en'?'日本語':'English';
   $('langToggle').setAttribute('aria-label',currentLang==='en'?'日本語に切り替える':'Switch to English');
+  const bookingUrl=currentLang==='en'?'https://docs.google.com/forms/d/e/1FAIpQLSecK9YxkFyGUIKs14U2xnfTjO-N-H56az5IWWe9ntD9Cynsvw/viewform':'https://docs.google.com/forms/d/e/1FAIpQLScQl62hFykxi3l_dEHyUc7Ol1HoiIjjlMt_b2bd04L9F98S8Q/viewform';
+  $('sizeBookingLink').href=bookingUrl;
+  $('budgetBookingLink').href=bookingUrl;
 }
 
 function setLanguage(lang,updateUrl=true){
