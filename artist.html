@@ -47,8 +47,9 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
 .summary-language-title{font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 8px}
 .summary-item{background:#fff;border-radius:7px;padding:13px 14px;margin-top:10px}
 .summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14px;font-weight:800}
-.summary-detail{margin-top:7px;color:var(--muted2);font-size:10.5px;line-height:1.55}
+.summary-detail{color:var(--muted2);font-size:10.5px;line-height:1.55}
 .summary-detail div+div{margin-top:1px}
+.summary-detail+.summary-main{margin-top:8px}
 .summary-totals{margin-top:14px;padding-top:2px}
 .sum-row{display:flex;justify-content:space-between;gap:14px;padding:6px 2px;font-size:13px}
 .sum-row.discount{color:#6b7280}
@@ -103,7 +104,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.2</div>
+<div class="version">artist-v0.3.3</div>
 </main>
 
 <template id="tattooTemplate">
@@ -461,15 +462,6 @@ function refreshSummary(){
       const item=document.createElement('div');
       item.className='summary-item';
 
-      const main=document.createElement('div');
-      main.className='summary-main';
-      const title=document.createElement('span');
-      title.textContent=summary.title(i);
-      const amount=document.createElement('strong');
-      amount.textContent=c?money(c.rounded):'¥--,---';
-      main.append(title,amount);
-      item.appendChild(main);
-
       const detail=document.createElement('div');
       detail.className='summary-detail';
       const detailLines=c?summary.lines(c):[card.dataset.special?summary.special:summary.invalid];
@@ -479,6 +471,15 @@ function refreshSummary(){
         detail.appendChild(line);
       });
       item.appendChild(detail);
+
+      const main=document.createElement('div');
+      main.className='summary-main';
+      const title=document.createElement('span');
+      title.textContent=summary.title(i);
+      const amount=document.createElement('strong');
+      amount.textContent=c?money(c.rounded):'¥--,---';
+      main.append(title,amount);
+      item.appendChild(main);
       summary.rows.appendChild(item);
     });
   });
