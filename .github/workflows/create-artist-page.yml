@@ -1,0 +1,63 @@
+name: Create artist calculator page
+
+on:
+  push:
+    branches:
+      - artist-calculator
+    paths:
+      - '.github/workflows/create-artist-page.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: artist-calculator
+      - name: Create artist page and add whitespace field
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          src=Path('index.html').read_text()
+          s=src
+
+          # Clearly distinguish the internal artist version without changing customer index.html.
+          s=s.replace('<title>Tattoo Price Simulator</title>','<title>Artist Tattoo Price Calculator</title>',1)
+          s=s.replace('<meta name="apple-mobile-web-app-title" content="Tattoo Price Simulator">','<meta name="apple-mobile-web-app-title" content="Artist Price Calculator">',1)
+
+          ja_anchor="    title:'料金シミュレーター',\n"
+          ja_add="    title:'アーティスト用料金計算機',\n    motifWhitespace:'複数モチーフの場合の余白',\n    whitespaceLarge:'ほとんど大部分が余白（70%以上）',\n    whitespaceHalf:'半分ほどが余白（50%前後）',\n    whitespaceSome:'少し余白（20〜30%）',\n    whitespaceNone:'余白なし（0〜10%）',\n"
+          if ja_anchor not in s:
+              raise SystemExit('Japanese title anchor not found')
+          s=s.replace(ja_anchor,ja_add,1)
+
+          en_anchor="    title:'Price Simulator',\n"
+          en_add="    title:'Artist Price Calculator',\n    motifWhitespace:'Whitespace for Multiple Motifs',\n    whitespaceLarge:'Mostly whitespace (70%+)',\n    whitespaceHalf:'About half whitespace (~50%)',\n    whitespaceSome:'Some whitespace (20–30%)',\n    whitespaceNone:'Little or no whitespace (0–10%)',\n"
+          if en_anchor not in s:
+              raise SystemExit('English title anchor not found')
+          s=s.replace(en_anchor,en_add,1)
+
+          short_block='''  <section class="step size-input-card">\n    <h2 data-i18n="shortSide">Short Side</h2>\n    <div class="slider-head"><div class="slider-value" id="sizeShortDisplay"><strong>50</strong><span>mm</span></div></div>\n    <div class="range-wrap">\n      <input id="sizeShort" type="range" min="1" max="300" step="1" value="50" data-i18n-aria="shortSide" />\n      <div class="range-scale"><span>1mm</span><span data-i18n="max300">300+ mm</span></div>\n    </div>\n    <div id="sizeDimensionError" class="validation hidden" data-i18n="dimensionError">The short side must not exceed the long side.</div>\n  </section>\n'''
+          whitespace_block=short_block+'''\n  <section class="step">\n    <h2 data-i18n="motifWhitespace">Whitespace for Multiple Motifs</h2>\n    <select id="sizeMotifWhitespace" data-i18n-aria="motifWhitespace">\n      <option value="" data-i18n="select">Select</option>\n      <option value="large" data-i18n="whitespaceLarge">Mostly whitespace (70%+)</option>\n      <option value="half" data-i18n="whitespaceHalf">About half whitespace (~50%)</option>\n      <option value="some" data-i18n="whitespaceSome">Some whitespace (20–30%)</option>\n      <option value="none" data-i18n="whitespaceNone">Little or no whitespace (0–10%)</option>\n    </select>\n  </section>\n'''
+          if short_block not in s:
+              raise SystemExit('Short side block not found')
+          s=s.replace(short_block,whitespace_block,1)
+
+          # Artist page is currently a UI scaffold; pricing adjustment logic will be wired next.
+          s=s.replace("document.title=currentLang==='en'?'Tattoo Price Simulator':'簡易版タトゥー料金シミュレーター';",
+                      "document.title=currentLang==='en'?'Artist Tattoo Price Calculator':'アーティスト用タトゥー料金計算機';",1)
+
+          s=s.replace('v0.9.7','artist-v0.1.0')
+          Path('artist.html').write_text(s)
+          PY
+      - name: Commit artist page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artist.html
+          git commit -m "Add artist calculator page with motif whitespace input"
+          git push origin HEAD:artist-calculator
