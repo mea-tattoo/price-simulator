@@ -24,6 +24,8 @@ main{max-width:800px;margin:auto;padding:38px 18px 48px}
 .tattoo-actions{display:flex;align-items:center;gap:14px}
 .text-btn{border:0;background:transparent;color:#717780;font:inherit;font-size:11px;font-weight:500;padding:6px 0;cursor:pointer}
 .text-btn.remove{color:#e25563;font-weight:400}
+.combined-wrap{display:flex;align-items:flex-start;gap:8px;margin-top:14px;padding:12px 14px;border-radius:4px;background:var(--soft);color:#68707a;font-size:11px;line-height:1.4;cursor:pointer}
+.combined-wrap input{width:16px;height:16px;margin:0;flex:0 0 auto;accent-color:#55a95d}
 .field{border:0;border-radius:4px;background:var(--soft);padding:16px 18px;margin-top:14px}
 .field h2{font-size:15px;font-weight:600;margin:0 0 8px}
 .dimension-row{display:flex;align-items:center;justify-content:space-between;gap:18px}
@@ -63,7 +65,8 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .summary-item+.summary-item{margin-top:24px}
 .summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:16px;font-weight:500}
 .summary-main strong{font-size:16px;font-weight:600}
-.summary-detail{color:#7d858e;font-size:12px;line-height:1.55}
+.summary-combined{color:#55a95d;font-size:12px;font-weight:400;text-align:right}
+.summary-detail{color:#646b74;font-size:12px;line-height:1.55}
 .summary-detail-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:baseline}
 .summary-detail-line+.summary-detail-line{margin-top:3px}
 .summary-detail-value{text-align:right;white-space:nowrap}
@@ -71,11 +74,11 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .summary-totals{margin-top:20px;padding:2px var(--summary-gutter) 0;color:var(--text)}
 .sum-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:7px 0;font-size:16px;font-weight:500}
 .sum-row strong{font-weight:600}
-.sum-row.discount{color:#55a95d}
-.sum-row.total{margin-top:7px;padding-top:14px;font-size:24px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
+.sum-row.discount,.sum-row.discount strong{color:#55a95d;font-weight:400}
+.sum-row.total{margin-top:14px;padding-top:28px;font-size:28px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
 .sum-row.total strong{font-weight:600}
 .app-footer{display:flex;flex-direction:column;align-items:center;margin-top:108px;padding:22px 0 40px;color:#b7bdc5}
-.app-footer img{display:block;width:44px;height:auto}
+.app-footer img{display:block;width:70px;height:auto}
 .copyright{margin-top:14px;color:#aeb4bc;font-size:9px;letter-spacing:.08em}
 .version{color:#c3c7cc;font-size:9px;margin-top:8px}
 @media(max-width:390px){
@@ -88,9 +91,9 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   .summary h2{font-size:24px}
   .summary-language{--summary-gutter:14px}
   .summary-item{padding:14px var(--summary-gutter)}
-  .sum-row.total{font-size:24px}
+  .sum-row.total{font-size:28px}
   .app-footer{margin-top:96px;padding-bottom:36px}
-  .app-footer img{width:40px}
+  .app-footer img{width:64px}
 }
 </style>
 </head>
@@ -132,7 +135,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">Version 0.3.24</div>
+  <div class="version">Version 0.3.25</div>
 </footer>
 </main>
 
@@ -167,10 +170,10 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
     <select class="whitespace">
       <option value="">---</option>
       <option value="notApplicable">該当なし</option>
-      <option value="large">ほとんど大部分が余白（70%以上）</option>
-      <option value="half">半分ほどが余白（50%前後）</option>
-      <option value="some">少し余白（20〜30%）</option>
-      <option value="none">余白なし（0〜10%）</option>
+      <option value="large">余白が非常に多い（70%以上）</option>
+      <option value="half">余白が約半分（50%前後）</option>
+      <option value="some">余白が少ない（20〜30%）</option>
+      <option value="none">余白がほとんどない（0〜10%）</option>
     </select>
     <div class="helper whitespaceHelp"></div>
   </section>
@@ -207,6 +210,11 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
     <div class="helper colorHelp"></div>
   </section>
 
+  <label class="combined-wrap hidden">
+    <input class="combined" type="checkbox">
+    <span>1箇所に施術したと仮定して計算する</span>
+  </label>
+
   <div class="add-wrap"><button class="add" type="button">＋ 別のタトゥーを追加</button></div>
 </section>
 </template>
@@ -222,7 +230,7 @@ const pct=n=>n>0?`+${n}%`:n<0?`${n}%`:'±0%';
 
 const LABEL={
   shape:{veryNarrow:'とても細長い',narrow:'細長い',somewhat:'一般的な長方形',square:'正方形に近い'},
-  whitespace:{notApplicable:'該当なし',large:'ほとんど大部分が余白',half:'半分ほどが余白',some:'少し余白',none:'余白なし'},
+  whitespace:{notApplicable:'該当なし',large:'余白が非常に多い',half:'余白が約半分',some:'余白が少ない',none:'余白がほとんどない'},
   complexity:{verySimple:'非常にシンプル',simple:'シンプル',standard:'標準',complex:'複雑',veryComplex:'非常に複雑'},
   color:{oneToThree:'1〜3色 / ブラック&グレー',fourToSix:'4〜6色',sevenPlus:'7色〜'}
 };
@@ -323,10 +331,10 @@ function shapeRowsHtml(b,currentShape,currentRatio){
 function optionRowsHtml(type,b,currentValue,priceBasis){
   const defs={
     whitespace:[
-      {key:'large',label:'70%以上 / ほとんど大部分が余白'},
-      {key:'half',label:'50%前後 / 半分ほどが余白'},
-      {key:'some',label:'20〜30% / 少し余白'},
-      {key:'none',label:'0〜10% / 余白なし'}
+      {key:'large',label:'70%以上 / 余白が非常に多い'},
+      {key:'half',label:'50%前後 / 余白が約半分'},
+      {key:'some',label:'20〜30% / 余白が少ない'},
+      {key:'none',label:'0〜10% / 余白がほとんどない'}
     ],
     complexity:[
       {key:'verySimple',label:'非常にシンプル'},
@@ -453,7 +461,7 @@ const LABEL_EN={
 
 function breakdownLinesJa(c){
   return [
-    {label:`${c.long} × ${c.short} mm`},
+    {label:`サイズ：${c.long} × ${c.short} mm`},
     {label:`形状：${LABEL.shape[c.shape]}`},
     c.whitespace==='notApplicable'
       ?{label:'余白：該当なし'}
@@ -471,7 +479,7 @@ function breakdownLinesJa(c){
 
 function breakdownLinesEn(c){
   return [
-    {label:`${c.long} × ${c.short} mm (${inches(c.long)} × ${inches(c.short)} in)`},
+    {label:`Size: ${c.long} × ${c.short} mm (${inches(c.long)} × ${inches(c.short)} in)`},
     {label:`Shape: ${LABEL_EN.shape[c.shape]}`},
     c.whitespace==='notApplicable'
       ?{label:'Whitespace: Not applicable'}
@@ -493,6 +501,10 @@ function refresh(){
     card.querySelector('.tattoo-title').textContent=`タトゥー #${i+1}`;
     card.querySelector('.remove').classList.toggle('hidden',cards.length===1);
     card.querySelector('.add-wrap').classList.toggle('hidden',i!==cards.length-1);
+    const combinedWrap=card.querySelector('.combined-wrap');
+    const combined=card.querySelector('.combined');
+    combinedWrap.classList.toggle('hidden',i===0);
+    if(i===0)combined.checked=false;
   });
   refreshSummary();
 }
@@ -500,8 +512,8 @@ function refresh(){
 function refreshSummary(){
   const cards=[...host.querySelectorAll('.tattoo')];
   const languageSummaries=[
-    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー #${i+1}`,invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
-    {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo #${i+1}`,invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
+    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー #${i+1}`,combined:'合算料金',invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
+    {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo #${i+1}`,combined:'Priced as one combined piece',invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
   ];
   languageSummaries.forEach(summary=>summary.rows.innerHTML='');
 
@@ -510,6 +522,7 @@ function refreshSummary(){
 
   cards.forEach((card,i)=>{
     const c=card._calc;
+    const combined=i>0&&card.querySelector('.combined').checked;
     if(!c)complete=false;
     else subtotal+=c.rounded;
 
@@ -540,17 +553,23 @@ function refreshSummary(){
       main.className='summary-main';
       const title=document.createElement('span');
       title.textContent=summary.title(i);
-      const amount=document.createElement('strong');
-      amount.textContent=c?money(c.rounded):'¥--,---';
+      const amount=document.createElement(combined?'span':'strong');
+      if(combined){
+        amount.className='summary-combined';
+        amount.textContent=summary.combined;
+      }else{
+        amount.textContent=c?money(c.rounded):'¥--,---';
+      }
       main.append(title,amount);
       item.appendChild(main);
       summary.rows.appendChild(item);
     });
   });
 
-  const discount=cards.length>=2?5000:0;
+  const separatelyPricedCount=cards.filter((card,i)=>i===0||!card.querySelector('.combined').checked).length;
+  const discount=separatelyPricedCount>=2?5000:0;
   ['Ja','En'].forEach(language=>{
-    document.getElementById(`discountRow${language}`).classList.toggle('hidden',cards.length<2);
+    document.getElementById(`discountRow${language}`).classList.toggle('hidden',separatelyPricedCount<2);
     document.getElementById(`subtotal${language}`).textContent=complete?money(subtotal):'¥--,---';
     document.getElementById(`total${language}`).textContent=complete?money(Math.max(0,subtotal-discount)):'¥--,---';
   });
