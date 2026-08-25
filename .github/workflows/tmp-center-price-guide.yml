@@ -1,0 +1,44 @@
+name: Temporary price guide layout update
+on:
+  push:
+    branches: [price-guide-pairing]
+    paths: [.github/workflows/tmp-center-price-guide.yml]
+permissions:
+  contents: write
+jobs:
+  update-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: price-guide-pairing
+      - name: Center and pair price guide content
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='.quick-price-row{display:grid;grid-template-columns:92px auto;grid-template-areas:"name price" "size time";column-gap:16px;row-gap:4px;justify-content:start;align-items:baseline;padding:9px 0;line-height:1.35}'
+          new='.quick-price-row{display:grid;grid-template-columns:160px 260px;grid-template-areas:"name price" "size time";column-gap:32px;row-gap:4px;align-items:baseline;width:min(100%,452px);margin:0 auto;padding:9px 0;line-height:1.35}'
+          if old not in s:
+              raise SystemExit('quick-price-row target not found')
+          s=s.replace(old,new,1)
+          old_note='.quick-price-note{margin-top:7px;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#b8b8b8;font-size:10.5px;line-height:1.4;font-weight:700}'
+          new_note='.quick-price-note{width:min(100%,452px);margin:7px auto 0;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#b8b8b8;font-size:10.5px;line-height:1.4;font-weight:700}'
+          if old_note not in s:
+              raise SystemExit('quick-price-note target not found')
+          s=s.replace(old_note,new_note,1)
+          marker='@media(max-width:390px){'
+          responsive='@media(max-width:520px){.quick-price-row{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:18px;width:100%}.quick-price-note{width:100%}}\n'
+          if responsive not in s:
+              s=s.replace(marker,responsive+marker,1)
+          s=s.replace('v0.9.8','v0.9.9',1)
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Center price guide information block"
+          git push origin HEAD:price-guide-pairing
