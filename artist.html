@@ -6,7 +6,10 @@
 <title>料金計算機(アーティスト用)</title>
 <meta name="apple-mobile-web-app-title" content="料金計算機(アーティスト用)">
 <style>
-:root{--bg:#fff;--card:#fff;--text:#111;--muted:#6b7280;--muted2:#9ca3af;--line:#e5e7eb;--dark:#111827}
+:root{
+  --bg:#fff;--card:#fff;--text:#111;--muted:#6b7280;--muted2:#9ca3af;
+  --line:#e5e7eb;--soft:#f6f7f8;--soft2:#fafafa;--dark:#111827;
+}
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text)}
 body{margin:0}
@@ -25,28 +28,30 @@ h1{font-size:24px;line-height:1.25;margin:0 0 22px}
 .number-input{width:120px;font:inherit;font-size:17px;font-weight:700;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:10px 11px;color:var(--text)}
 .unit{font-size:12px;color:var(--muted);font-weight:600}
 select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:11px;color:var(--text)}
-.helper{font-size:10.5px;color:#858b94;line-height:1.5;margin-top:7px;min-height:15px}
+.helper{font-size:10.5px;color:#8a9099;line-height:1.5;margin-top:9px}
+.helper-title{font-size:10px;font-weight:700;color:#777e87;margin-bottom:4px}
+.helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:1px 0}
+.helper-row.current{color:#555b63;font-weight:700}
+.helper-row .meta{text-align:right;white-space:nowrap}
 .validation{font-size:11px;color:#991b1b;margin-top:7px}
 .hidden{display:none!important}
-.pricebox{border:2px solid var(--dark);border-radius:4px;padding:14px 16px;margin-top:12px}
+.pricebox{background:var(--soft);border:0;border-radius:6px;padding:15px 16px;margin-top:14px}
 .price-kicker{font-size:11px;color:var(--muted);font-weight:700}
 .price{font-size:23px;font-weight:800;margin-top:2px}
-.add-wrap{display:flex;justify-content:center;margin:18px 0 6px}
-.add{border:1.3px solid #111;background:#fff;color:#111;border-radius:4px;font:inherit;font-size:13px;font-weight:700;padding:10px 14px;cursor:pointer}
-.add-note{text-align:center;color:var(--muted);font-size:10.5px;margin-top:7px}
-.summary{margin-top:38px;border-top:2px solid #111;padding-top:18px}
-.summary h2{font-size:19px;margin:0 0 14px}
-.summary-item{padding:12px 0;border-bottom:1px solid var(--line)}
-.summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14px;font-weight:700}
-.summary-detail{margin-top:6px;color:var(--muted2);font-size:10.5px;line-height:1.55}
+.add-wrap{display:flex;justify-content:center;margin:20px 0 0}
+.add{border:0;background:#f1f2f4;color:#23262b;border-radius:6px;font:inherit;font-size:13px;font-weight:700;padding:11px 16px;cursor:pointer}
+.summary{margin-top:40px;background:var(--soft2);border-radius:10px;padding:18px 16px}
+.summary h2{font-size:18px;margin:0 0 14px}
+.summary-item{background:#fff;border-radius:7px;padding:13px 14px;margin-top:10px}
+.summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14px;font-weight:800}
+.summary-detail{margin-top:7px;color:var(--muted2);font-size:10.5px;line-height:1.55}
 .summary-detail div+div{margin-top:1px}
-.sum-row{display:flex;justify-content:space-between;gap:14px;padding:8px 0;font-size:13px}
-.sum-row.subtotal{margin-top:5px;padding-top:12px}
-.sum-row.discount{color:#59616c}
-.sum-row.total{border-top:1px solid #111;margin-top:6px;padding-top:13px;font-size:18px;font-weight:800}
-.payment{margin-top:20px;border:1px solid var(--line);border-radius:4px;padding:14px 16px}
-.payment h2{font-size:15px;margin:0 0 8px}
-.payment p{font-size:12px;color:#59616c;line-height:1.6;margin:2px 0}
+.summary-totals{margin-top:14px;padding-top:2px}
+.sum-row{display:flex;justify-content:space-between;gap:14px;padding:6px 2px;font-size:13px}
+.sum-row.discount{color:#6b7280}
+.sum-row.total{margin-top:7px;padding-top:11px;font-size:18px;font-weight:800;border-top:1px solid #dfe2e6}
+.payment{margin:14px 2px 0;color:#9aa0a8;font-size:10.5px;line-height:1.55}
+.payment-title{font-weight:700;color:#8b9199}
 .version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
 @media(max-width:390px){
   h1{font-size:22px}
@@ -54,6 +59,8 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   .field{padding:13px 14px}
   .number-input{width:108px}
   .price{font-size:22px}
+  .summary{padding:16px 13px}
+  .summary-item{padding:12px}
 }
 </style>
 </head>
@@ -64,20 +71,20 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
 <div id="tattoos"></div>
 
 <section class="summary">
-  <h2>Price Breakdown</h2>
+  <h2>料金内訳 / Price Breakdown</h2>
   <div id="summaryRows"></div>
-  <div class="sum-row subtotal"><span>Subtotal</span><strong id="subtotal">¥--,---</strong></div>
-  <div id="discountRow" class="sum-row discount hidden"><span>Same-day Discount</span><strong>-¥5,000</strong></div>
-  <div class="sum-row total"><span>Total</span><strong id="total">¥--,---</strong></div>
+  <div class="summary-totals">
+    <div class="sum-row"><span>小計 / Subtotal</span><strong id="subtotal">¥--,---</strong></div>
+    <div id="discountRow" class="sum-row discount hidden"><span>同時施術割 / Same-day Discount</span><strong>-¥5,000</strong></div>
+    <div class="sum-row total"><span>お支払い合計 / Total</span><strong id="total">¥--,---</strong></div>
+  </div>
+  <div class="payment">
+    <span class="payment-title">支払い時期：</span>
+    1セッションは施術後に全額支払い。複数セッションは各セッションの施術後に、そのセッション分を支払い。
+  </div>
 </section>
 
-<section class="payment">
-  <h2>支払い時期</h2>
-  <p>1セッションのみ：施術後に全額支払い</p>
-  <p>複数セッション：各セッションの施術後に、そのセッション分を支払い</p>
-</section>
-
-<div class="version">artist-v0.3.0</div>
+<div class="version">artist-v0.3.1</div>
 </main>
 
 <template id="tattooTemplate">
@@ -140,12 +147,11 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   </section>
 
   <div class="pricebox">
-    <div class="price-kicker">予想金額</div>
+    <div class="price-kicker">予想金額 / Estimated Price</div>
     <div class="price">¥--,---</div>
   </div>
 
   <div class="add-wrap"><button class="add" type="button">＋ 別のタトゥーを追加</button></div>
-  <div class="add-note">別のタトゥーを同日に施術する場合に追加します。隣接する部位でも別タトゥーなら対象です。</div>
 </section>
 </template>
 
@@ -191,17 +197,21 @@ const RATE={
   }
 };
 
+const BASE_BANDS=[
+  {size:'XXS',min:1,max:9,price:13000},
+  {size:'XS',min:10,max:44,price:17000},
+  {size:'XS',min:45,max:49,price:22000},
+  {size:'S',min:50,max:75,price:25000},
+  {size:'S',min:76,max:90,price:33000},
+  {size:'M',min:91,max:109,price:42000},
+  {size:'M',min:110,max:150,price:52000},
+  {size:'M',min:151,max:180,price:62000},
+  {size:'L',min:181,max:230,price:80000}
+];
+
 function base(mm){
-  if(mm<=9)return{size:'XXS',price:13000,min:1,max:9};
-  if(mm<=44)return{size:'XS',price:17000,min:10,max:44};
-  if(mm<=49)return{size:'XS',price:22000,min:45,max:49};
-  if(mm<=75)return{size:'S',price:25000,min:50,max:75};
-  if(mm<=90)return{size:'S',price:33000,min:76,max:90};
-  if(mm<=109)return{size:'M',price:42000,min:91,max:109};
-  if(mm<=150)return{size:'M',price:52000,min:110,max:150};
-  if(mm<=180)return{size:'M',price:62000,min:151,max:180};
-  if(mm<=230)return{size:'L',price:80000,min:181,max:230};
-  return{special:true};
+  const band=BASE_BANDS.find(x=>mm>=x.min&&mm<=x.max);
+  return band?{...band}:{special:true};
 }
 
 function shapeFromRatio(r){
@@ -220,18 +230,60 @@ function amountFromRate(basePrice,rateValue){
   return Math.round(basePrice*rateValue/100);
 }
 
-function rateRange(type,size,basePrice){
-  if(size==='XXS')return 'XXSは補正なし（±0% / ±¥0）';
-  const values=Object.values(RATE[type]).map(v=>v[size]);
-  const min=Math.min(...values),max=Math.max(...values);
-  return `${size}の補正範囲 ${pct(min)}〜${pct(max)}（${signedMoney(amountFromRate(basePrice,min))}〜${signedMoney(amountFromRate(basePrice,max))}）`;
+function rowsHtml(title,rows,currentKey){
+  return `<div class="helper-title">${title}</div>`+rows.map(r=>
+    `<div class="helper-row${r.key===currentKey?' current':''}"><span>${r.label}</span><span class="meta">${r.meta}</span></div>`
+  ).join('');
 }
 
-function selectedHelper(type,val,b){
-  if(!b||b.special)return'長辺を入力すると補正額を表示します。';
-  if(!val)return rateRange(type,b.size,b.price);
-  const r=rate(type,val,b.size);
-  return `選択値 ${pct(r)}（${signedMoney(amountFromRate(b.price,r))}）｜${rateRange(type,b.size,b.price)}`;
+function baseBandsHtml(currentBand){
+  return rowsHtml('基準料金一覧',BASE_BANDS.map((b,i)=>({
+    key:String(i),
+    label:`${b.min}〜${b.max}mm / ${b.size}`,
+    meta:money(b.price)
+  })), currentBand ? String(BASE_BANDS.findIndex(b=>b.min===currentBand.min&&b.max===currentBand.max)) : '');
+}
+
+function shapeRowsHtml(b,currentShape,currentRatio){
+  const defs=[
+    {key:'veryNarrow',label:'〜34% / とても細長い'},
+    {key:'narrow',label:'35〜60% / 細長い'},
+    {key:'somewhat',label:'61〜85% / 一般的な長方形'},
+    {key:'square',label:'86〜100% / 正方形に近い'}
+  ];
+  const title=currentRatio==null?'形状補正一覧':`形状補正一覧（現在 ${currentRatio.toFixed(1)}%）`;
+  return rowsHtml(title,defs.map(d=>{
+    const r=b&&!b.special?rate('shape',d.key,b.size):null;
+    return {key:d.key,label:d.label,meta:r==null?'—':`${pct(r)} / ${signedMoney(amountFromRate(b.price,r))}`};
+  }),currentShape||'');
+}
+
+function optionRowsHtml(type,b,currentValue){
+  const defs={
+    whitespace:[
+      {key:'large',label:'70%以上 / ほとんど大部分が余白'},
+      {key:'half',label:'50%前後 / 半分ほどが余白'},
+      {key:'some',label:'20〜30% / 少し余白'},
+      {key:'none',label:'0〜10% / 余白なし'}
+    ],
+    complexity:[
+      {key:'verySimple',label:'非常にシンプル'},
+      {key:'simple',label:'シンプル'},
+      {key:'standard',label:'標準'},
+      {key:'complex',label:'複雑'},
+      {key:'veryComplex',label:'非常に複雑'}
+    ],
+    color:[
+      {key:'oneToThree',label:'1〜3色 / ブラック&グレー'},
+      {key:'fourToSix',label:'4〜6色'},
+      {key:'sevenPlus',label:'7色〜'}
+    ]
+  };
+  const titles={whitespace:'余白補正一覧',complexity:'複雑さ補正一覧',color:'カラー補正一覧'};
+  return rowsHtml(titles[type],defs[type].map(d=>{
+    const r=b&&!b.special?rate(type,d.key,b.size):null;
+    return {key:d.key,label:d.label,meta:r==null?'—':`${pct(r)} / ${signedMoney(amountFromRate(b.price,r))}`};
+  }),currentValue||'');
 }
 
 const host=document.getElementById('tattoos');
@@ -272,41 +324,29 @@ function normalizeNumber(input){
 }
 
 function recalc(card){
-  const longInput=card.querySelector('.long');
-  const shortInput=card.querySelector('.short');
-  const long=normalizeNumber(longInput);
-  const short=normalizeNumber(shortInput);
-
+  const long=normalizeNumber(card.querySelector('.long'));
+  const short=normalizeNumber(card.querySelector('.short'));
   const b=long?base(long):null;
   const invalid=!long||!short||short>long;
+
   card.querySelector('.validation').classList.toggle('hidden',!long||!short||short<=long);
+  card.querySelector('.longHelp').innerHTML=baseBandsHtml(b&&!b.special?b:null);
 
-  if(!long){
-    card.querySelector('.longHelp').textContent='1〜300mmで入力してください。';
-  }else if(b.special){
-    card.querySelector('.longHelp').textContent='231mm以上：自動計算対象外';
-  }else{
-    card.querySelector('.longHelp').textContent=`サイズ帯 ${b.size}（${b.min}〜${b.max}mm）｜基準価格 ${money(b.price)}`;
-  }
-
-  let shape=null,shapeRate=0;
+  let shape=null,shapeRate=0,currentRatio=null;
   if(long&&short&&!invalid&&b&&!b.special){
+    currentRatio=(short/long)*100;
     shape=shapeFromRatio(short/long);
     shapeRate=rate('shape',shape,b.size);
-    card.querySelector('.shortHelp').textContent=`入力範囲 1〜${long}mm｜比率 ${((short/long)*100).toFixed(1)}%：${LABEL.shape[shape]}｜形状補正 ${pct(shapeRate)}（${signedMoney(amountFromRate(b.price,shapeRate))}）`;
-  }else if(long){
-    card.querySelector('.shortHelp').textContent=`入力範囲 1〜${long}mm`;
-  }else{
-    card.querySelector('.shortHelp').textContent='長辺を先に入力してください。';
   }
+  card.querySelector('.shortHelp').innerHTML=shapeRowsHtml(b,shape,currentRatio);
 
   const whitespace=card.querySelector('.whitespace').value;
   const complexity=card.querySelector('.complexity').value;
   const color=card.querySelector('.color').value;
 
-  card.querySelector('.whitespaceHelp').textContent=selectedHelper('whitespace',whitespace,b);
-  card.querySelector('.complexityHelp').textContent=selectedHelper('complexity',complexity,b);
-  card.querySelector('.colorHelp').textContent=selectedHelper('color',color,b);
+  card.querySelector('.whitespaceHelp').innerHTML=optionRowsHtml('whitespace',b,whitespace);
+  card.querySelector('.complexityHelp').innerHTML=optionRowsHtml('complexity',b,complexity);
+  card.querySelector('.colorHelp').innerHTML=optionRowsHtml('color',b,color);
 
   let calc=null;
   if(!invalid&&b&&!b.special){
@@ -318,10 +358,7 @@ function recalc(card){
     const rounded=Math.max(0,Math.round(raw/1000)*1000);
     calc={
       long,short,size:b.size,bandMin:b.min,bandMax:b.max,basePrice:b.price,
-      shape,shapeRate,
-      whitespace,whitespaceRate,
-      complexity,complexityRate,
-      color,colorRate,
+      shape,shapeRate,whitespace,whitespaceRate,complexity,complexityRate,color,colorRate,
       totalRate,raw,rounded
     };
   }
@@ -334,16 +371,19 @@ function recalc(card){
 
 function breakdownLines(c){
   const lines=[];
-  lines.push(`${c.long} × ${c.short} mm / ${c.size}サイズ（長辺 ${c.bandMin}〜${c.bandMax}mm）`);
-  lines.push(`基準価格 ${money(c.basePrice)}`);
-  lines.push(`形状：${LABEL.shape[c.shape]} ${pct(c.shapeRate)}（${signedMoney(amountFromRate(c.basePrice,c.shapeRate))}）`);
-  if(c.whitespace)lines.push(`余白：${LABEL.whitespace[c.whitespace]} ${pct(c.whitespaceRate)}（${signedMoney(amountFromRate(c.basePrice,c.whitespaceRate))}）`);
-  else lines.push('余白：該当なし ±0%（±¥0）');
-  if(c.complexity)lines.push(`複雑さ：${LABEL.complexity[c.complexity]} ${pct(c.complexityRate)}（${signedMoney(amountFromRate(c.basePrice,c.complexityRate))}）`);
-  else lines.push('複雑さ：未選択 ±0%（±¥0）');
-  if(c.color)lines.push(`カラー：${LABEL.color[c.color]} ${pct(c.colorRate)}（${signedMoney(amountFromRate(c.basePrice,c.colorRate))}）`);
-  else lines.push('カラー：未選択 ±0%（±¥0）');
-  lines.push(`補正合計 ${pct(c.totalRate)} → ${money(Math.round(c.raw))} → 1,000円単位で ${money(c.rounded)}`);
+  lines.push(`${c.long} × ${c.short} mm / ${c.size}サイズ / ${c.size} size`);
+  lines.push(`基準価格 / Base ${money(c.basePrice)}`);
+  lines.push(`形状 / Shape：${LABEL.shape[c.shape]} ${pct(c.shapeRate)}（${signedMoney(amountFromRate(c.basePrice,c.shapeRate))}）`);
+  lines.push(c.whitespace
+    ?`余白 / Whitespace：${LABEL.whitespace[c.whitespace]} ${pct(c.whitespaceRate)}（${signedMoney(amountFromRate(c.basePrice,c.whitespaceRate))}）`
+    :'余白 / Whitespace：該当なし ±0%（±¥0）');
+  lines.push(c.complexity
+    ?`複雑さ / Complexity：${LABEL.complexity[c.complexity]} ${pct(c.complexityRate)}（${signedMoney(amountFromRate(c.basePrice,c.complexityRate))}）`
+    :'複雑さ / Complexity：未選択 ±0%（±¥0）');
+  lines.push(c.color
+    ?`カラー / Color：${LABEL.color[c.color]} ${pct(c.colorRate)}（${signedMoney(amountFromRate(c.basePrice,c.colorRate))}）`
+    :'カラー / Color：未選択 ±0%（±¥0）');
+  lines.push(`補正合計 / Adjustment ${pct(c.totalRate)} → ${money(Math.round(c.raw))} → ${money(c.rounded)}`);
   return lines;
 }
 
@@ -353,7 +393,6 @@ function refresh(){
     card.querySelector('.tattoo-title').textContent=`タトゥー${i+1}`;
     card.querySelector('.remove').classList.toggle('hidden',cards.length===1);
     card.querySelector('.add-wrap').classList.toggle('hidden',i!==cards.length-1);
-    card.querySelector('.add-note').classList.toggle('hidden',i!==cards.length-1);
   });
   refreshSummary();
 }
@@ -376,7 +415,7 @@ function refreshSummary(){
 
     const main=document.createElement('div');
     main.className='summary-main';
-    main.innerHTML=`<span>タトゥー${i+1}</span><strong>${c?money(c.rounded):'¥--,---'}</strong>`;
+    main.innerHTML=`<span>タトゥー${i+1} / Tattoo ${i+1}</span><strong>${c?money(c.rounded):'¥--,---'}</strong>`;
     item.appendChild(main);
 
     const detail=document.createElement('div');
