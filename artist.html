@@ -142,7 +142,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">Version 0.3.26</div>
+  <div class="version">Version 0.3.27</div>
 </footer>
 </main>
 
@@ -539,8 +539,10 @@ function refreshSummary(){
   cards.forEach((card,i)=>{
     const c=card._calc;
     const combined=i>0&&card.querySelector('.combined').checked;
-    if(!c)complete=false;
-    else subtotal+=c.rounded;
+    if(!combined){
+      if(!c)complete=false;
+      else subtotal+=c.rounded;
+    }
 
     languageSummaries.forEach(summary=>{
       const item=document.createElement('div');
