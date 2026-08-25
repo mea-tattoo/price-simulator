@@ -14,7 +14,7 @@
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text)}
 body{margin:0}
-main{max-width:760px;margin:auto;padding:18px 14px calc(110px + env(safe-area-inset-bottom))}
+main{max-width:760px;margin:auto;padding:18px 14px calc(28px + env(safe-area-inset-bottom))}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
 h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
@@ -34,7 +34,6 @@ h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .top-segment-wrap{margin-top:12px}
 .top-segment-wrap .segment{max-width:none}
 .top-segment-wrap .segment button{padding:11px 8px}
-.bottom-segment-wrap{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0;padding:8px 14px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .segment{display:grid;grid-template-columns:1fr 1fr;gap:.7px;max-width:732px;margin:auto;padding:.7px;background:#171717;border:2px solid #262626;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
 .segment button{border:0;border-radius:5px;background:transparent;color:#bdbdbd;font:inherit;font-size:14px;font-weight:700;padding:10px 8px;cursor:pointer}
 .segment button.active{background:#f5f5f5;color:#111;box-shadow:0 1px 4px rgba(0,0,0,.22)}
@@ -69,10 +68,11 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .final.is-placeholder .kicker,.final.is-placeholder .amount,.result.is-placeholder .main-label,.result.is-placeholder .dimension-name,.result.is-placeholder .dimension-value{color:#b6bbc4}
 .estimate-note{margin-top:8px;padding:0;color:var(--muted);font-size:12px;line-height:1.5}
 .final.is-placeholder .estimate-note,.result.is-placeholder .estimate-note{display:none}
-.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:60%;min-height:52px;margin:45px auto;padding:15px 46px 15px 18px;background:#7fb8f0;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:16px;font-weight:600;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
-.booking-cta::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-52%);font-size:21px;font-weight:500;line-height:1}
-.booking-cta:active{background:#72ace5;transform:scale(.985);box-shadow:none}
-.section-booking-cta{margin:45px auto}
+.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:60%;min-height:50px;margin:45px auto;padding:14px 42px 14px 18px;background:#3484d2;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
+.booking-cta::after{content:"→";position:absolute;right:17px;top:50%;transform:translateY(-52%);font-size:16px;font-weight:500;line-height:1}
+.booking-cta:active{background:#2d74ba;transform:scale(.985);box-shadow:none}
+.section-booking-cta{margin:45px auto 0}
+.section-transition{height:1px;background:var(--line);margin:58px 2px 18px}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
@@ -131,6 +131,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 </section>
 
 <a id="sectionBookingLink" class="booking-cta section-booking-cta" href="#" data-i18n="bookingCta">Booking Form</a>
+<div class="section-transition" aria-hidden="true"></div>
 
 <h2 id="appTitle" class="simulator-title" data-i18n="title">Price Simulator</h2>
 <p class="simulator-description" data-i18n="simulatorDescription">Get a more detailed price estimate.</p>
@@ -139,13 +140,6 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <div id="estimateMethodTabsTop" class="segment" role="tablist" data-i18n-aria="estimateMethod">
     <button id="tabSizeTop" class="active" type="button" role="tab" aria-selected="true" data-i18n="tabSize">Estimate by Size</button>
     <button id="tabBudgetTop" type="button" role="tab" aria-selected="false" data-i18n="tabBudget">Estimate by Budget</button>
-  </div>
-</div>
-
-<div class="bottom-segment-wrap">
-  <div id="estimateMethodTabsBottom" class="segment" role="tablist" data-i18n-aria="estimateMethod">
-    <button id="tabSizeBottom" class="active" type="button" role="tab" aria-selected="true" data-i18n="tabSize">Estimate by Size</button>
-    <button id="tabBudgetBottom" type="button" role="tab" aria-selected="false" data-i18n="tabBudget">Estimate by Budget</button>
   </div>
 </div>
 
@@ -279,7 +273,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
 </section>
 
-<div class="app-version" aria-label="Version">v0.9.5</div>
+<div class="app-version" aria-label="Version">v0.9.6</div>
 </main>
 
 <script>
@@ -424,8 +418,8 @@ function rate(type,value,size){
 }
 
 const modeButtons={
-  size:[$('tabSizeTop'),$('tabSizeBottom')],
-  budget:[$('tabBudgetTop'),$('tabBudgetBottom')]
+  size:[$('tabSizeTop')],
+  budget:[$('tabBudgetTop')]
 };
 
 function setMode(mode){
