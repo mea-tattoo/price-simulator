@@ -1,0 +1,37 @@
+name: Refine price guide pairing
+on:
+  push:
+    branches: [price-guide-pairing]
+permissions:
+  contents: write
+jobs:
+  refine:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: price-guide-pairing
+      - name: Tighten price guide columns
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+          old = '.quick-price-row{display:grid;grid-template-columns:1fr auto;grid-template-areas:"name price" "size time";column-gap:14px;row-gap:4px;align-items:baseline;padding:9px 0;line-height:1.35}'
+          new = '.quick-price-row{display:grid;grid-template-columns:92px auto;grid-template-areas:"name price" "size time";column-gap:16px;row-gap:4px;justify-content:start;align-items:baseline;padding:9px 0;line-height:1.35}'
+          if old not in s:
+              raise SystemExit('quick-price-row CSS not found')
+          s = s.replace(old, new, 1)
+          s = s.replace('.quick-price-detail:nth-child(3){grid-area:price;color:#fff;font-size:13px;font-weight:800;text-align:right}', '.quick-price-detail:nth-child(3){grid-area:price;color:#fff;font-size:13px;font-weight:800;text-align:left}', 1)
+          s = s.replace('.quick-price-detail:nth-child(4){grid-area:time;text-align:right}', '.quick-price-detail:nth-child(4){grid-area:time;text-align:left}', 1)
+          s = s.replace('v0.9.7', 'v0.9.8')
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Tighten quick price guide pairing'
+          git push origin price-guide-pairing
