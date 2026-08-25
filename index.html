@@ -42,18 +42,19 @@ h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .step{background:var(--card);border:1px solid var(--line);border-radius:4px;margin-top:12px;padding:16px}
 .kicker{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em}
 h2{font-size:17px;margin:0 0 12px}
-.helper{font-size:12px;color:var(--muted);line-height:1.65;margin:10px 0 0}
+.step>h2{font-size:15px;font-weight:700;margin:0 0 10px}
+.helper{font-size:11px;color:var(--muted);line-height:1.4;margin:9px 0 0}
 .helper-title{font-size:10px;font-weight:800;color:#6b7280;letter-spacing:.08em;margin-bottom:4px}
-.helper-row{display:flex;align-items:baseline;gap:6px}
-.helper-row+.helper-row{margin-top:3px}
-.helper-label{font-weight:700;color:#4b5563;white-space:nowrap}
-.helper-sep{color:#9ca3af;white-space:nowrap}
+.helper-row{display:flex;align-items:baseline;gap:5px;line-height:1.35}
+.helper-row+.helper-row{margin-top:1px}
+.helper-label{font-weight:600;color:#59616c;white-space:nowrap}
+.helper-sep{color:#a6abb3;white-space:nowrap}
 .helper-example{min-width:0}
 select{width:100%;font-size:16px;border:1px solid #d1d5db;border-radius:4px;background:white;padding:12px 11px;color:var(--text)}
 .slider-head{display:flex;justify-content:flex-end;margin-bottom:9px}
-.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:20px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}
-.slider-value span{font-size:13px;font-weight:600;color:var(--muted);margin-left:0}
-.slider-value .inch-value{font-size:11.5px;font-weight:600;color:#9ca3af;margin-left:3px;letter-spacing:0}
+.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:17px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+.slider-value span{font-size:12px;font-weight:500;color:var(--muted);margin-left:0}
+.slider-value .inch-value{font-size:10.5px;font-weight:500;color:#9ca3af;margin-left:3px;letter-spacing:0}
 .range-wrap{padding:4px 1px 0}
 input[type="range"]{width:100%;height:18px;margin:0;-webkit-appearance:none;appearance:none;background:transparent;--range-progress:0%}
 input[type="range"]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(to right,var(--dark) 0 var(--range-progress),#dfe2e6 var(--range-progress) 100%);border-radius:1px}
@@ -64,18 +65,18 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .range-scale{display:flex;justify-content:space-between;margin-top:4px;color:var(--muted);font-size:11px}
 .validation{margin-top:9px;padding:9px 10px;border:1px solid #fecaca;background:#fff1f2;color:#991b1b;border-radius:4px;font-size:12px;line-height:1.5}
 .final,.result{margin-top:12px;border:2px solid var(--dark);border-radius:4px;background:white;padding:16px}
-.final .amount{font-size:28px;font-weight:800;letter-spacing:-.03em;margin-top:3px}
+.final .amount{font-size:23px;font-weight:800;letter-spacing:-.025em;margin-top:3px}
 .final.is-placeholder .kicker,.final.is-placeholder .amount,.result.is-placeholder .main-label,.result.is-placeholder .dimension-name,.result.is-placeholder .dimension-value{color:#b6bbc4}
 .estimate-note{margin-top:8px;padding:0;color:var(--muted);font-size:12px;line-height:1.5}
 .final.is-placeholder .estimate-note,.result.is-placeholder .estimate-note{display:none}
-.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin-top:18px;padding:17px 50px 17px 18px;background:#111;color:#fff;text-decoration:none;border:2px solid #111;border-radius:6px;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:30px 0 24px;padding:18px 50px 18px 18px;background:#b42318;color:#fff;text-decoration:none;border:2px solid #b42318;border-radius:6px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em}
 .booking-cta::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-52%);font-size:21px;font-weight:500;line-height:1}
-.booking-cta:active{background:#2a2a2a;transform:translateY(1px)}
+.booking-cta:active{background:#8f1c13;border-color:#8f1c13;transform:translateY(1px)}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
 .budget-title h2{margin:0}
-.budget-value{font-size:24px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}
+.budget-value{font-size:20px;font-weight:700;letter-spacing:-.025em;white-space:nowrap}
 .size-input-card{display:grid;grid-template-columns:1fr auto;grid-template-areas:"title value" "range range" "validation validation";align-items:end;column-gap:14px;padding:13px 16px}
 .size-input-card>h2{grid-area:title;margin:0 0 10px}
 .size-input-card>.slider-head{grid-area:value;margin:0 0 10px}
@@ -85,11 +86,12 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .result .size{margin-top:8px}
 .dimension-line{display:flex;align-items:baseline;gap:8px;line-height:1.25;white-space:nowrap}
 .dimension-line+.dimension-line{margin-top:5px}
-.dimension-name{font-size:19px;font-weight:700;color:var(--text)}
-.dimension-value{font-size:22px;font-weight:800;letter-spacing:-.035em}
-.dimension-value .inch-value{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:5px;letter-spacing:0}
+.dimension-name{font-size:15px;font-weight:700;color:var(--text)}
+.dimension-value{font-size:19px;font-weight:700;letter-spacing:-.025em}
+.dimension-value .inch-value{font-size:11px;font-weight:500;color:var(--muted);margin-left:5px;letter-spacing:0}
 .hidden{display:none!important}
-@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:23px}.slider-value .inch-value{font-size:11px}.dimension-value{font-size:25px}.dimension-value .inch-value{font-size:11.5px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}
+.app-version{margin-top:24px;text-align:right;color:#c3c7cc;font-size:9px;line-height:1}
+@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:17px}.slider-value .inch-value{font-size:10.5px}.dimension-value{font-size:19px}.dimension-value .inch-value{font-size:11px}.dimension-name{font-size:15px}.budget-value{font-size:20px}}
 </style>
 </head>
 <body>
@@ -275,6 +277,8 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 
   <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
 </section>
+
+<div class="app-version" aria-label="Version">v0.9.1</div>
 </main>
 
 <script>
@@ -311,7 +315,7 @@ const TEXT={
     budget:'予算',budgetMin:'¥17,000以下',budgetMax:'¥120,000以上',
     shape:'形状',shapeSquare:'正方形に近い',shapeSomewhat:'一般的な長方形',shapeNarrow:'細長い',shapeVeryNarrow:'とても細長い',
     withBudget:'この予算なら',largeNotice:'230mmを超えるサイズは、このシミュレーターでは算出できません。',
-    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームへ進む'
+    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約へ進む'
   },
   en:{
     title:'Price Simulator',
@@ -340,7 +344,7 @@ const TEXT={
     budget:'Budget',budgetMin:'≤ ¥17,000',budgetMax:'≥ ¥120,000',
     shape:'Proportions',shapeSquare:'Nearly Equal',shapeSomewhat:'Moderately Elongated',shapeNarrow:'Elongated',shapeVeryNarrow:'Very Elongated',
     withBudget:'With this budget',largeNotice:'Sizes over 230 mm cannot be calculated.',
-    sizeNote:'The displayed size is an estimate.',bookingCta:'Continue to Booking Form'
+    sizeNote:'The displayed size is an estimate.',bookingCta:'Continue to Booking'
   }
 };
 
