@@ -47,6 +47,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .helper-row.current{color:#7b828b;font-weight:500}
 .helper-row .rate,.helper-row .amount{text-align:right;white-space:nowrap}
 .validation{font-size:10px;color:#b4232f;margin-top:7px}
+.notice{margin:0 0 28px;color:#dc4c57;font-size:11px;font-weight:400;line-height:1.5}
 .hidden{display:none!important}
 [hidden]{display:none!important}
 .add-wrap{display:flex;justify-content:center;margin:26px 0 0}
@@ -77,6 +78,9 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .sum-row.discount,.sum-row.discount strong{color:#55a95d;font-weight:400}
 .sum-row.total{margin-top:14px;padding-top:28px;font-size:28px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
 .sum-row.total strong{font-weight:600}
+.reset-wrap{display:flex;justify-content:center;margin-top:24px}
+.reset-all{appearance:none;border:0;border-radius:4px;background:#f1f2f4;color:#666d76;font:inherit;font-size:11px;font-weight:400;padding:9px 13px;cursor:pointer}
+.reset-all:focus-visible{outline:2px solid #9bbcf5;outline-offset:3px}
 .app-footer{display:flex;flex-direction:column;align-items:center;margin-top:108px;padding:22px 0 40px;color:#b7bdc5}
 .app-footer img{display:block;width:70px;height:auto}
 .copyright{margin-top:14px;color:#aeb4bc;font-size:9px;letter-spacing:.08em}
@@ -102,6 +106,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   <div class="app-header-inner">料金計算機(アーティスト用)</div>
 </header>
 <main>
+<p class="notice">※必ず個別計数すること。複数人の同時計数は禁止</p>
 <div id="tattoos"></div>
 
 <section class="summary">
@@ -130,6 +135,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
       </div>
     </section>
   </div>
+  <div class="reset-wrap"><button id="resetAll" class="reset-all" type="button">すべてリセット</button></div>
 </section>
 
 <footer class="app-footer">
@@ -360,6 +366,7 @@ const host=document.getElementById('tattoos');
 const tpl=document.getElementById('tattooTemplate');
 const summaryTabs=[...document.querySelectorAll('.summary-tab')];
 const summaryHeading=document.getElementById('summaryHeading');
+const resetAll=document.getElementById('resetAll');
 
 function selectSummaryLanguage(tab){
   summaryTabs.forEach(button=>{
@@ -372,6 +379,14 @@ function selectSummaryLanguage(tab){
 }
 
 summaryTabs.forEach(tab=>tab.addEventListener('click',()=>selectSummaryLanguage(tab)));
+
+resetAll.addEventListener('click',()=>{
+  const confirmed=window.confirm('すべての入力内容を初期状態に戻します。本当にリセットしますか？');
+  if(!confirmed)return;
+  host.replaceChildren();
+  addTattoo();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
 
 function addTattoo(){
   const card=tpl.content.firstElementChild.cloneNode(true);
