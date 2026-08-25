@@ -80,13 +80,13 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 <div id="tattoos"></div>
 
 <section class="summary">
-  <h2>料金内訳</h2>
   <div class="summary-tabs" role="tablist" aria-label="料金内訳の言語">
     <button id="summaryTabEn" class="summary-tab" type="button" role="tab" aria-selected="true" aria-controls="summaryPanelEn">English</button>
     <button id="summaryTabJa" class="summary-tab" type="button" role="tab" aria-selected="false" aria-controls="summaryPanelJa">日本語</button>
   </div>
   <div class="summary-panels">
     <section id="summaryPanelEn" class="summary-language" lang="en" role="tabpanel" aria-labelledby="summaryTabEn">
+      <h2>Price Breakdown</h2>
       <div id="summaryRowsEn"></div>
       <div class="summary-totals">
         <div class="sum-row"><span>Subtotal</span><strong id="subtotalEn">¥--,---</strong></div>
@@ -95,6 +95,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
       </div>
     </section>
     <section id="summaryPanelJa" class="summary-language" lang="ja" role="tabpanel" aria-labelledby="summaryTabJa" hidden>
+      <h2>料金内訳</h2>
       <div id="summaryRowsJa"></div>
       <div class="summary-totals">
         <div class="sum-row"><span>小計</span><strong id="subtotalJa">¥--,---</strong></div>
@@ -105,7 +106,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.13</div>
+<div class="version">artist-v0.3.14</div>
 </main>
 
 <template id="tattooTemplate">
