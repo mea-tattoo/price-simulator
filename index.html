@@ -69,9 +69,10 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .final.is-placeholder .kicker,.final.is-placeholder .amount,.result.is-placeholder .main-label,.result.is-placeholder .dimension-name,.result.is-placeholder .dimension-value{color:#b6bbc4}
 .estimate-note{margin-top:8px;padding:0;color:var(--muted);font-size:12px;line-height:1.5}
 .final.is-placeholder .estimate-note,.result.is-placeholder .estimate-note{display:none}
-.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:30px 0 24px;padding:18px 50px 18px 18px;background:#53606b;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em;box-shadow:0 4px 12px rgba(17,24,39,.12);transition:transform .16s ease,background .16s ease,box-shadow .16s ease}
+.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:30px 0 24px;padding:18px 50px 18px 18px;background:#62a5e8;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
 .booking-cta::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-52%);font-size:21px;font-weight:500;line-height:1}
-.booking-cta:active{background:#46515b;transform:scale(.985);box-shadow:0 2px 8px rgba(17,24,39,.10)}
+.booking-cta:active{background:#5598dc;transform:scale(.985);box-shadow:none}
+.section-booking-cta{margin:42px 0 42px}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
@@ -129,7 +130,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <div class="quick-price-note" data-i18n="quickPriceNote">Prices and times are estimates and may vary depending on the design.</div>
 </section>
 
-<div class="section-divider" aria-hidden="true"></div>
+<a id="sectionBookingLink" class="booking-cta section-booking-cta" href="#" data-i18n="bookingCta">Booking Form</a>
 
 <h2 id="appTitle" class="simulator-title" data-i18n="title">Price Simulator</h2>
 <p class="simulator-description" data-i18n="simulatorDescription">Get a more detailed price estimate.</p>
@@ -278,7 +279,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
 </section>
 
-<div class="app-version" aria-label="Version">v0.9.3-muted</div>
+<div class="app-version" aria-label="Version">v0.9.4</div>
 </main>
 
 <script>
@@ -315,7 +316,7 @@ const TEXT={
     budget:'予算',budgetMin:'¥17,000以下',budgetMax:'¥120,000以上',
     shape:'形状',shapeSquare:'正方形に近い',shapeSomewhat:'一般的な長方形',shapeNarrow:'細長い',shapeVeryNarrow:'とても細長い',
     withBudget:'この予算なら',largeNotice:'230mmを超えるサイズは、このシミュレーターでは算出できません。',
-    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約へ進む'
+    sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームはこちら'
   },
   en:{
     title:'Price Simulator',
@@ -344,7 +345,7 @@ const TEXT={
     budget:'Budget',budgetMin:'≤ ¥17,000',budgetMax:'≥ ¥120,000',
     shape:'Proportions',shapeSquare:'Nearly Equal',shapeSomewhat:'Moderately Elongated',shapeNarrow:'Elongated',shapeVeryNarrow:'Very Elongated',
     withBudget:'With this budget',largeNotice:'Sizes over 230 mm cannot be calculated.',
-    sizeNote:'The displayed size is an estimate.',bookingCta:'Continue to Booking'
+    sizeNote:'The displayed size is an estimate.',bookingCta:'Booking Form'
   }
 };
 
@@ -364,6 +365,7 @@ function applyLanguage(){
   const bookingUrl=currentLang==='en'?'https://docs.google.com/forms/d/e/1FAIpQLSecK9YxkFyGUIKs14U2xnfTjO-N-H56az5IWWe9ntD9Cynsvw/viewform':'https://docs.google.com/forms/d/e/1FAIpQLScQl62hFykxi3l_dEHyUc7Ol1HoiIjjlMt_b2bd04L9F98S8Q/viewform';
   $('sizeBookingLink').href=bookingUrl;
   $('budgetBookingLink').href=bookingUrl;
+  $('sectionBookingLink').href=bookingUrl;
 }
 
 function setLanguage(lang,updateUrl=true){
