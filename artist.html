@@ -106,7 +106,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.14</div>
+<div class="version">artist-v0.3.15</div>
 </main>
 
 <template id="tattooTemplate">
@@ -407,38 +407,38 @@ const LABEL_EN={
 function breakdownLinesJa(c){
   return [
     {label:`${c.long} × ${c.short} mm / ${c.size}サイズ`,value:money(c.basePrice)},
-    {label:`形状：${LABEL.shape[c.shape]}`,value:`${pct(c.shapeRate)}（${signedMoney(c.shapeAmount)}）`},
+    {label:`形状：${LABEL.shape[c.shape]}`,value:pct(c.shapeRate)},
     c.whitespace==='notApplicable'
-      ?{label:'余白：該当なし',value:'±0%（±¥0）'}
+      ?{label:'余白：該当なし',value:'±0%'}
       :c.whitespace
-      ?{label:`余白：${LABEL.whitespace[c.whitespace]}`,value:`${pct(c.whitespaceRate)}（${signedMoney(c.whitespaceAmount)}）`}
-      :{label:'余白：未選択',value:'±0%（±¥0）'},
+      ?{label:`余白：${LABEL.whitespace[c.whitespace]}`,value:pct(c.whitespaceRate)}
+      :{label:'余白：未選択',value:'±0%'},
     c.complexity
-      ?{label:`複雑さ：${LABEL.complexity[c.complexity]}`,value:`${pct(c.complexityRate)}（${signedMoney(c.complexityAmount)}）`}
-      :{label:'複雑さ：未選択',value:'±0%（±¥0）'},
+      ?{label:`複雑さ：${LABEL.complexity[c.complexity]}`,value:pct(c.complexityRate)}
+      :{label:'複雑さ：未選択',value:'±0%'},
     c.color
-      ?{label:`カラー：${LABEL.color[c.color]}`,value:`${pct(c.colorRate)}（${signedMoney(c.colorAmount)}）`}
-      :{label:'カラー：未選択',value:'±0%（±¥0）'},
-    {label:'補正後金額',value:`${money(Math.round(c.raw))} → ${money(c.rounded)}`}
+      ?{label:`カラー：${LABEL.color[c.color]}`,value:pct(c.colorRate)}
+      :{label:'カラー：未選択',value:'±0%'},
+    {label:'1,000円単位で四捨五入',value:`${money(Math.round(c.raw))} → ${money(c.rounded)}`}
   ];
 }
 
 function breakdownLinesEn(c){
   return [
     {label:`${c.long} × ${c.short} mm / ${c.size} size`,value:money(c.basePrice)},
-    {label:`Shape: ${LABEL_EN.shape[c.shape]}`,value:`${pct(c.shapeRate)} (${signedMoney(c.shapeAmount)})`},
+    {label:`Shape: ${LABEL_EN.shape[c.shape]}`,value:pct(c.shapeRate)},
     c.whitespace==='notApplicable'
-      ?{label:'Whitespace: Not applicable',value:'±0% (±¥0)'}
+      ?{label:'Whitespace: Not applicable',value:'±0%'}
       :c.whitespace
-      ?{label:`Whitespace: ${LABEL_EN.whitespace[c.whitespace]}`,value:`${pct(c.whitespaceRate)} (${signedMoney(c.whitespaceAmount)})`}
-      :{label:'Whitespace: Not selected',value:'±0% (±¥0)'},
+      ?{label:`Whitespace: ${LABEL_EN.whitespace[c.whitespace]}`,value:pct(c.whitespaceRate)}
+      :{label:'Whitespace: Not selected',value:'±0%'},
     c.complexity
-      ?{label:`Complexity: ${LABEL_EN.complexity[c.complexity]}`,value:`${pct(c.complexityRate)} (${signedMoney(c.complexityAmount)})`}
-      :{label:'Complexity: Not selected',value:'±0% (±¥0)'},
+      ?{label:`Complexity: ${LABEL_EN.complexity[c.complexity]}`,value:pct(c.complexityRate)}
+      :{label:'Complexity: Not selected',value:'±0%'},
     c.color
-      ?{label:`Color: ${LABEL_EN.color[c.color]}`,value:`${pct(c.colorRate)} (${signedMoney(c.colorAmount)})`}
-      :{label:'Color: Not selected',value:'±0% (±¥0)'},
-    {label:'Adjusted price',value:`${money(Math.round(c.raw))} → ${money(c.rounded)}`}
+      ?{label:`Color: ${LABEL_EN.color[c.color]}`,value:pct(c.colorRate)}
+      :{label:'Color: Not selected',value:'±0%'},
+    {label:'Rounded to the nearest ¥1,000',value:`${money(Math.round(c.raw))} → ${money(c.rounded)}`}
   ];
 }
 
