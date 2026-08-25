@@ -1,0 +1,93 @@
+name: Apply final UI hierarchy
+
+on:
+  push:
+    branches:
+      - final-ui-hierarchy
+    paths:
+      - '.github/workflows/apply-final-ui-hierarchy.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: final-ui-hierarchy
+      - name: Apply UI refinements
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = [
+            (
+              'h2{font-size:17px;margin:0 0 12px}',
+              'h2{font-size:17px;margin:0 0 12px}\n.step>h2{font-size:15px;font-weight:700;margin:0 0 10px}'
+            ),
+            (
+              '.helper{font-size:12px;color:var(--muted);line-height:1.65;margin:10px 0 0}\n.helper-title{font-size:10px;font-weight:800;color:#6b7280;letter-spacing:.08em;margin-bottom:4px}\n.helper-row{display:flex;align-items:baseline;gap:6px}\n.helper-row+.helper-row{margin-top:3px}\n.helper-label{font-weight:700;color:#4b5563;white-space:nowrap}\n.helper-sep{color:#9ca3af;white-space:nowrap}\n.helper-example{min-width:0}',
+              '.helper{font-size:11px;color:var(--muted);line-height:1.4;margin:9px 0 0}\n.helper-title{font-size:10px;font-weight:800;color:#6b7280;letter-spacing:.08em;margin-bottom:4px}\n.helper-row{display:flex;align-items:baseline;gap:5px;line-height:1.35}\n.helper-row+.helper-row{margin-top:1px}\n.helper-label{font-weight:600;color:#59616c;white-space:nowrap}\n.helper-sep{color:#a6abb3;white-space:nowrap}\n.helper-example{min-width:0}'
+            ),
+            (
+              '.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:20px;font-weight:800;letter-spacing:-.03em;white-space:nowrap}\n.slider-value span{font-size:13px;font-weight:600;color:var(--muted);margin-left:0}\n.slider-value .inch-value{font-size:11.5px;font-weight:600;color:#9ca3af;margin-left:3px;letter-spacing:0}',
+              '.slider-value{display:flex;align-items:baseline;justify-content:flex-end;gap:4px;font-size:17px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}\n.slider-value span{font-size:12px;font-weight:500;color:var(--muted);margin-left:0}\n.slider-value .inch-value{font-size:10.5px;font-weight:500;color:#9ca3af;margin-left:3px;letter-spacing:0}'
+            ),
+            (
+              '.final .amount{font-size:28px;font-weight:800;letter-spacing:-.03em;margin-top:3px}',
+              '.final .amount{font-size:23px;font-weight:800;letter-spacing:-.025em;margin-top:3px}'
+            ),
+            (
+              '.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;margin-top:18px;padding:17px 50px 17px 18px;background:#111;color:#fff;text-decoration:none;border:2px solid #111;border-radius:6px;font-size:17px;font-weight:800;line-height:1.2;letter-spacing:-.01em}',
+              '.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:30px 0 24px;padding:18px 50px 18px 18px;background:#b42318;color:#fff;text-decoration:none;border:2px solid #b42318;border-radius:6px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em}'
+            ),
+            (
+              '.booking-cta:active{background:#2a2a2a;transform:translateY(1px)}',
+              '.booking-cta:active{background:#8f1c13;border-color:#8f1c13;transform:translateY(1px)}'
+            ),
+            (
+              '.budget-value{font-size:24px;font-weight:800;letter-spacing:-.035em;white-space:nowrap}',
+              '.budget-value{font-size:20px;font-weight:700;letter-spacing:-.025em;white-space:nowrap}'
+            ),
+            (
+              '.dimension-name{font-size:19px;font-weight:700;color:var(--text)}\n.dimension-value{font-size:22px;font-weight:800;letter-spacing:-.035em}\n.dimension-value .inch-value{font-size:12.5px;font-weight:600;color:var(--muted);margin-left:5px;letter-spacing:0}',
+              '.dimension-name{font-size:15px;font-weight:700;color:var(--text)}\n.dimension-value{font-size:19px;font-weight:700;letter-spacing:-.025em}\n.dimension-value .inch-value{font-size:11px;font-weight:500;color:var(--muted);margin-left:5px;letter-spacing:0}'
+            ),
+            (
+              '.hidden{display:none!important}\n@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:23px}.slider-value .inch-value{font-size:11px}.dimension-value{font-size:25px}.dimension-value .inch-value{font-size:11.5px}.dimension-name{font-size:18px}.budget-value{font-size:27px}}',
+              '.hidden{display:none!important}\n.app-version{margin-top:24px;text-align:right;color:#c3c7cc;font-size:9px;line-height:1}\n@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:17px}.slider-value .inch-value{font-size:10.5px}.dimension-value{font-size:19px}.dimension-value .inch-value{font-size:11px}.dimension-name{font-size:15px}.budget-value{font-size:20px}}'
+            ),
+            (
+              "sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームへ進む'",
+              "sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約へ進む'"
+            ),
+            (
+              "sizeNote:'The displayed size is an estimate.',bookingCta:'Continue to Booking Form'",
+              "sizeNote:'The displayed size is an estimate.',bookingCta:'Continue to Booking'"
+            ),
+            (
+              '  <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>\n</section>\n</main>',
+              '  <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>\n</section>\n\n<div class="app-version" aria-label="Version">v0.9.1</div>\n</main>'
+            ),
+          ]
+
+          for old, new in replacements:
+            if old not in s:
+              raise SystemExit(f'Target not found: {old[:100]}')
+            s = s.replace(old, new, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit UI update and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/apply-final-ui-hierarchy.yml
+          git add index.html
+          git commit -m "Refine final UI hierarchy and booking CTA"
+          git push origin final-ui-hierarchy
