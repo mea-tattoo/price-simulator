@@ -102,7 +102,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.4</div>
+<div class="version">artist-v0.3.5</div>
 </main>
 
 <template id="tattooTemplate">
@@ -110,7 +110,6 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   <div class="tattoo-head">
     <div class="tattoo-title"></div>
     <div class="tattoo-actions">
-      <button class="text-btn reset" type="button">リセット</button>
       <button class="text-btn remove" type="button">削除</button>
     </div>
   </div>
@@ -310,18 +309,8 @@ function addTattoo(){
   if(host.children.length>1)card.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function resetCard(card){
-  card.querySelector('.long').value=80;
-  card.querySelector('.short').value=50;
-  card.querySelector('.whitespace').value='';
-  card.querySelector('.complexity').value='';
-  card.querySelector('.color').value='';
-  recalc(card);
-}
-
 function bind(card){
   card.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>recalc(card)));
-  card.querySelector('.reset').addEventListener('click',()=>resetCard(card));
   card.querySelector('.remove').addEventListener('click',()=>{
     card.remove();
     refresh();
