@@ -102,7 +102,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.5</div>
+<div class="version">artist-v0.3.6</div>
 </main>
 
 <template id="tattooTemplate">
@@ -130,7 +130,8 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   <section class="field">
     <h2>複数モチーフの場合の余白</h2>
     <select class="whitespace">
-      <option value="">該当なし / 選択してください</option>
+      <option value="">---</option>
+      <option value="notApplicable">該当なし</option>
       <option value="large">ほとんど大部分が余白（70%以上）</option>
       <option value="half">半分ほどが余白（50%前後）</option>
       <option value="some">少し余白（20〜30%）</option>
@@ -142,7 +143,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   <section class="field">
     <h2>デザインの複雑さ</h2>
     <select class="complexity">
-      <option value="">選択してください</option>
+      <option value="">---</option>
       <option value="verySimple">非常にシンプル</option>
       <option value="simple">シンプル</option>
       <option value="standard">標準</option>
@@ -155,7 +156,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   <section class="field">
     <h2>カラー</h2>
     <select class="color">
-      <option value="">選択してください</option>
+      <option value="">---</option>
       <option value="oneToThree">1〜3色 または ブラック&グレー</option>
       <option value="fourToSix">4〜6色</option>
       <option value="sevenPlus">7色〜</option>
@@ -177,7 +178,7 @@ const pct=n=>n>0?`+${n}%`:n<0?`${n}%`:'±0%';
 
 const LABEL={
   shape:{veryNarrow:'とても細長い',narrow:'細長い',somewhat:'一般的な長方形',square:'正方形に近い'},
-  whitespace:{large:'ほとんど大部分が余白',half:'半分ほどが余白',some:'少し余白',none:'余白なし'},
+  whitespace:{notApplicable:'該当なし',large:'ほとんど大部分が余白',half:'半分ほどが余白',some:'少し余白',none:'余白なし'},
   complexity:{verySimple:'非常にシンプル',simple:'シンプル',standard:'標準',complex:'複雑',veryComplex:'非常に複雑'},
   color:{oneToThree:'1〜3色 / ブラック&グレー',fourToSix:'4〜6色',sevenPlus:'7色〜'}
 };
@@ -190,6 +191,7 @@ const RATE={
     square:{XS:0,S:0,M:0,L:0}
   },
   whitespace:{
+    notApplicable:{XS:0,S:0,M:0,L:0},
     large:{XS:0,S:-30,M:-30,L:-30},
     half:{XS:0,S:-10,M:-15,L:-15},
     some:{XS:0,S:0,M:-10,L:-10},
@@ -372,7 +374,7 @@ function recalc(card){
 
 const LABEL_EN={
   shape:{veryNarrow:'Very narrow',narrow:'Narrow',somewhat:'Rectangular',square:'Nearly square'},
-  whitespace:{large:'Mostly whitespace',half:'About half whitespace',some:'Some whitespace',none:'No whitespace'},
+  whitespace:{notApplicable:'Not applicable',large:'Mostly whitespace',half:'About half whitespace',some:'Some whitespace',none:'No whitespace'},
   complexity:{verySimple:'Very simple',simple:'Simple',standard:'Standard',complex:'Complex',veryComplex:'Very complex'},
   color:{oneToThree:'1–3 colors / Black & Grey',fourToSix:'4–6 colors',sevenPlus:'7+ colors'}
 };
@@ -382,9 +384,11 @@ function breakdownLinesJa(c){
     `${c.long} × ${c.short} mm / ${c.size}サイズ`,
     `基準価格 ${money(c.basePrice)}`,
     `形状：${LABEL.shape[c.shape]} ${pct(c.shapeRate)}（${signedMoney(amountFromRate(c.basePrice,c.shapeRate))}）`,
-    c.whitespace
+    c.whitespace==='notApplicable'
+      ?'余白：該当なし ±0%（±¥0）'
+      :c.whitespace
       ?`余白：${LABEL.whitespace[c.whitespace]} ${pct(c.whitespaceRate)}（${signedMoney(amountFromRate(c.basePrice,c.whitespaceRate))}）`
-      :'余白：該当なし ±0%（±¥0）',
+      :'余白：未選択 ±0%（±¥0）',
     c.complexity
       ?`複雑さ：${LABEL.complexity[c.complexity]} ${pct(c.complexityRate)}（${signedMoney(amountFromRate(c.basePrice,c.complexityRate))}）`
       :'複雑さ：未選択 ±0%（±¥0）',
@@ -400,9 +404,11 @@ function breakdownLinesEn(c){
     `${c.long} × ${c.short} mm / ${c.size} size`,
     `Base ${money(c.basePrice)}`,
     `Shape: ${LABEL_EN.shape[c.shape]} ${pct(c.shapeRate)} (${signedMoney(amountFromRate(c.basePrice,c.shapeRate))})`,
-    c.whitespace
+    c.whitespace==='notApplicable'
+      ?'Whitespace: Not applicable ±0% (±¥0)'
+      :c.whitespace
       ?`Whitespace: ${LABEL_EN.whitespace[c.whitespace]} ${pct(c.whitespaceRate)} (${signedMoney(amountFromRate(c.basePrice,c.whitespaceRate))})`
-      :'Whitespace: Not applicable ±0% (±¥0)',
+      :'Whitespace: Not selected ±0% (±¥0)',
     c.complexity
       ?`Complexity: ${LABEL_EN.complexity[c.complexity]} ${pct(c.complexityRate)} (${signedMoney(amountFromRate(c.basePrice,c.complexityRate))})`
       :'Complexity: Not selected ±0% (±¥0)',
