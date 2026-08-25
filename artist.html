@@ -41,7 +41,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .examples-title{margin-bottom:4px;color:#b2b7be;font-size:9px;font-weight:500}
 .example-row{display:grid;grid-template-columns:80px 16px minmax(0,1fr);gap:4px}
 .example-row+.example-row{margin-top:0}
-.example-row strong{color:#7b828b;font-weight:500}
+.example-label{color:#b2b7be;font-weight:400}
 .example-dots{text-align:center;color:#b2b7be}
 .helper-row{display:grid;grid-template-columns:minmax(0,1fr) 46px 62px;gap:7px;padding:0}
 .helper-row.current{color:#7b828b;font-weight:500}
@@ -78,10 +78,10 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .sum-row.discount,.sum-row.discount strong{color:#55a95d;font-weight:400}
 .sum-row.total{margin-top:14px;padding-top:28px;font-size:28px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
 .sum-row.total strong{font-weight:600}
-.reset-wrap{display:flex;justify-content:center;margin-top:24px}
+.reset-wrap{display:flex;justify-content:flex-end;margin-top:40px;padding:0 18px}
 .reset-all{appearance:none;border:0;border-radius:4px;background:#f1f2f4;color:#666d76;font:inherit;font-size:11px;font-weight:400;padding:9px 13px;cursor:pointer}
 .reset-all:focus-visible{outline:2px solid #9bbcf5;outline-offset:3px}
-.app-footer{display:flex;flex-direction:column;align-items:center;margin-top:108px;padding:22px 0 40px;color:#b7bdc5}
+.app-footer{display:flex;flex-direction:column;align-items:center;margin-top:72px;padding:22px 0 40px;color:#b7bdc5}
 .app-footer img{display:block;width:70px;height:auto}
 .copyright{margin-top:14px;color:#aeb4bc;font-size:9px;letter-spacing:.08em}
 .version{color:#c3c7cc;font-size:9px;margin-top:8px}
@@ -96,7 +96,8 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   .summary-language{--summary-gutter:14px}
   .summary-item{padding:14px var(--summary-gutter)}
   .sum-row.total{font-size:28px}
-  .app-footer{margin-top:96px;padding-bottom:36px}
+  .reset-wrap{padding:0 14px}
+  .app-footer{margin-top:64px;padding-bottom:36px}
   .app-footer img{width:64px}
 }
 </style>
@@ -141,7 +142,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">Version 0.3.25</div>
+  <div class="version">Version 0.3.26</div>
 </footer>
 </main>
 
@@ -196,11 +197,11 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
     </select>
     <div class="examples">
       <div class="examples-title">例</div>
-      <div class="example-row"><strong>とてもシンプル</strong><span class="example-dots">･･･</span><span>直線が数本 / ハートのみ</span></div>
-      <div class="example-row"><strong>シンプル</strong><span class="example-dots">･･･</span><span>シンプルなラインのみ / レタリング</span></div>
-      <div class="example-row"><strong>標準</strong><span class="example-dots">･･･</span><span>一般的なラインワーク / パッキングのみ / 少しシェーディング</span></div>
-      <div class="example-row"><strong>複雑</strong><span class="example-dots">･･･</span><span>描き込みが多い / 半分シェーディング</span></div>
-      <div class="example-row"><strong>とても複雑</strong><span class="example-dots">･･･</span><span>リアリスティック / 描き込みが非常に多い / フルカラー / フルシェーディング</span></div>
+      <div class="example-row"><span class="example-label">非常にシンプル</span><span class="example-dots">･･･</span><span>直線が数本 / ハートのみ</span></div>
+      <div class="example-row"><span class="example-label">シンプル</span><span class="example-dots">･･･</span><span>シンプルなラインのみ / レタリング</span></div>
+      <div class="example-row"><span class="example-label">標準</span><span class="example-dots">･･･</span><span>一般的なラインワーク / パッキングのみ / 少しシェーディング</span></div>
+      <div class="example-row"><span class="example-label">複雑</span><span class="example-dots">･･･</span><span>描き込みが多い / 半分シェーディング</span></div>
+      <div class="example-row"><span class="example-label">非常に複雑</span><span class="example-dots">･･･</span><span>リアリスティック / 描き込みが非常に多い / フルカラー / フルシェーディング</span></div>
     </div>
     <div class="helper complexityHelp"></div>
   </section>
@@ -527,7 +528,7 @@ function refresh(){
 function refreshSummary(){
   const cards=[...host.querySelectorAll('.tattoo')];
   const languageSummaries=[
-    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー #${i+1}`,combined:'合算料金',invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
+    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー #${i+1}`,combined:'合算料金とする',invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
     {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo #${i+1}`,combined:'Priced as one combined piece',invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
   ];
   languageSummaries.forEach(summary=>summary.rows.innerHTML='');
