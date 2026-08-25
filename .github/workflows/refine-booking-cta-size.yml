@@ -1,0 +1,40 @@
+name: Refine booking CTA size
+
+on:
+  push:
+    branches:
+      - blue-gradient-cta
+    paths:
+      - '.github/workflows/refine-booking-cta-size.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: blue-gradient-cta
+      - name: Refine CTA size and spacing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='''.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:30px 0 24px;padding:18px 50px 18px 18px;background:#62a5e8;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}\n.booking-cta::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-52%);font-size:21px;font-weight:500;line-height:1}\n.booking-cta:active{background:#5598dc;transform:scale(.985);box-shadow:none}\n.section-booking-cta{margin:42px 0 42px}'''
+          new='''.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:60%;min-height:52px;margin:45px auto;padding:15px 46px 15px 18px;background:#7fb8f0;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:16px;font-weight:600;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}\n.booking-cta::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-52%);font-size:21px;font-weight:500;line-height:1}\n.booking-cta:active{background:#72ace5;transform:scale(.985);box-shadow:none}\n.section-booking-cta{margin:45px auto}'''
+          if old not in s:
+              raise SystemExit('CTA CSS target not found')
+          s=s.replace(old,new)
+          s=s.replace('v0.9.4','v0.9.5')
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Refine booking CTA size and spacing"
+          git push origin HEAD:blue-gradient-cta
