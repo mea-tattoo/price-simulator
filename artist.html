@@ -40,14 +40,14 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 [hidden]{display:none!important}
 .add-wrap{display:flex;justify-content:center;margin:26px 0 0}
 .add{border:0;background:#f1f2f4;color:#3d4249;border-radius:5px;font:inherit;font-size:12px;font-weight:500;padding:10px 15px;cursor:pointer}
-.summary{margin-top:44px;border-top:3px solid #d7dbe0;padding-top:20px}
+.summary{margin-top:44px;border-top:3px solid #111;padding-top:20px}
 .summary h2{font-size:14px;font-weight:600;margin:0 0 14px}
 .summary-tabs{display:inline-flex;gap:18px;margin-bottom:12px}
 .summary-tab{appearance:none;border:0;border-bottom:1px solid #e7e9ec;background:transparent;color:#a0a6ae;font:inherit;font-size:11px;font-weight:500;padding:7px 2px 8px;cursor:pointer}
 .summary-tab[aria-selected="true"]{border-bottom-color:#777e87;color:#454a51}
 .summary-tab:focus-visible{outline:2px solid #9bbcf5;outline-offset:2px}
 .summary-panels{max-width:100%}
-.summary-language{min-width:0;border:1px solid #e7e9ec;border-radius:6px;background:#fff;padding:14px}
+.summary-language{min-width:0;border:0;border-radius:0;background:#fff;padding:0}
 .summary-item{background:#fafbfc;border-radius:4px;padding:12px 13px;margin-top:10px}
 .summary-item:first-child{margin-top:0}
 .summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:11px;font-weight:500}
@@ -61,7 +61,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 .sum-row{display:flex;justify-content:space-between;gap:14px;padding:5px 1px;font-size:11px}
 .sum-row strong{font-weight:500}
 .sum-row.discount{color:var(--text)}
-.sum-row.total{margin-top:5px;padding-top:8px;font-size:13px;font-weight:600;border-top:1px solid #eceef0;color:#3f444b}
+.sum-row.total{margin-top:5px;padding-top:8px;font-size:13px;font-weight:600;border-top:1px dashed #cfd3d8;color:#3f444b}
 .sum-row.total strong{font-weight:600}
 .version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
 @media(max-width:390px){
@@ -104,7 +104,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.11</div>
+<div class="version">artist-v0.3.12</div>
 </main>
 
 <template id="tattooTemplate">
