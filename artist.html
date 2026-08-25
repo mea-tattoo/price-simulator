@@ -448,7 +448,7 @@ const LABEL_EN={
 
 function breakdownLinesJa(c){
   return [
-    {label:`${c.long} × ${c.short} mm (${inches(c.long)} × ${inches(c.short)} in)`,value:money(c.basePrice)},
+    {label:`${c.long} × ${c.short} mm`,value:money(c.basePrice)},
     {label:`形状：${LABEL.shape[c.shape]}`,value:pct(c.shapeRate)},
     c.whitespace==='notApplicable'
       ?{label:'余白：該当なし',value:'±0%'}
@@ -467,7 +467,7 @@ function breakdownLinesJa(c){
 
 function breakdownLinesEn(c){
   return [
-    {label:`${c.long} × ${c.short} mm`,value:money(c.basePrice)},
+    {label:`${c.long} × ${c.short} mm (${inches(c.long)} × ${inches(c.short)} in)`,value:money(c.basePrice)},
     {label:`Shape: ${LABEL_EN.shape[c.shape]}`,value:pct(c.shapeRate)},
     c.whitespace==='notApplicable'
       ?{label:'Whitespace: Not applicable',value:'±0%'}
