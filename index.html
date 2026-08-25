@@ -22,7 +22,7 @@ main{max-width:760px;margin:auto;padding:18px 14px calc(28px + env(safe-area-ins
 h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
 .quick-price-guide{background:#171717;border:1px solid #262626;border-radius:0;margin-top:14px;padding:14px 16px 13px;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.quick-price-row{display:grid;grid-template-columns:92px auto;grid-template-areas:"name price" "size time";column-gap:16px;row-gap:4px;justify-content:start;align-items:baseline;padding:9px 0;line-height:1.35}
+.quick-price-row{display:grid;grid-template-columns:160px 260px;grid-template-areas:"name price" "size time";column-gap:32px;row-gap:4px;align-items:baseline;width:min(100%,452px);margin:0 auto;padding:9px 0;line-height:1.35}
 .quick-price-row+.quick-price-row{border-top:1px solid rgba(255,255,255,.12)}
 .quick-price-size{grid-area:name;font-weight:800;color:#fff;font-size:13px;margin:0}
 .quick-price-detail{color:#d2d2d2;font-size:11.5px;line-height:1.35;white-space:nowrap}
@@ -30,7 +30,7 @@ h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .quick-price-detail:nth-child(3){grid-area:price;color:#fff;font-size:13px;font-weight:800;text-align:left}
 .quick-price-detail:nth-child(4){grid-area:time;text-align:left}
 .quick-price-detail+.quick-price-detail{margin-top:0}
-.quick-price-note{margin-top:7px;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#b8b8b8;font-size:10.5px;line-height:1.4;font-weight:700}
+.quick-price-note{width:min(100%,452px);margin:7px auto 0;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#b8b8b8;font-size:10.5px;line-height:1.4;font-weight:700}
 .section-divider{height:1px;background:var(--line);margin:52px 2px}
 .simulator-title{font-size:22px;line-height:1.25;font-weight:800;margin:0 2px}
 .simulator-description{margin:6px 2px 0;color:var(--muted);font-size:13px;line-height:1.5}
@@ -95,6 +95,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .dimension-value .inch-value{font-size:11px;font-weight:500;color:var(--muted);margin-left:5px;letter-spacing:0}
 .hidden{display:none!important}
 .app-version{margin-top:24px;text-align:right;color:#c3c7cc;font-size:9px;line-height:1}
+@media(max-width:520px){.quick-price-row{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:18px;width:100%}.quick-price-note{width:100%}}
 @media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:12.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:12.5px}.slider-value{font-size:17px}.slider-value .inch-value{font-size:10.5px}.dimension-value{font-size:19px}.dimension-value .inch-value{font-size:11px}.dimension-name{font-size:15px}.budget-value{font-size:20px}}
 </style>
 </head>
@@ -283,7 +284,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
 </section>
 
-<div class="app-version" aria-label="Version">v0.9.8</div>
+<div class="app-version" aria-label="Version">v0.9.9</div>
 </main>
 
 <script>
