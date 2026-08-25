@@ -13,54 +13,59 @@
 *{box-sizing:border-box}
 html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text)}
 body{margin:0}
-main{max-width:760px;margin:auto;padding:22px 14px 36px}
-h1{font-size:18px;font-weight:600;line-height:1.3;margin:0 0 18px}
-.tattoo{border-top:1px solid var(--line);padding-top:22px;margin-top:24px}
+main{max-width:800px;margin:auto;padding:28px 18px 48px}
+h1{font-size:18px;font-weight:600;line-height:1.3;margin:0 0 24px}
+.tattoo{border-top:1px solid var(--line);padding-top:26px;margin-top:30px}
 .tattoo:first-of-type{margin-top:0}
-.tattoo-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.tattoo-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .tattoo-title{font-size:15px;font-weight:600}
 .tattoo-actions{display:flex;align-items:center;gap:14px}
 .text-btn{border:0;background:transparent;color:#717780;font:inherit;font-size:11px;font-weight:500;padding:6px 0;cursor:pointer}
 .text-btn.remove{color:#e25563;font-weight:400}
-.field{border:1px solid var(--line);border-radius:4px;background:var(--card);padding:14px 16px;margin-top:10px}
+.field{border:1px solid var(--line);border-radius:4px;background:var(--card);padding:16px 18px;margin-top:14px}
 .field h2{font-size:13px;font-weight:600;margin:0 0 8px}
+.dimension-row{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.dimension-row h2{margin:0}
 .number-wrap{display:flex;align-items:center;gap:8px}
 .number-input{width:120px;font:inherit;font-size:15px;font-weight:500;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:9px 10px;color:var(--text)}
 .unit{font-size:11px;color:var(--muted);font-weight:500}
-select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:10px;color:var(--text)}
-.helper{font-size:9px;color:#b2b7be;line-height:1.45;margin-top:8px}
-.helper-title{font-size:9px;font-weight:500;color:#a1a7af;margin-bottom:3px}
-.helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:1px 0}
+select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:11px;color:var(--text)}
+.helper{font-size:9px;color:#b2b7be;line-height:1.55;margin-top:11px}
+.helper-title{font-size:9px;font-weight:500;color:#a1a7af;margin-bottom:5px}
+.helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:2px 0}
 .helper-row.current{color:#7b828b;font-weight:500}
 .helper-row .meta{text-align:right;white-space:nowrap}
 .validation{font-size:10px;color:#b4232f;margin-top:7px}
 .hidden{display:none!important}
-.add-wrap{display:flex;justify-content:center;margin:20px 0 0}
+[hidden]{display:none!important}
+.add-wrap{display:flex;justify-content:center;margin:26px 0 0}
 .add{border:0;background:#f1f2f4;color:#3d4249;border-radius:5px;font:inherit;font-size:12px;font-weight:500;padding:10px 15px;cursor:pointer}
-.summary{margin-top:36px;border-top:1px solid var(--line);padding-top:16px}
-.summary h2{font-size:14px;font-weight:600;margin:0 0 10px}
-.summary-languages{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.summary-language{min-width:0;border:1px solid #e7e9ec;border-radius:6px;background:#fff;padding:11px}
-.summary-item{background:#fafbfc;border-radius:4px;padding:10px 11px;margin-top:8px}
+.summary{margin-top:44px;border-top:1px solid var(--line);padding-top:20px}
+.summary h2{font-size:14px;font-weight:600;margin:0 0 14px}
+.summary-tabs{display:flex;gap:18px;border-bottom:1px solid #e7e9ec;margin-bottom:12px}
+.summary-tab{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:#a0a6ae;font:inherit;font-size:11px;font-weight:500;padding:7px 2px 8px;cursor:pointer}
+.summary-tab[aria-selected="true"]{border-bottom-color:#777e87;color:#454a51}
+.summary-tab:focus-visible{outline:2px solid #9bbcf5;outline-offset:2px}
+.summary-panels{max-width:100%}
+.summary-language{min-width:0;border:1px solid #e7e9ec;border-radius:6px;background:#fff;padding:14px}
+.summary-item{background:#fafbfc;border-radius:4px;padding:12px 13px;margin-top:10px}
 .summary-item:first-child{margin-top:0}
 .summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:11px;font-weight:500}
 .summary-main strong{font-weight:600}
 .summary-detail{color:#a9afb7;font-size:9px;line-height:1.45}
 .summary-detail-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline}
-.summary-detail-line+.summary-detail-line{margin-top:1px}
+.summary-detail-line+.summary-detail-line{margin-top:2px}
 .summary-detail-value{text-align:right;white-space:nowrap}
-.summary-detail+.summary-main{margin-top:7px}
-.summary-totals{margin-top:11px;padding-top:2px;color:#777e87}
-.sum-row{display:flex;justify-content:space-between;gap:14px;padding:4px 1px;font-size:11px}
+.summary-detail+.summary-main{margin-top:10px}
+.summary-totals{margin-top:14px;padding-top:2px;color:#777e87}
+.sum-row{display:flex;justify-content:space-between;gap:14px;padding:5px 1px;font-size:11px}
 .sum-row strong{font-weight:500}
 .sum-row.discount{color:#8f969e}
 .sum-row.total{margin-top:5px;padding-top:8px;font-size:13px;font-weight:600;border-top:1px solid #eceef0;color:#3f444b}
 .sum-row.total strong{font-weight:600}
 .version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
-@media(max-width:640px){
-  .summary-languages{grid-template-columns:1fr}
-}
 @media(max-width:390px){
+  main{padding:22px 12px 40px}
   .field{padding:13px 14px}
   .number-input{width:108px}
   .summary-item{padding:9px 10px}
@@ -75,8 +80,12 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 
 <section class="summary">
   <h2>料金内訳</h2>
-  <div class="summary-languages">
-    <section class="summary-language" lang="ja">
+  <div class="summary-tabs" role="tablist" aria-label="料金内訳の言語">
+    <button id="summaryTabJa" class="summary-tab" type="button" role="tab" aria-selected="true" aria-controls="summaryPanelJa">日本語</button>
+    <button id="summaryTabEn" class="summary-tab" type="button" role="tab" aria-selected="false" aria-controls="summaryPanelEn">English</button>
+  </div>
+  <div class="summary-panels">
+    <section id="summaryPanelJa" class="summary-language" lang="ja" role="tabpanel" aria-labelledby="summaryTabJa">
       <div id="summaryRowsJa"></div>
       <div class="summary-totals">
         <div class="sum-row"><span>小計</span><strong id="subtotalJa">¥--,---</strong></div>
@@ -84,7 +93,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
         <div class="sum-row total"><span>お支払い合計</span><strong id="totalJa">¥--,---</strong></div>
       </div>
     </section>
-    <section class="summary-language" lang="en">
+    <section id="summaryPanelEn" class="summary-language" lang="en" role="tabpanel" aria-labelledby="summaryTabEn" hidden>
       <div id="summaryRowsEn"></div>
       <div class="summary-totals">
         <div class="sum-row"><span>Subtotal</span><strong id="subtotalEn">¥--,---</strong></div>
@@ -95,7 +104,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.8</div>
+<div class="version">artist-v0.3.9</div>
 </main>
 
 <template id="tattooTemplate">
@@ -107,15 +116,19 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
     </div>
   </div>
 
-  <section class="field">
-    <h2>長辺</h2>
-    <div class="number-wrap"><input class="number-input long" type="number" min="1" max="300" step="1" inputmode="numeric" value="80"><span class="unit">mm</span></div>
+  <section class="field dimension-field">
+    <div class="dimension-row">
+      <h2>長辺</h2>
+      <div class="number-wrap"><input class="number-input long" type="number" min="1" max="300" step="1" inputmode="numeric" value="80" aria-label="長辺"><span class="unit">mm</span></div>
+    </div>
     <div class="helper longHelp"></div>
   </section>
 
-  <section class="field">
-    <h2>短辺</h2>
-    <div class="number-wrap"><input class="number-input short" type="number" min="1" max="300" step="1" inputmode="numeric" value="50"><span class="unit">mm</span></div>
+  <section class="field dimension-field">
+    <div class="dimension-row">
+      <h2>短辺</h2>
+      <div class="number-wrap"><input class="number-input short" type="number" min="1" max="300" step="1" inputmode="numeric" value="50" aria-label="短辺"><span class="unit">mm</span></div>
+    </div>
     <div class="helper shortHelp"></div>
     <div class="validation hidden">短辺は長辺以下になるように設定してください。</div>
   </section>
@@ -295,6 +308,17 @@ function optionRowsHtml(type,b,currentValue){
 
 const host=document.getElementById('tattoos');
 const tpl=document.getElementById('tattooTemplate');
+const summaryTabs=[...document.querySelectorAll('.summary-tab')];
+
+function selectSummaryLanguage(tab){
+  summaryTabs.forEach(button=>{
+    const selected=button===tab;
+    button.setAttribute('aria-selected',String(selected));
+    document.getElementById(button.getAttribute('aria-controls')).hidden=!selected;
+  });
+}
+
+summaryTabs.forEach(tab=>tab.addEventListener('click',()=>selectSummaryLanguage(tab)));
 
 function addTattoo(){
   const card=tpl.content.firstElementChild.cloneNode(true);
@@ -415,7 +439,7 @@ function breakdownLinesEn(c){
 function refresh(){
   const cards=[...host.querySelectorAll('.tattoo')];
   cards.forEach((card,i)=>{
-    card.querySelector('.tattoo-title').textContent=`タトゥー${i+1}`;
+    card.querySelector('.tattoo-title').textContent=`${i+1}つ目のタトゥー`;
     card.querySelector('.remove').classList.toggle('hidden',cards.length===1);
     card.querySelector('.add-wrap').classList.toggle('hidden',i!==cards.length-1);
   });
@@ -425,7 +449,7 @@ function refresh(){
 function refreshSummary(){
   const cards=[...host.querySelectorAll('.tattoo')];
   const languageSummaries=[
-    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー${i+1}`,invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
+    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`${i+1}つ目のタトゥー`,invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
     {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo ${i+1}`,invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
   ];
   languageSummaries.forEach(summary=>summary.rows.innerHTML='');
