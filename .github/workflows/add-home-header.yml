@@ -1,0 +1,54 @@
+name: Add localized home header
+
+on:
+  push:
+    branches:
+      - blue-gradient-cta
+    paths:
+      - '.github/workflows/add-home-header.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: blue-gradient-cta
+      - name: Add localized home navigation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+
+          css_anchor='main{max-width:760px;margin:auto;padding:18px 14px calc(28px + env(safe-area-inset-bottom))}\n'
+          css_add='''.site-nav{display:flex;align-items:center;height:38px;margin:0 2px 14px;border-bottom:1px solid var(--line)}\n.site-home{display:inline-flex;align-items:center;gap:6px;color:#111;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1}\n.site-home svg{width:14px;height:14px;display:block;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}\n'''
+          if css_anchor not in s:
+              raise SystemExit('main CSS anchor not found')
+          s=s.replace(css_anchor,css_anchor+css_add,1)
+
+          body_anchor='<main>\n<div class="topbar">'
+          body_new='''<main>\n<nav class="site-nav" aria-label="Home">\n  <a id="homeLink" class="site-home" href="https://sites.google.com/view/mea-tattoo">\n    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-6h5v6"/></svg>\n    <span>HOME</span>\n  </a>\n</nav>\n\n<div class="topbar">'''
+          if body_anchor not in s:
+              raise SystemExit('body anchor not found')
+          s=s.replace(body_anchor,body_new,1)
+
+          js_anchor="  const bookingUrl=currentLang==='en'?'https://docs.google.com/forms/d/e/1FAIpQLSecK9YxkFyGUIKs14U2xnfTjO-N-H56az5IWWe9ntD9Cynsvw/viewform':'https://docs.google.com/forms/d/e/1FAIpQLScQl62hFykxi3l_dEHyUc7Ol1HoiIjjlMt_b2bd04L9F98S8Q/viewform';\n"
+          js_add="  const homeUrl=currentLang==='en'?'https://sites.google.com/view/mea-tattoo':'https://sites.google.com/view/mea-tattoo/jp';\n  $('homeLink').href=homeUrl;\n"
+          if js_anchor not in s:
+              raise SystemExit('language URL anchor not found')
+          s=s.replace(js_anchor,js_anchor+js_add,1)
+
+          s=s.replace('v0.9.6','v0.9.7')
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Add localized home header"
+          git push origin HEAD:blue-gradient-cta
