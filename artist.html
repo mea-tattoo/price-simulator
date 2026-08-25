@@ -47,8 +47,8 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 .summary-tab[aria-selected="true"]{border-bottom-color:#777e87;color:#454a51}
 .summary-tab:focus-visible{outline:2px solid #9bbcf5;outline-offset:2px}
 .summary-panels{max-width:100%}
-.summary-language{min-width:0;border:0;border-radius:0;background:#fff;padding:0}
-.summary-item{background:#fafbfc;border-radius:4px;padding:12px 13px;margin-top:10px}
+.summary-language{--summary-gutter:13px;min-width:0;border:0;border-radius:0;background:#fff;padding:0}
+.summary-item{background:#fafbfc;border-radius:4px;padding:12px var(--summary-gutter);margin-top:10px}
 .summary-item:first-child{margin-top:0}
 .summary-main{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:11px;font-weight:500}
 .summary-main strong{font-weight:600}
@@ -57,18 +57,19 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 .summary-detail-line+.summary-detail-line{margin-top:2px}
 .summary-detail-value{text-align:right;white-space:nowrap}
 .summary-detail+.summary-main{margin-top:10px}
-.summary-totals{margin-top:14px;padding-top:2px;color:var(--text)}
-.sum-row{display:flex;justify-content:space-between;gap:14px;padding:5px 1px;font-size:11px}
+.summary-totals{margin-top:14px;padding:2px var(--summary-gutter) 0;color:var(--text)}
+.sum-row{display:flex;justify-content:space-between;gap:14px;padding:5px 0;font-size:11px}
 .sum-row strong{font-weight:500}
 .sum-row.discount{color:var(--text)}
-.sum-row.total{margin-top:5px;padding-top:8px;font-size:13px;font-weight:600;border-top:1px dashed #cfd3d8;color:#3f444b}
+.sum-row.total{margin-top:5px;padding-top:11px;font-size:18px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
 .sum-row.total strong{font-weight:600}
 .version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
 @media(max-width:390px){
   main{padding:22px 12px 40px}
   .field{padding:13px 14px}
   .number-input{width:108px}
-  .summary-item{padding:9px 10px}
+  .summary-language{--summary-gutter:10px}
+  .summary-item{padding:9px var(--summary-gutter)}
 }
 </style>
 </head>
@@ -104,7 +105,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.12</div>
+<div class="version">artist-v0.3.13</div>
 </main>
 
 <template id="tattooTemplate">
