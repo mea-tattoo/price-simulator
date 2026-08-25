@@ -66,7 +66,10 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .sum-row.discount{color:var(--text)}
 .sum-row.total{margin-top:7px;padding-top:14px;font-size:24px;font-weight:600;border-top:1px dashed #cfd3d8;color:#111}
 .sum-row.total strong{font-weight:600}
-.version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
+.app-footer{display:flex;flex-direction:column;align-items:center;margin-top:104px;padding:36px 0 max(160px,22vh);color:#b7bdc5}
+.app-footer img{display:block;width:132px;height:auto;opacity:.72}
+.copyright{margin-top:18px;color:#aeb4bc;font-size:9px;letter-spacing:.08em}
+.version{color:#c3c7cc;font-size:9px;margin-top:10px}
 @media(max-width:390px){
   main{padding:22px 12px 40px}
   h1{margin-bottom:34px;padding:14px 15px}
@@ -77,6 +80,8 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   .summary-language{--summary-gutter:14px}
   .summary-item{padding:14px var(--summary-gutter)}
   .sum-row.total{font-size:24px}
+  .app-footer{margin-top:96px;padding-bottom:max(180px,24vh)}
+  .app-footer img{width:128px}
 }
 </style>
 </head>
@@ -114,7 +119,11 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.18</div>
+<footer class="app-footer">
+  <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
+  <div class="copyright">© Mea Tattoo Studio</div>
+  <div class="version">artist-v0.3.19</div>
+</footer>
 </main>
 
 <template id="tattooTemplate">
