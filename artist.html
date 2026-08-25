@@ -47,7 +47,9 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 .helper-row.current{color:#7b828b;font-weight:500}
 .helper-row .rate,.helper-row .amount{text-align:right;white-space:nowrap}
 .validation{font-size:10px;color:#b4232f;margin-top:7px}
-.notice{margin:0 0 28px;color:#dc4c57;font-size:11px;font-weight:400;line-height:1.5}
+.notices{margin:0 0 28px}
+.notice{margin:0;color:#dc4c57;font-size:11px;font-weight:400;line-height:1.5}
+.notice+.notice{margin-top:4px}
 .hidden{display:none!important}
 [hidden]{display:none!important}
 .add-wrap{display:flex;justify-content:center;margin:26px 0 0}
@@ -107,7 +109,10 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
   <div class="app-header-inner">料金計算機(アーティスト用)</div>
 </header>
 <main>
-<p class="notice">※必ず個別計数すること。複数人の同時計数は禁止</p>
+<div class="notices">
+  <p class="notice">※必ず個別計数すること。複数人の同時計数は禁止</p>
+  <p class="notice">※複数セッションの場合、原則1セッション目に一括払いとする</p>
+</div>
 <div id="tattoos"></div>
 
 <section class="summary">
@@ -142,7 +147,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">Version 0.3.27</div>
+  <div class="version">Version 0.3.28</div>
 </footer>
 </main>
 
