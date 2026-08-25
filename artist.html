@@ -35,9 +35,6 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
 .helper-row .meta{text-align:right;white-space:nowrap}
 .validation{font-size:11px;color:#991b1b;margin-top:7px}
 .hidden{display:none!important}
-.pricebox{background:var(--soft);border:0;border-radius:6px;padding:15px 16px;margin-top:14px}
-.price-kicker{font-size:11px;color:var(--muted);font-weight:700}
-.price{font-size:23px;font-weight:800;margin-top:2px}
 .add-wrap{display:flex;justify-content:center;margin:20px 0 0}
 .add{border:0;background:#f1f2f4;color:#23262b;border-radius:6px;font:inherit;font-size:13px;font-weight:700;padding:11px 16px;cursor:pointer}
 .summary{margin-top:40px;background:var(--soft2);border-radius:10px;padding:18px 16px}
@@ -57,15 +54,16 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
 .payment{margin:14px 2px 0;color:#9aa0a8;font-size:10.5px;line-height:1.55}
 .payment-title{font-weight:700;color:#8b9199}
 .version{text-align:right;color:#c3c7cc;font-size:9px;margin-top:24px}
+@media(max-width:640px){
+  .summary-languages{grid-template-columns:1fr}
+  .summary-language+.summary-language{margin-top:8px}
+}
 @media(max-width:390px){
   h1{font-size:22px}
   .tattoo-title{font-size:18px}
   .field{padding:13px 14px}
   .number-input{width:108px}
-  .price{font-size:22px}
   .summary{padding:16px 13px}
-  .summary-languages{grid-template-columns:1fr}
-  .summary-language+.summary-language{margin-top:8px}
   .summary-item{padding:12px}
 }
 </style>
@@ -104,7 +102,7 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.3</div>
+<div class="version">artist-v0.3.4</div>
 </main>
 
 <template id="tattooTemplate">
@@ -165,11 +163,6 @@ select{width:100%;font-size:15px;border:1px solid #d1d5db;border-radius:4px;back
     </select>
     <div class="helper colorHelp"></div>
   </section>
-
-  <div class="pricebox">
-    <div class="price-kicker">予想金額 / Estimated Price</div>
-    <div class="price">¥--,---</div>
-  </div>
 
   <div class="add-wrap"><button class="add" type="button">＋ 別のタトゥーを追加</button></div>
 </section>
@@ -385,7 +378,6 @@ function recalc(card){
 
   card._calc=calc;
   card.dataset.special=b?.special?'1':'';
-  card.querySelector('.price').textContent=b?.special?'230mmを超えるサイズは自動計算できません。':(calc?money(calc.rounded):'¥--,---');
   refreshSummary();
 }
 
