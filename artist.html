@@ -22,14 +22,14 @@ h1{font-size:18px;font-weight:600;line-height:1.3;margin:0 0 24px}
 .tattoo-actions{display:flex;align-items:center;gap:14px}
 .text-btn{border:0;background:transparent;color:#717780;font:inherit;font-size:11px;font-weight:500;padding:6px 0;cursor:pointer}
 .text-btn.remove{color:#e25563;font-weight:400}
-.field{border:1px solid var(--line);border-radius:4px;background:var(--card);padding:16px 18px;margin-top:14px}
+.field{border:0;border-radius:4px;background:var(--soft);padding:16px 18px;margin-top:14px}
 .field h2{font-size:13px;font-weight:600;margin:0 0 8px}
 .dimension-row{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .dimension-row h2{margin:0}
 .number-wrap{display:flex;align-items:center;gap:8px}
-.number-input{width:120px;font:inherit;font-size:15px;font-weight:500;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:9px 10px;color:var(--text)}
+.number-input{width:120px;font:inherit;font-size:15px;font-weight:500;border:1px solid #dfe3e8;border-radius:4px;background:#fff;padding:9px 10px;color:var(--text)}
 .unit{font-size:11px;color:var(--muted);font-weight:500}
-select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:11px;color:var(--text)}
+select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;background:#fff;padding:11px;color:var(--text)}
 .helper{font-size:9px;color:#b2b7be;line-height:1.25;margin-top:10px}
 .helper-title{font-size:9px;font-weight:500;color:#a1a7af;margin-bottom:3px}
 .helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:0}
@@ -106,7 +106,7 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
   </div>
 </section>
 
-<div class="version">artist-v0.3.15</div>
+<div class="version">artist-v0.3.16</div>
 </main>
 
 <template id="tattooTemplate">
@@ -445,7 +445,7 @@ function breakdownLinesEn(c){
 function refresh(){
   const cards=[...host.querySelectorAll('.tattoo')];
   cards.forEach((card,i)=>{
-    card.querySelector('.tattoo-title').textContent=`${i+1}つ目のタトゥー`;
+    card.querySelector('.tattoo-title').textContent=`タトゥー #${i+1}`;
     card.querySelector('.remove').classList.toggle('hidden',cards.length===1);
     card.querySelector('.add-wrap').classList.toggle('hidden',i!==cards.length-1);
   });
@@ -455,8 +455,8 @@ function refresh(){
 function refreshSummary(){
   const cards=[...host.querySelectorAll('.tattoo')];
   const languageSummaries=[
-    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`${i+1}つ目のタトゥー`,invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
-    {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo ${i+1}`,invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
+    {rows:document.getElementById('summaryRowsJa'),lines:breakdownLinesJa,title:i=>`タトゥー #${i+1}`,invalid:'入力内容を確認してください。',special:'自動計算対象外のサイズです。'},
+    {rows:document.getElementById('summaryRowsEn'),lines:breakdownLinesEn,title:i=>`Tattoo #${i+1}`,invalid:'Please check the entered details.',special:'This size cannot be calculated automatically.'}
   ];
   languageSummaries.forEach(summary=>summary.rows.innerHTML='');
 
