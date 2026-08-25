@@ -30,9 +30,9 @@ h1{font-size:18px;font-weight:600;line-height:1.3;margin:0 0 24px}
 .number-input{width:120px;font:inherit;font-size:15px;font-weight:500;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:9px 10px;color:var(--text)}
 .unit{font-size:11px;color:var(--muted);font-weight:500}
 select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;background:#fff;padding:11px;color:var(--text)}
-.helper{font-size:9px;color:#b2b7be;line-height:1.55;margin-top:11px}
-.helper-title{font-size:9px;font-weight:500;color:#a1a7af;margin-bottom:5px}
-.helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:2px 0}
+.helper{font-size:9px;color:#b2b7be;line-height:1.25;margin-top:10px}
+.helper-title{font-size:9px;font-weight:500;color:#a1a7af;margin-bottom:3px}
+.helper-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:0}
 .helper-row.current{color:#7b828b;font-weight:500}
 .helper-row .meta{text-align:right;white-space:nowrap}
 .validation{font-size:10px;color:#b4232f;margin-top:7px}
@@ -81,19 +81,11 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
 <section class="summary">
   <h2>料金内訳</h2>
   <div class="summary-tabs" role="tablist" aria-label="料金内訳の言語">
-    <button id="summaryTabJa" class="summary-tab" type="button" role="tab" aria-selected="true" aria-controls="summaryPanelJa">日本語</button>
-    <button id="summaryTabEn" class="summary-tab" type="button" role="tab" aria-selected="false" aria-controls="summaryPanelEn">English</button>
+    <button id="summaryTabEn" class="summary-tab" type="button" role="tab" aria-selected="true" aria-controls="summaryPanelEn">English</button>
+    <button id="summaryTabJa" class="summary-tab" type="button" role="tab" aria-selected="false" aria-controls="summaryPanelJa">日本語</button>
   </div>
   <div class="summary-panels">
-    <section id="summaryPanelJa" class="summary-language" lang="ja" role="tabpanel" aria-labelledby="summaryTabJa">
-      <div id="summaryRowsJa"></div>
-      <div class="summary-totals">
-        <div class="sum-row"><span>小計</span><strong id="subtotalJa">¥--,---</strong></div>
-        <div id="discountRowJa" class="sum-row discount hidden"><span>同時施術割</span><strong>-¥5,000</strong></div>
-        <div class="sum-row total"><span>お支払い合計</span><strong id="totalJa">¥--,---</strong></div>
-      </div>
-    </section>
-    <section id="summaryPanelEn" class="summary-language" lang="en" role="tabpanel" aria-labelledby="summaryTabEn" hidden>
+    <section id="summaryPanelEn" class="summary-language" lang="en" role="tabpanel" aria-labelledby="summaryTabEn">
       <div id="summaryRowsEn"></div>
       <div class="summary-totals">
         <div class="sum-row"><span>Subtotal</span><strong id="subtotalEn">¥--,---</strong></div>
@@ -101,10 +93,18 @@ select{width:100%;font-size:14px;border:1px solid #d1d5db;border-radius:4px;back
         <div class="sum-row total"><span>Total</span><strong id="totalEn">¥--,---</strong></div>
       </div>
     </section>
+    <section id="summaryPanelJa" class="summary-language" lang="ja" role="tabpanel" aria-labelledby="summaryTabJa" hidden>
+      <div id="summaryRowsJa"></div>
+      <div class="summary-totals">
+        <div class="sum-row"><span>小計</span><strong id="subtotalJa">¥--,---</strong></div>
+        <div id="discountRowJa" class="sum-row discount hidden"><span>同時施術割</span><strong>-¥5,000</strong></div>
+        <div class="sum-row total"><span>お支払い合計</span><strong id="totalJa">¥--,---</strong></div>
+      </div>
+    </section>
   </div>
 </section>
 
-<div class="version">artist-v0.3.9</div>
+<div class="version">artist-v0.3.10</div>
 </main>
 
 <template id="tattooTemplate">
@@ -398,8 +398,7 @@ const LABEL_EN={
 
 function breakdownLinesJa(c){
   return [
-    {label:`${c.long} × ${c.short} mm / ${c.size}サイズ`},
-    {label:'基準価格',value:money(c.basePrice)},
+    {label:`${c.long} × ${c.short} mm / ${c.size}サイズ`,value:money(c.basePrice)},
     {label:`形状：${LABEL.shape[c.shape]}`,value:`${pct(c.shapeRate)}（${signedMoney(amountFromRate(c.basePrice,c.shapeRate))}）`},
     c.whitespace==='notApplicable'
       ?{label:'余白：該当なし',value:'±0%（±¥0）'}
@@ -418,8 +417,7 @@ function breakdownLinesJa(c){
 
 function breakdownLinesEn(c){
   return [
-    {label:`${c.long} × ${c.short} mm / ${c.size} size`},
-    {label:'Base',value:money(c.basePrice)},
+    {label:`${c.long} × ${c.short} mm / ${c.size} size`,value:money(c.basePrice)},
     {label:`Shape: ${LABEL_EN.shape[c.shape]}`,value:`${pct(c.shapeRate)} (${signedMoney(amountFromRate(c.basePrice,c.shapeRate))})`},
     c.whitespace==='notApplicable'
       ?{label:'Whitespace: Not applicable',value:'±0% (±¥0)'}
