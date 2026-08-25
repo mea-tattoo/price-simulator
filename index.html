@@ -15,6 +15,9 @@
 html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:var(--bg);color:var(--text)}
 body{margin:0}
 main{max-width:760px;margin:auto;padding:18px 14px calc(28px + env(safe-area-inset-bottom))}
+.site-nav{display:flex;align-items:center;height:38px;margin:0 2px 14px;border-bottom:1px solid var(--line)}
+.site-home{display:inline-flex;align-items:center;gap:6px;color:#111;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1}
+.site-home svg{width:14px;height:14px;display:block;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
 h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
@@ -97,6 +100,13 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 </head>
 <body>
 <main>
+<nav class="site-nav" aria-label="Home">
+  <a id="homeLink" class="site-home" href="https://sites.google.com/view/mea-tattoo">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M9.5 20v-6h5v6"/></svg>
+    <span>HOME</span>
+  </a>
+</nav>
+
 <div class="topbar">
   <h1 id="quickPriceHeading" data-i18n="quickPriceGuide">Price</h1>
   <button id="langToggle" class="language-toggle" type="button">日本語</button>
@@ -273,7 +283,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
 </section>
 
-<div class="app-version" aria-label="Version">v0.9.6</div>
+<div class="app-version" aria-label="Version">v0.9.7</div>
 </main>
 
 <script>
@@ -357,6 +367,8 @@ function applyLanguage(){
   $('langToggle').textContent=currentLang==='en'?'日本語':'English';
   $('langToggle').setAttribute('aria-label',currentLang==='en'?'日本語に切り替える':'Switch to English');
   const bookingUrl=currentLang==='en'?'https://docs.google.com/forms/d/e/1FAIpQLSecK9YxkFyGUIKs14U2xnfTjO-N-H56az5IWWe9ntD9Cynsvw/viewform':'https://docs.google.com/forms/d/e/1FAIpQLScQl62hFykxi3l_dEHyUc7Ol1HoiIjjlMt_b2bd04L9F98S8Q/viewform';
+  const homeUrl=currentLang==='en'?'https://sites.google.com/view/mea-tattoo':'https://sites.google.com/view/mea-tattoo/jp';
+  $('homeLink').href=homeUrl;
   $('sizeBookingLink').href=bookingUrl;
   $('budgetBookingLink').href=bookingUrl;
   $('sectionBookingLink').href=bookingUrl;
