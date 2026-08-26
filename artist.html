@@ -147,7 +147,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">Version 0.3.29</div>
+  <div class="version">Version 0.3.30</div>
 </footer>
 </main>
 
@@ -333,7 +333,7 @@ function shapeRowsHtml(b,currentShape,currentRatio){
     {key:'somewhat',label:'61〜85% / 一般的な長方形'},
     {key:'square',label:'86〜100% / 正方形に近い'}
   ];
-  const title=currentRatio==null?'形状補正一覧':`形状補正一覧（現在 ${currentRatio.toFixed(1)}%）`;
+  const title=currentRatio==null?'縦横比補正一覧':`縦横比補正一覧（現在 ${currentRatio.toFixed(1)}%）`;
   return rowsHtml(title,defs.map(d=>{
     const r=b&&!b.special?rate('shape',d.key,b.size):null;
     return {key:d.key,label:d.label,meta:r==null?'—':`${pct(r)} / ${signedMoney(amountFromRate(b.price,r))}`};
@@ -483,7 +483,7 @@ const LABEL_EN={
 function breakdownLinesJa(c){
   return [
     {label:`サイズ：${c.long} × ${c.short} mm`},
-    {label:`形状：${LABEL.shape[c.shape]}`},
+    {label:`縦横比：${LABEL.shape[c.shape]}`},
     c.whitespace==='notApplicable'
       ?{label:'余白：該当なし'}
       :c.whitespace
@@ -501,7 +501,7 @@ function breakdownLinesJa(c){
 function breakdownLinesEn(c){
   return [
     {label:`Size: ${c.long} × ${c.short} mm (${inches(c.long)} × ${inches(c.short)} in)`},
-    {label:`Shape: ${LABEL_EN.shape[c.shape]}`},
+    {label:`Proportions: ${LABEL_EN.shape[c.shape]}`},
     c.whitespace==='notApplicable'
       ?{label:'Whitespace: Not applicable'}
       :c.whitespace
