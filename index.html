@@ -18,19 +18,8 @@ main{max-width:760px;margin:auto;padding:18px 14px calc(28px + env(safe-area-ins
 .site-nav{display:flex;align-items:center;height:38px;margin:0 2px 14px;border-bottom:1px solid var(--line)}
 .site-home{display:inline-flex;align-items:center;gap:6px;color:#111;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.06em;line-height:1}
 .site-home svg{width:14px;height:14px;display:block;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
-h1{font-size:24px;line-height:1.25;margin:4px 0;white-space:nowrap;min-width:0}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap;margin-bottom:14px}
 .language-toggle{border:0;background:transparent;color:#59616c;font:inherit;font-size:13px;font-weight:700;padding:7px 2px;cursor:pointer;white-space:nowrap;flex:none}
-.quick-price-guide{background:#171717;border:1px solid #262626;border-radius:0;margin-top:14px;padding:14px 16px 13px;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.quick-price-row{display:grid;grid-template-columns:160px 260px;grid-template-areas:"name price" "size time";column-gap:32px;row-gap:4px;align-items:baseline;width:min(100%,452px);margin:0 auto;padding:9px 0;line-height:1.35}
-.quick-price-row+.quick-price-row{border-top:1px solid rgba(255,255,255,.12)}
-.quick-price-size{grid-area:name;font-weight:800;color:#fff;font-size:14px;margin:0}
-.quick-price-detail{color:#d2d2d2;font-size:11.5px;line-height:1.35;white-space:nowrap}
-.quick-price-detail:nth-child(2){grid-area:size}
-.quick-price-detail:nth-child(3){grid-area:price;color:#fff;font-size:14px;font-weight:800;text-align:left}
-.quick-price-detail:nth-child(4){grid-area:time;text-align:left}
-.quick-price-detail+.quick-price-detail{margin-top:0}
-.quick-price-note{width:min(100%,452px);margin:7px auto 0;padding-top:9px;border-top:1px solid rgba(255,255,255,.12);color:#b8b8b8;font-size:10.5px;line-height:1.4;font-weight:700}
 .section-divider{height:1px;background:var(--line);margin:52px 2px}
 .simulator-title{font-size:22px;line-height:1.25;font-weight:800;margin:0 2px}
 .simulator-description{margin:6px 2px 0;color:var(--muted);font-size:13px;line-height:1.5}
@@ -74,8 +63,6 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:60%;min-height:50px;margin:45px auto;padding:14px 42px 14px 18px;background:#3484d2;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
 .booking-cta::after{content:"→";position:absolute;right:17px;top:50%;transform:translateY(-52%);font-size:16px;font-weight:500;line-height:1}
 .booking-cta:active{background:#2d74ba;transform:scale(.985);box-shadow:none}
-.section-booking-cta{margin:45px auto 0}
-.section-transition{height:1px;background:var(--line);margin:58px 2px 18px}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
@@ -95,9 +82,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .dimension-value .inch-value{font-size:11px;font-weight:500;color:var(--muted);margin-left:5px;letter-spacing:0}
 .hidden{display:none!important}
 .app-version{margin-top:24px;text-align:right;color:#c3c7cc;font-size:9px;line-height:1}
-@media(min-width:521px){.quick-price-guide{padding-top:26px;padding-bottom:26px}}
-@media(max-width:520px){.quick-price-row{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);column-gap:18px;width:100%}.quick-price-note{width:100%}}
-@media(max-width:390px){h1{font-size:22px}.simulator-title{font-size:22px}.quick-price-guide{padding:13px 14px 12px}.quick-price-size{font-size:13.5px}.quick-price-detail{font-size:11px}.quick-price-detail:nth-child(3){font-size:13.5px}.slider-value{font-size:17px}.slider-value .inch-value{font-size:10.5px}.dimension-value{font-size:19px}.dimension-value .inch-value{font-size:11px}.dimension-name{font-size:15px}.budget-value{font-size:20px}}
+@media(max-width:390px){.simulator-title{font-size:22px}.slider-value{font-size:17px}.slider-value .inch-value{font-size:10.5px}.dimension-value{font-size:19px}.dimension-value .inch-value{font-size:11px}.dimension-name{font-size:15px}.budget-value{font-size:20px}}
 </style>
 </head>
 <body>
@@ -110,40 +95,8 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 </nav>
 
 <div class="topbar">
-  <h1 id="quickPriceHeading" data-i18n="quickPriceGuide">Price</h1>
   <button id="langToggle" class="language-toggle" type="button">日本語</button>
 </div>
-
-<section class="quick-price-guide" aria-labelledby="quickPriceHeading">
-  <div class="quick-price-row">
-    <div class="quick-price-size" data-i18n="quickXSName">XS size</div>
-    <div class="quick-price-detail" data-i18n="quickXSSize">Size: about 3 cm (1.2 in)</div>
-    <div class="quick-price-detail" data-i18n="quickXSPrice">about ¥17,000</div>
-    <div class="quick-price-detail" data-i18n="quickXSTime">Time: about 1 hour</div>
-  </div>
-  <div class="quick-price-row">
-    <div class="quick-price-size" data-i18n="quickSName">S size</div>
-    <div class="quick-price-detail" data-i18n="quickSSize">Size: about 6 cm (2.5 in)</div>
-    <div class="quick-price-detail" data-i18n="quickSPrice">¥22,000–¥35,000</div>
-    <div class="quick-price-detail" data-i18n="quickSTime">Time: about 1–2 hours</div>
-  </div>
-  <div class="quick-price-row">
-    <div class="quick-price-size" data-i18n="quickMName">M size</div>
-    <div class="quick-price-detail" data-i18n="quickMSize">Size: about 12 cm (5 in)</div>
-    <div class="quick-price-detail" data-i18n="quickMPrice">¥45,000–¥65,000</div>
-    <div class="quick-price-detail" data-i18n="quickMTime">Time: about 3–5 hours</div>
-  </div>
-  <div class="quick-price-row">
-    <div class="quick-price-size" data-i18n="quickLName">L size</div>
-    <div class="quick-price-detail" data-i18n="quickLSize">Size: about 20 cm (8 in)</div>
-    <div class="quick-price-detail" data-i18n="quickLPrice">¥70,000–¥100,000</div>
-    <div class="quick-price-detail" data-i18n="quickLTime">Time: about 5–8 hours</div>
-  </div>
-  <div class="quick-price-note" data-i18n="quickPriceNote">Prices and times are estimates and may vary depending on the design.</div>
-</section>
-
-<a id="sectionBookingLink" class="booking-cta section-booking-cta" href="#" data-i18n="bookingCta">Booking Form</a>
-<div class="section-transition" aria-hidden="true"></div>
 
 <h2 id="appTitle" class="simulator-title" data-i18n="title">Price Simulator</h2>
 <p class="simulator-description" data-i18n="simulatorDescription">Get a more detailed price estimate.</p>
@@ -297,12 +250,6 @@ const money=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',ma
 const TEXT={
   ja:{
     title:'料金シミュレーター',
-    quickPriceGuide:'料金',
-    quickXSName:'XSサイズ',quickXSSize:'サイズ：約3cm',quickXSPrice:'約¥17,000',quickXSTime:'時間：約1時間',
-    quickSName:'Sサイズ',quickSSize:'サイズ：約6cm',quickSPrice:'¥22,000〜¥35,000',quickSTime:'時間：約1〜2時間',
-    quickMName:'Mサイズ',quickMSize:'サイズ：約12cm',quickMPrice:'¥45,000〜¥65,000',quickMTime:'時間：約3〜5時間',
-    quickLName:'Lサイズ',quickLSize:'サイズ：約20cm',quickLPrice:'¥70,000〜¥100,000',quickLTime:'時間：約5〜8時間',
-    quickPriceNote:'料金・所要時間はあくまで目安です。デザインによって異なります。',
     simulatorDescription:'より詳細な料金をもとめられます。',
     estimateMethod:'見積もり方法',
     tabSize:'サイズから見積もる',tabBudget:'予算から見積もる',
@@ -326,12 +273,6 @@ const TEXT={
   },
   en:{
     title:'Price Simulator',
-    quickPriceGuide:'Price',
-    quickXSName:'XS size',quickXSSize:'Size: about 3 cm (1.2 in)',quickXSPrice:'about ¥17,000',quickXSTime:'Time: about 1 hour',
-    quickSName:'S size',quickSSize:'Size: about 6 cm (2.5 in)',quickSPrice:'¥22,000–¥35,000',quickSTime:'Time: about 1–2 hours',
-    quickMName:'M size',quickMSize:'Size: about 12 cm (5 in)',quickMPrice:'¥45,000–¥65,000',quickMTime:'Time: about 3–5 hours',
-    quickLName:'L size',quickLSize:'Size: about 20 cm (8 in)',quickLPrice:'¥70,000–¥100,000',quickLTime:'Time: about 5–8 hours',
-    quickPriceNote:'Prices and times are estimates and may vary depending on the design.',
     simulatorDescription:'Get a more detailed price estimate.',
     estimateMethod:'Estimate method',
     tabSize:'Estimate by Size',tabBudget:'Estimate by Budget',
@@ -373,7 +314,6 @@ function applyLanguage(){
   $('homeLink').href=homeUrl;
   $('sizeBookingLink').href=bookingUrl;
   $('budgetBookingLink').href=bookingUrl;
-  $('sectionBookingLink').href=bookingUrl;
 }
 
 function setLanguage(lang,updateUrl=true){
