@@ -6,6 +6,7 @@
 <title>Tattoo Price Simulator</title>
 <meta name="apple-mobile-web-app-title" content="Tattoo Price Simulator">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&amp;icon_names=chevron_right&amp;display=block" rel="stylesheet">
 <style>
 :root{
   --bg:#fff;--card:#fff;--text:#111;--muted:#6b7280;--line:#e5e7eb;
@@ -60,9 +61,11 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
 .final.is-placeholder .kicker,.final.is-placeholder .amount,.result.is-placeholder .main-label,.result.is-placeholder .dimension-name,.result.is-placeholder .dimension-value{color:#b6bbc4}
 .estimate-note{margin-top:8px;padding:0;color:var(--muted);font-size:12px;line-height:1.5}
 .final.is-placeholder .estimate-note,.result.is-placeholder .estimate-note{display:none}
-.booking-cta{position:relative;display:flex;align-items:center;justify-content:center;width:60%;min-height:50px;margin:45px auto;padding:14px 42px 14px 18px;background:#3484d2;color:#fff;text-decoration:none;border:0;border-radius:999px;font-size:14px;font-weight:600;line-height:1.2;letter-spacing:-.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
-.booking-cta::after{content:"→";position:absolute;right:17px;top:50%;transform:translateY(-52%);font-size:16px;font-weight:500;line-height:1}
-.booking-cta:active{background:#2d74ba;transform:scale(.985);box-shadow:none}
+.booking-cta{display:flex;align-items:center;justify-content:center;width:100%;min-height:58px;margin:45px auto;padding:16px 20px;background:#333;color:#fff;text-decoration:none;border:0;border-radius:6px;font-size:clamp(16px,2.3vw,24px);font-weight:600;line-height:1.3;letter-spacing:.01em;box-shadow:none;transition:transform .16s ease,background .16s ease}
+.booking-cta-icon{margin-left:clamp(18px,2.5vw,28px);font-size:clamp(20px,2.3vw,24px);font-weight:400;line-height:1}
+.booking-cta:hover{background:#292929}
+.booking-cta:focus-visible{outline:3px solid #9bbcf5;outline-offset:3px}
+.booking-cta:active{background:#202020;transform:scale(.99)}
 .budget-sticky{position:sticky;top:0;z-index:30;padding:8px 0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .budget-card{margin-top:0;padding:13px 16px}
 .budget-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:10px}
@@ -167,7 +170,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
     </div>
   </div>
 
-  <a id="sizeBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
+  <a id="sizeBookingLink" class="booking-cta" href="#"><span data-i18n="bookingCta">Booking Form</span><span class="booking-cta-icon material-symbols-outlined" aria-hidden="true">chevron_right</span></a>
 </section>
 
 <section id="budgetPane" class="pane hidden">
@@ -235,7 +238,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
     <div class="estimate-note" data-i18n="sizeNote">The displayed size is an estimate.</div>
   </div>
 
-  <a id="budgetBookingLink" class="booking-cta" href="#" data-i18n="bookingCta">Continue to Booking</a>
+  <a id="budgetBookingLink" class="booking-cta" href="#"><span data-i18n="bookingCta">Booking Form</span><span class="booking-cta-icon material-symbols-outlined" aria-hidden="true">chevron_right</span></a>
 </section>
 
 <div class="app-version" aria-label="Version">v1</div>
