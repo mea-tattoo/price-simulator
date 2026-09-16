@@ -1,0 +1,29 @@
+name: About修正
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/about-fix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: read
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: GitHub Pages URLを取得してAboutを更新
+        shell: bash
+        run: |
+          set -euo pipefail
+          PAGES_URL=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.html_url // empty')
+          echo "Pages URL: ${PAGES_URL}"
+          test -n "$PAGES_URL"
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}" \
+            -f description='Mea Tattoo Studioのタトゥー料金目安を計算する料金シミュレーター' \
+            -f homepage="$PAGES_URL"
