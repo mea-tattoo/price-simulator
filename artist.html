@@ -149,7 +149,7 @@ select{width:100%;font-size:14px;border:1px solid #dfe3e8;border-radius:4px;back
 <footer class="app-footer">
   <img src="assets/mea-logo-white-bg.png" alt="Mea Tattoo Studio" width="633" height="362">
   <div class="copyright">© Mea Tattoo Studio</div>
-  <div class="version">v1</div>
+  <div class="version">v2</div>
 </footer>
 </main>
 
@@ -375,6 +375,84 @@ const tpl=document.getElementById('tattooTemplate');
 const summaryTabs=[...document.querySelectorAll('.summary-tab')];
 const summaryHeading=document.getElementById('summaryHeading');
 const resetAll=document.getElementById('resetAll');
+const STORAGE_KEY='mea-price-simulator:artist-state:v1';
+let restoringState=false;
+
+function readSavedState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    return parsed&&typeof parsed==='object'?parsed:null;
+  }catch{
+    return null;
+  }
+}
+
+function captureState(){
+  const selectedLanguage=summaryTabs.find(tab=>tab.getAttribute('aria-selected')==='true')?.dataset.lang||'en';
+  return {
+    version:1,
+    summaryLanguage:selectedLanguage,
+    tattoos:[...host.querySelectorAll('.tattoo')].map(card=>({
+      long:card.querySelector('.long').value,
+      short:card.querySelector('.short').value,
+      whitespace:card.querySelector('.whitespace').value,
+      complexity:card.querySelector('.complexity').value,
+      color:card.querySelector('.color').value,
+      combined:card.querySelector('.combined').checked
+    }))
+  };
+}
+
+function saveState(){
+  if(restoringState)return;
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(captureState()));
+  }catch{
+    // Storage can be unavailable in private/restricted browsing. The calculator still works in-memory.
+  }
+}
+
+function clearSavedState(){
+  try{
+    localStorage.removeItem(STORAGE_KEY);
+  }catch{
+    // Ignore storage errors and continue resetting the in-memory UI.
+  }
+}
+
+function applySavedCardState(card,state){
+  if(!state||typeof state!=='object')return;
+  const setValue=(selector,value)=>{
+    if(value===undefined||value===null)return;
+    card.querySelector(selector).value=String(value);
+  };
+  setValue('.long',state.long);
+  setValue('.short',state.short);
+  setValue('.whitespace',state.whitespace);
+  setValue('.complexity',state.complexity);
+  setValue('.color',state.color);
+  card.querySelector('.combined').checked=Boolean(state.combined);
+}
+
+function restoreSavedState(){
+  const saved=readSavedState();
+  if(!saved||!Array.isArray(saved.tattoos)||saved.tattoos.length===0)return false;
+
+  restoringState=true;
+  host.replaceChildren();
+  saved.tattoos.forEach(state=>addTattoo(state,{scroll:false}));
+
+  const language=typeof saved.summaryLanguage==='string'?saved.summaryLanguage:'en';
+  const languageTab=summaryTabs.find(tab=>tab.dataset.lang===language);
+  if(languageTab)selectSummaryLanguage(languageTab);
+
+  restoringState=false;
+  refresh();
+  saveState();
+  return true;
+}
 
 function selectSummaryLanguage(tab){
   summaryTabs.forEach(button=>{
@@ -386,31 +464,46 @@ function selectSummaryLanguage(tab){
   summaryHeading.lang=tab.dataset.lang;
 }
 
-summaryTabs.forEach(tab=>tab.addEventListener('click',()=>selectSummaryLanguage(tab)));
+summaryTabs.forEach(tab=>tab.addEventListener('click',()=>{
+  selectSummaryLanguage(tab);
+  saveState();
+}));
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden')saveState();
+});
+window.addEventListener('pagehide',saveState);
 
 resetAll.addEventListener('click',()=>{
   const confirmed=window.confirm('すべての入力内容を初期状態に戻します。本当にリセットしますか？');
   if(!confirmed)return;
+  clearSavedState();
   host.replaceChildren();
   addTattoo();
   window.scrollTo({top:0,behavior:'smooth'});
 });
 
-function addTattoo(){
+function addTattoo(initialState=null,{scroll=true}={}){
   const card=tpl.content.firstElementChild.cloneNode(true);
   host.appendChild(card);
+  applySavedCardState(card,initialState);
   bind(card);
   refresh();
-  if(host.children.length>1)card.scrollIntoView({behavior:'smooth',block:'start'});
+  saveState();
+  if(scroll&&host.children.length>1)card.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function bind(card){
-  card.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>recalc(card)));
+  card.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{
+    recalc(card);
+    saveState();
+  }));
   card.querySelector('.remove').addEventListener('click',()=>{
     card.remove();
     refresh();
+    saveState();
   });
-  card.querySelector('.add').addEventListener('click',addTattoo);
+  card.querySelector('.add').addEventListener('click',()=>addTattoo());
   recalc(card);
 }
 
@@ -600,7 +693,7 @@ function refreshSummary(){
   });
 }
 
-addTattoo();
+if(!restoreSavedState())addTattoo();
 })();
 </script>
 </body>
