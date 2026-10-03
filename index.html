@@ -402,9 +402,9 @@ const sizeColor=$('sizeColor');
 
 function shapeFromDimensions(longMm,shortMm){
   const ratio=shortMm/longMm;
-  if(ratio<=1/3)return 'veryNarrow';
-  if(ratio<=0.625)return 'narrow';
-  if(ratio<0.875)return 'somewhat';
+  if(ratio<=0.34)return 'veryNarrow';
+  if(ratio<=0.60)return 'narrow';
+  if(ratio<=0.85)return 'somewhat';
   return 'square';
 }
 
