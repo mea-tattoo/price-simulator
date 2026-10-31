@@ -1,0 +1,60 @@
+name: Apply confirmed pricing
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: 'Confirmed pricing-core main commit (full 40-character SHA)'
+        required: true
+        type: string
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: confirmed-pricing-publication
+  cancel-in-progress: false
+jobs:
+  apply:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate the confirmed commit
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        run: |
+          node -e "if(!/^[0-9a-f]{40}$/.test(process.env.SOURCE_COMMIT))process.exit(1)"
+          git clone --branch main --single-branch https://github.com/mea-tattoo/pricing-core.git "$RUNNER_TEMP/pricing-core"
+          test "$(git -C "$RUNNER_TEMP/pricing-core" rev-parse HEAD)" = "$SOURCE_COMMIT"
+      - name: Build and test canonical code
+        run: |
+          npm --prefix "$RUNNER_TEMP/pricing-core" test
+          npm --prefix "$RUNNER_TEMP/pricing-core" run build
+          git -C "$RUNNER_TEMP/pricing-core" diff --exit-code -- dist
+      - name: Import and check both consumers
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        run: |
+          node scripts/sync-pricing.cjs "$RUNNER_TEMP/pricing-core" "$SOURCE_COMMIT"
+          npm test
+          node scripts/check-pricing.cjs --release
+      - name: Commit the generated bundle
+        env:
+          SOURCE_COMMIT: ${{ inputs.source_commit }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vendor/pricing.js pricing-lock.json index.html artist.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Apply confirmed pricing $SOURCE_COMMIT"
+            git push origin HEAD:main
+          fi
+      - name: Publish and verify exact deployed files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/publish-pages.cjs

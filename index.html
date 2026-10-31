@@ -241,12 +241,17 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border:1px solid #d
   <a id="budgetBookingLink" class="booking-cta" href="#"><span data-i18n="bookingCta">Booking Form</span><span class="booking-cta-icon material-symbols-outlined" aria-hidden="true">chevron_right</span></a>
 </section>
 
-<div class="app-version" aria-label="Version">v1</div>
+<div class="app-version" aria-label="Version">v2</div>
 </main>
 
+<script src="vendor/pricing.js"></script>
 <script>
 (()=>{
 'use strict';
+const pricing=globalThis.MeaPricing;
+if(!pricing||pricing.apiVersion!==1)throw new Error('Unsupported pricing API');
+document.documentElement.dataset.pricingVersion=pricing.version;
+const maxCalculatedLength=Math.max(...pricing.BASE_BANDS.map(band=>band.max));
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat('ja-JP',{style:'currency',currency:'JPY',maximumFractionDigits:0}).format(n);
 
@@ -271,7 +276,7 @@ const TEXT={
     pricing:'料金について',sizeCannotPrice:'このサイズは自動で料金を算出できません。',reset:'リセット',
     budget:'予算',budgetMin:'¥17,000以下',budgetMax:'¥120,000以上',
     shape:'縦横比',shapeSquare:'正方形に近い',shapeSomewhat:'一般的な長方形',shapeNarrow:'細長い',shapeVeryNarrow:'非常に細長い',
-    withBudget:'この予算なら',largeNotice:'230mmを超えるサイズは、このシミュレーターでは算出できません。',
+    withBudget:'この予算なら',largeNotice:`${maxCalculatedLength}mmを超えるサイズは、このシミュレーターでは算出できません。`,
     sizeNote:'表示サイズは目安です。実際のサイズとは異なる場合があります。',bookingCta:'予約フォームはこちら'
   },
   en:{
@@ -294,7 +299,7 @@ const TEXT={
     pricing:'Pricing',sizeCannotPrice:'This size cannot be priced automatically.',reset:'Reset',
     budget:'Budget',budgetMin:'≤ ¥17,000',budgetMax:'≥ ¥120,000',
     shape:'Proportions',shapeSquare:'Nearly Equal',shapeSomewhat:'Moderately Elongated',shapeNarrow:'Elongated',shapeVeryNarrow:'Very Elongated',
-    withBudget:'With this budget',largeNotice:'Sizes over 230 mm cannot be calculated.',
+    withBudget:'With this budget',largeNotice:`Sizes over ${maxCalculatedLength} mm cannot be calculated.`,
     sizeNote:'The displayed size is an estimate.',bookingCta:'Booking Form'
   }
 };
@@ -333,46 +338,7 @@ function setLanguage(lang,updateUrl=true){
 
 $('langToggle').addEventListener('click',()=>setLanguage(currentLang==='en'?'ja':'en'));
 
-const RATE={
-  shape:{
-    veryNarrow:{XS:-20,S:-20,M:-30,L:-30},
-    narrow:{XS:0,S:-10,M:-15,L:-15},
-    somewhat:{XS:0,S:0,M:-8,L:-8},
-    square:{XS:0,S:0,M:0,L:0}
-  },
-  complexity:{
-    verySimple:{XS:0,S:-15,M:-15,L:-20},
-    simple:{XS:0,S:0,M:-10,L:-15},
-    standard:{XS:0,S:0,M:0,L:0},
-    complex:{XS:0,S:10,M:5,L:5},
-    veryComplex:{XS:10,S:15,M:10,L:25}
-  },
-  color:{
-    oneToThree:{XS:0,S:0,M:0,L:0},
-    fourToSix:{XS:0,S:5,M:5,L:10},
-    sevenPlus:{XS:10,S:10,M:10,L:20}
-  }
-};
-
-const SHAPE_RATIO={square:1,somewhat:.75,narrow:.5,veryNarrow:1/3};
-
-function baseFromLength(mm){
-  if(mm<=9)return {size:'XXS',price:13000};
-  if(mm<=44)return {size:'XS',price:17000};
-  if(mm<=49)return {size:'XS',price:22000};
-  if(mm<=75)return {size:'S',price:25000};
-  if(mm<=90)return {size:'S',price:33000};
-  if(mm<=109)return {size:'M',price:42000};
-  if(mm<=150)return {size:'M',price:52000};
-  if(mm<=180)return {size:'M',price:62000};
-  if(mm<=230)return {size:'L',price:80000};
-  return {special:true};
-}
-
-function rate(type,value,size){
-  if(size==='XXS')return 0;
-  return RATE[type]?.[value]?.[size]??0;
-}
+const {SHAPE_RATIO,base:baseFromLength}=pricing;
 
 const modeButtons={
   size:[$('tabSizeTop')],
@@ -399,14 +365,6 @@ const sizeLength=$('sizeLength');
 const sizeShort=$('sizeShort');
 const sizeComplexity=$('sizeComplexity');
 const sizeColor=$('sizeColor');
-
-function shapeFromDimensions(longMm,shortMm){
-  const ratio=shortMm/longMm;
-  if(ratio<=0.34)return 'veryNarrow';
-  if(ratio<=0.60)return 'narrow';
-  if(ratio<=0.85)return 'somewhat';
-  return 'square';
-}
 
 function inchesFromMm(mm){return (mm/25.4).toFixed(1);}
 
@@ -471,12 +429,8 @@ function recalcSize(){
   const base=baseFromLength(longMm);
   if(base.special){showSizeInquiry();return;}
   if(!sizeComplexity.value||!sizeColor.value)return;
-  const shape=shapeFromDimensions(longMm,shortMm);
-  let amount=base.price;
-  amount*=1+rate('shape',shape,base.size)/100;
-  amount*=1+rate('complexity',sizeComplexity.value,base.size)/100;
-  amount*=1+rate('color',sizeColor.value,base.size)/100;
-  showSizeEstimate(Math.round(amount/1000)*1000);
+  const result=pricing.calculate({long:longMm,short:shortMm,complexity:sizeComplexity.value,color:sizeColor.value},'customer');
+  if(result)showSizeEstimate(result.rounded);
 }
 
 [sizeLength,sizeShort].forEach(el=>el.addEventListener('input',recalcSize));
@@ -489,20 +443,8 @@ const budgetComplexity=$('budgetComplexity');
 const budgetColor=$('budgetColor');
 const budgetResult=$('budgetResult');
 
-function calculatedBudgetPrice(longMm){
-  const base=baseFromLength(longMm);
-  if(base.special)return Infinity;
-  let amount=base.price;
-  amount*=1+rate('shape',budgetShape.value,base.size)/100;
-  amount*=1+rate('complexity',budgetComplexity.value,base.size)/100;
-  amount*=1+rate('color',budgetColor.value,base.size)/100;
-  return Math.round(amount/1000)*1000;
-}
-
 function maxAffordableLength(budgetValue){
-  let max=0;
-  for(let mm=1;mm<=230;mm++)if(calculatedBudgetPrice(mm)<=budgetValue)max=mm;
-  return max;
+  return pricing.maxAffordableLength(budgetValue,{shape:budgetShape.value,complexity:budgetComplexity.value,color:budgetColor.value});
 }
 
 function showBudgetPlaceholder(){
@@ -521,7 +463,7 @@ function showBudgetPlaceholder(){
 function recalcBudget(){
   updateRangeTrack(budget);
   const budgetValue=Number(budget.value);
-  $('budgetDisplay').textContent=budgetValue===17000?t('budgetMin'):budgetValue===120000?t('budgetMax'):money(budgetValue);
+  $('budgetDisplay').textContent=budgetValue===Number(budget.min)?t('budgetMin'):budgetValue===Number(budget.max)?t('budgetMax'):money(budgetValue);
   if(!budgetShape.value||!budgetComplexity.value||!budgetColor.value){showBudgetPlaceholder();return;}
   const longMm=maxAffordableLength(budgetValue);
   if(!longMm){showBudgetPlaceholder();return;}
@@ -533,7 +475,7 @@ function recalcBudget(){
     $('budgetLongResult').textContent=`約${longMm}mmまで`;
     $('budgetShortResult').textContent=`約${shortMm}mmまで`;
   }
-  $('budgetLargeNotice').classList.toggle('hidden',longMm<230);
+  $('budgetLargeNotice').classList.toggle('hidden',longMm<maxCalculatedLength);
   budgetResult.classList.remove('is-placeholder');
   budgetResult.classList.remove('hidden');
 }
@@ -546,3 +488,4 @@ setLanguage(currentLang,false);
 </script>
 </body>
 </html>
+

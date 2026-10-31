@@ -1,0 +1,10 @@
+{
+  "name": "mea-price-simulator",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.cjs",
+    "check:pricing": "node scripts/check-pricing.cjs",
+    "sync:pricing": "node scripts/sync-pricing.cjs"
+  },
+  "engines": {"node": ">=22"}
+}
