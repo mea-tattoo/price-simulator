@@ -1,6 +1,6 @@
 # アーティスト向け料金計算機仕様
 
-この文書を、アーティスト向け料金計算機の現行仕様・計算ルール・UI方針のマスターとする。仕様変更時は、この文書と実装を同じ変更単位で更新する。
+この文書はアーティスト向け料金計算機のUI仕様と現行料金の参考記録です。料金設定・計算アルゴリズムの正本は `gakkii415/tattoo-pricing-core`、利用中の版は `pricing-lock.json`。この文書の料金表を変更しても計算結果は変更されません。
 
 ## 実装対象
 
@@ -11,8 +11,9 @@
 - Current version: `v0.3.29`
 - Current commit: `b4cfd7751a38fddb250fd5b8e1fe638ceabbc567`
 - main: マージ済み（PR #4）
-- 顧客向け `index.html` と既存URLは変更しない
-- 単一HTMLで実装し、共通JSへの切り出しは現時点では行わない
+- 既存URLを維持し、顧客向け `index.html` と `artist.html` は同じ `vendor/pricing.js` を利用する
+- 料金改定の検討は正本の検討用ブランチで行い、確定後に固定ワークフローで取り込む
+- 以下の料金表は料金正本v1の参考値（後続改定は正本を確認）
 
 確認URL:
 https://raw.githack.com/mea-tattoo/price-simulator/b4cfd7751a38fddb250fd5b8e1fe638ceabbc567/artist.html
@@ -208,3 +209,4 @@ https://raw.githack.com/mea-tattoo/price-simulator/b4cfd7751a38fddb250fd5b8e1fe6
 
 - 料金表下部の時間単価
 - 自動計算対象外サイズや特殊事例の詳細運用
+
