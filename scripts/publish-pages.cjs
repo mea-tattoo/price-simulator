@@ -21,9 +21,10 @@ async function main(){
   assert.equal(pages.build_type,'legacy','Keep branch publication; inspect Pages settings before changing the pipeline');
   assert.equal(pages.source.branch,'main');assert.equal(pages.source.path,'/');
   // GITHUB_TOKEN pushes do not start Pages builds, so request it explicitly.
-  const build=await api('pages/builds','POST');
-  assert(build.url?.startsWith(`https://api.github.com/repos/${repo}/pages/builds/`));
-  const route=build.url.split(`/repos/${repo}/`)[1];
+  await api('pages/builds','POST');
+  // GitHub may return a URL using a repository ID or canonicalized owner name.
+  // Poll our fixed endpoint and match the commit instead of parsing that URL.
+  const route='pages/builds/latest';
   let built=false;
   for(let attempt=0;attempt<60;attempt++){
     const state=await api(route);
