@@ -1,0 +1,14 @@
+{
+  "name": "@mea-tattoo/pricing-core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mea Tattoo Studio の共通料金計算エンジン",
+  "main": "src/engine.cjs",
+  "browser": "dist/pricing.js",
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node --test test/*.test.cjs",
+    "check": "npm run build && npm test"
+  },
+  "engines": { "node": ">=18" }
+}

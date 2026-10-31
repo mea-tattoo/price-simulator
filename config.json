@@ -1,0 +1,201 @@
+{
+  "apiVersion": 1,
+  "version": "v1",
+  "baseBands": [
+    {
+      "size": "XXS",
+      "min": 1,
+      "max": 9,
+      "price": 13000
+    },
+    {
+      "size": "XS",
+      "min": 10,
+      "max": 44,
+      "price": 17000
+    },
+    {
+      "size": "XS",
+      "min": 45,
+      "max": 49,
+      "price": 22000
+    },
+    {
+      "size": "S",
+      "min": 50,
+      "max": 75,
+      "price": 25000
+    },
+    {
+      "size": "S",
+      "min": 76,
+      "max": 90,
+      "price": 33000
+    },
+    {
+      "size": "M",
+      "min": 91,
+      "max": 109,
+      "price": 42000
+    },
+    {
+      "size": "M",
+      "min": 110,
+      "max": 150,
+      "price": 52000
+    },
+    {
+      "size": "M",
+      "min": 151,
+      "max": 180,
+      "price": 62000
+    },
+    {
+      "size": "L",
+      "min": 181,
+      "max": 230,
+      "price": 80000
+    }
+  ],
+  "rates": {
+    "shape": {
+      "veryNarrow": {
+        "XS": -20,
+        "S": -20,
+        "M": -30,
+        "L": -30
+      },
+      "narrow": {
+        "XS": 0,
+        "S": -10,
+        "M": -15,
+        "L": -15
+      },
+      "somewhat": {
+        "XS": 0,
+        "S": 0,
+        "M": -8,
+        "L": -8
+      },
+      "square": {
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0
+      }
+    },
+    "whitespace": {
+      "notApplicable": {
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0
+      },
+      "large": {
+        "XS": 0,
+        "S": -30,
+        "M": -30,
+        "L": -30
+      },
+      "half": {
+        "XS": 0,
+        "S": -10,
+        "M": -15,
+        "L": -15
+      },
+      "some": {
+        "XS": 0,
+        "S": 0,
+        "M": -10,
+        "L": -10
+      },
+      "none": {
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0
+      }
+    },
+    "complexity": {
+      "verySimple": {
+        "XS": 0,
+        "S": -15,
+        "M": -15,
+        "L": -20
+      },
+      "simple": {
+        "XS": 0,
+        "S": 0,
+        "M": -10,
+        "L": -15
+      },
+      "standard": {
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0
+      },
+      "complex": {
+        "XS": 0,
+        "S": 10,
+        "M": 5,
+        "L": 5
+      },
+      "veryComplex": {
+        "XS": 10,
+        "S": 15,
+        "M": 10,
+        "L": 25
+      }
+    },
+    "color": {
+      "oneToThree": {
+        "XS": 0,
+        "S": 0,
+        "M": 0,
+        "L": 0
+      },
+      "fourToSix": {
+        "XS": 0,
+        "S": 5,
+        "M": 5,
+        "L": 10
+      },
+      "sevenPlus": {
+        "XS": 10,
+        "S": 10,
+        "M": 10,
+        "L": 20
+      }
+    }
+  },
+  "shapeRatios": {
+    "square": 1,
+    "somewhat": 0.75,
+    "narrow": 0.5,
+    "veryNarrow": 0.3333333333333333
+  },
+  "shapeThresholds": [
+    {
+      "max": 0.34,
+      "shape": "veryNarrow"
+    },
+    {
+      "max": 0.6,
+      "shape": "narrow"
+    },
+    {
+      "max": 0.85,
+      "shape": "somewhat"
+    }
+  ],
+  "fallbackShape": "square",
+  "zeroRateSizes": [
+    "XXS"
+  ],
+  "roundingUnit": 1000,
+  "sameDayDiscount": {
+    "amount": 5000,
+    "minSeparatelyPricedCount": 2
+  }
+}
