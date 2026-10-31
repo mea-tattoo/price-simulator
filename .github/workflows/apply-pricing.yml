@@ -1,5 +1,8 @@
 name: Apply confirmed pricing
 on:
+  push:
+    branches: [main]
+    paths: ['.pricing-release.json']
   workflow_dispatch:
     inputs:
       source_commit:
@@ -20,16 +23,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'push' && github.sha || 'main' }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Validate the confirmed commit
         env:
-          SOURCE_COMMIT: ${{ inputs.source_commit }}
+          DISPATCH_SOURCE_COMMIT: ${{ inputs.source_commit }}
         run: |
-          node -e "if(!/^[0-9a-f]{40}$/.test(process.env.SOURCE_COMMIT))process.exit(1)"
-          git clone --branch main --single-branch https://github.com/mea-tattoo/pricing-core.git "$RUNNER_TEMP/pricing-core"
+          node scripts/read-release-request.cjs
+      # Read the request from its immutable event first, then use current main
+      # so retries after a successful commit do not try to create it again.
+      - name: Prepare current main for idempotent import
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Fetch the confirmed canonical revision
+        run: |
+          git clone --branch main --single-branch https://github.com/gakkii415/tattoo-pricing-core.git "$RUNNER_TEMP/pricing-core"
           test "$(git -C "$RUNNER_TEMP/pricing-core" rev-parse HEAD)" = "$SOURCE_COMMIT"
       - name: Build and test canonical code
         run: |
@@ -37,15 +48,11 @@ jobs:
           npm --prefix "$RUNNER_TEMP/pricing-core" run build
           git -C "$RUNNER_TEMP/pricing-core" diff --exit-code -- dist
       - name: Import and check both consumers
-        env:
-          SOURCE_COMMIT: ${{ inputs.source_commit }}
         run: |
           node scripts/sync-pricing.cjs "$RUNNER_TEMP/pricing-core" "$SOURCE_COMMIT"
           npm test
           node scripts/check-pricing.cjs --release
       - name: Commit the generated bundle
-        env:
-          SOURCE_COMMIT: ${{ inputs.source_commit }}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

@@ -27,8 +27,8 @@ async function main(){
   let built=false;
   for(let attempt=0;attempt<60;attempt++){
     const state=await api(route);
-    if(state.status==='errored')throw new Error('Pages build failed');
-    if(state.status==='built'){assert.equal(state.commit,expected,'Another commit was published');built=true;break;}
+    if(state.commit===expected&&state.status==='errored')throw new Error('Pages build failed');
+    if(state.commit===expected&&state.status==='built'){built=true;break;}
     await delay(10000);
   }
   assert(built,'Pages build timed out');

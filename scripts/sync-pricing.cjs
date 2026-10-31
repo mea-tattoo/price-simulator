@@ -16,7 +16,7 @@ const bundle=execFileSync('git',['show',`${commit}:dist/pricing.js`],{cwd:canoni
 assert.equal(manifest.apiVersion,1,'Breaking API change: update the consumer adapter before release');
 assert.equal(crypto.createHash('sha256').update(bundle).digest('hex'),manifest.sha256,'Canonical build differs from manifest');
 const previous=JSON.parse(fs.readFileSync(path.join(root,'pricing-lock.json'),'utf8'));
-const next={repository:'mea-tattoo/pricing-core',commit,version:manifest.version,apiVersion:manifest.apiVersion,sha256:manifest.sha256,bootstrapPending:false};
+const next={repository:'gakkii415/tattoo-pricing-core',commit,version:manifest.version,apiVersion:manifest.apiVersion,sha256:manifest.sha256,bootstrapPending:false};
 const changed=previous.sha256!==next.sha256;
 fs.mkdirSync(path.join(root,'vendor'),{recursive:true});
 fs.writeFileSync(path.join(root,'vendor/pricing.js'),bundle);

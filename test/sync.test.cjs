@@ -56,3 +56,16 @@ test('changed canonical bundle updates both consumers and increments product ver
   assert.equal(versionOf('artist.html'),before.artist+1);assert.equal(versionOf('index.html'),before.customer+1);
   assert.equal(fs.readFileSync(path.join(f.app,'vendor/pricing.js'),'utf8'),next);
 });
+test('plugin release request accepts only the canonical repository and exact SHA',t=>{
+  const f=setup(t);const envFile=path.join(f.app,'action-env');
+  const file=path.join(f.app,'.pricing-release.json');
+  const invoke=()=>spawnSync(process.execPath,[path.join(f.app,'scripts/read-release-request.cjs')],{encoding:'utf8',env:{...process.env,GITHUB_EVENT_NAME:'push',GITHUB_ENV:envFile}});
+  fs.writeFileSync(file,JSON.stringify({repository:'gakkii415/tattoo-pricing-core',commit:f.initial}));
+  assert.equal(invoke().status,0);
+  assert.equal(fs.readFileSync(envFile,'utf8'),`SOURCE_COMMIT=${f.initial}\n`);
+  fs.writeFileSync(file,JSON.stringify({repository:'other/repository',commit:f.initial}));
+  assert.notEqual(invoke().status,0);
+  fs.writeFileSync(file,JSON.stringify({repository:'gakkii415/tattoo-pricing-core',commit:f.initial+'\nEXTRA=bad'}));
+  assert.notEqual(invoke().status,0);
+  assert.equal(fs.readFileSync(envFile,'utf8'),`SOURCE_COMMIT=${f.initial}\n`);
+});

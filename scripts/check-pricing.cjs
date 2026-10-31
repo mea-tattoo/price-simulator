@@ -22,7 +22,7 @@ function check(release=false){
     for(const [,js] of html.matchAll(/<script>([\s\S]*?)<\/script>/g))new vm.Script(js,{filename:file});
   }
   if(release){
-    assert.equal(lock.repository,'mea-tattoo/pricing-core');
+    assert.equal(lock.repository,'gakkii415/tattoo-pricing-core');
     assert.match(lock.commit,/^[0-9a-f]{40}$/,'Canonical repository must be created and pinned before release');
     assert.equal(lock.bootstrapPending,false,'Bootstrap must finish before release');
   }
